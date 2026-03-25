@@ -12,11 +12,15 @@
 <!-- LLM:END summary -->
 
 ## Skills
+<!-- LLM:BEGIN skills -->
 - Languages: Java, Golang
+- AI/LLM: LLM, Agent, Workflow, Prompt Engineering, ReAct; Dify, LangChain4j; Langfuse; MCP (Model Context Protocol), Skills, OpenClaw
 - Frameworks: Spring, Spring Boot, MyBatis, Spring Cloud（Eureka/Config/OpenFeign/Ribbon/Hystrix）
 - Infrastructure: MySQL, Redis, ZooKeeper, Docker, Kubernetes, Jenkins
+- AI Coding: Claude Code, Codex CLI, Cursor
 - Data/ML: （待补）
 - Other: 分布式理论（CAP/BASE/AKF/NPC）、高并发高可用（CDN/LVS/Nginx）、RESTful API 设计与实践、JVM/JMM/GC 调优；共识算法（ZAB/Paxos/Raft）理解
+<!-- LLM:END skills -->
 
 ## Experience
 **技术总监｜基础平台开发、公共框架 QA 团队负责人**, 去哪儿旅行 — 上海  (2021-08 — Present)

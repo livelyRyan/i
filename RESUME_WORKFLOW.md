@@ -55,11 +55,13 @@
 - 避免“负责/参与/协助”等弱动词开头；优先“Designed / Built / Led / Reduced / Improved …”
 
 ### 2.5 Skills 写法（结构固定）
-按分组列出，分组名固定为英文，便于英文版复用：
+按分组列出，分组名使用英文且保持稳定，便于英文版复用；允许在不破坏整体结构的前提下扩展分组（例如补充 AI/LLM 与 AI Coding）：
 
 - `- Languages: ...`
+- `- AI/LLM: ...`（如需要，推荐包含 LLM/Agent/Workflow/Prompt/ReAct/MCP 等）
 - `- Frameworks: ...`
 - `- Infrastructure: ...`
+- `- AI Coding: ...`（如需要，推荐包含 Claude Code/Codex/Cursor 等）
 - `- Data/ML: ...`（如需要）
 
 ## 3. LLM 修改协议（每次改简历都要遵守）
@@ -107,4 +109,3 @@
   - 版式用单栏、简洁 CSS（避免多栏/表格）
 
 > 说明：本规范只定义设计与约束。落地时会补齐 `resume.md` 模板、Astro 工程与一键脚本。
-
