@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI小软件革命：智能体平台驱动的万级PD提效</title>
+
+  <!-- Distinctive fonts (Fontshare) -->
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700&f[]=satoshi@400,500,700&f[]=jet-brains-mono@400,600&display=swap" />
+
+  <style>
+    /* ===========================================
+       VIEWPORT FITTING: MANDATORY BASE STYLES
+       (from frontend-slides skill; adapted to this deck)
+       =========================================== */
+    html, body {
+      height: 100%;
+      overflow-x: hidden;
+    }
+
+    html {
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+    }
+
+    :root {
+      /* Colors */
+      --bg-0: #070911;
+      --bg-1: #0b1020;
+      --bg-2: rgba(255, 255, 255, 0.06);
+      --text-0: rgba(255, 255, 255, 0.94);
+      --text-1: rgba(255, 255, 255, 0.72);
+      --text-2: rgba(255, 255, 255, 0.52);
+
+      --accent-0: #3dffcf;
+      --accent-1: #ff4fd8;
+      --accent-2: #7c5cff;
+      --accent-glow: rgba(61, 255, 207, 0.28);
+      --pink-glow: rgba(255, 79, 216, 0.18);
+
+      /* Typography (MUST use clamp()) */
+      --font-display: "Clash Display", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      --font-body: "Satoshi", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+
+      --title-size: clamp(1.75rem, 5.4vw, 4.5rem);
+      --h2-size: clamp(1.25rem, 3.3vw, 2.6rem);
+      --h3-size: clamp(1.05rem, 2.2vw, 1.6rem);
+      --body-size: clamp(0.78rem, 1.35vw, 1.08rem);
+      --small-size: clamp(0.68rem, 1.05vw, 0.92rem);
+
+      /* Spacing (MUST use clamp()) */
+      --slide-padding: clamp(1rem, 4vw, 4rem);
+      --content-gap: clamp(0.7rem, 2.1vw, 2rem);
+      --element-gap: clamp(0.45rem, 1.1vw, 1rem);
+
+      /* Animation */
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+      --dur-fast: 240ms;
+      --dur: 650ms;
+      --dur-slow: 920ms;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-body);
+      background: radial-gradient(1200px 900px at 15% 10%, rgba(124, 92, 255, 0.18), transparent 60%),
+                  radial-gradient(900px 700px at 80% 20%, rgba(61, 255, 207, 0.12), transparent 55%),
+                  radial-gradient(900px 700px at 65% 88%, rgba(255, 79, 216, 0.10), transparent 55%),
+                  linear-gradient(180deg, var(--bg-0), var(--bg-1));
+      color: var(--text-0);
+      height: 100%;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .slide {
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden; /* CRITICAL: prevent overflow */
+      scroll-snap-align: start;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      padding: var(--slide-padding);
+      isolation: isolate;
+    }
+
+    .slide::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,0.15) 40%, transparent 41%),
+        radial-gradient(1px 1px at 72% 22%, rgba(255,255,255,0.14) 40%, transparent 41%),
+        radial-gradient(1px 1px at 88% 68%, rgba(255,255,255,0.11) 40%, transparent 41%),
+        radial-gradient(1px 1px at 22% 78%, rgba(255,255,255,0.09) 40%, transparent 41%),
+        radial-gradient(1000px 700px at 50% 15%, rgba(255,255,255,0.04), transparent 70%);
+      pointer-events: none;
+      z-index: -2;
+      opacity: 0.9;
+    }
+
+    .slide::after {
+      content: "";
+      position: absolute;
+      inset: -40px;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+      background-size: 68px 68px;
+      mask-image: radial-gradient(closest-side at 25% 30%, rgba(0,0,0,0.9), transparent 70%);
+      pointer-events: none;
+      z-index: -3;
+      opacity: 0.28;
+      transform: translate3d(0,0,0);
+    }
+
+    .slide-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      max-height: 100%;
+      overflow: hidden;
+      gap: var(--content-gap);
+    }
+
+    .kicker {
+      font-family: var(--font-mono);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: var(--small-size);
+      color: var(--text-2);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      width: fit-content;
+    }
+
+    .kicker .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 99px;
+      background: linear-gradient(135deg, var(--accent-0), var(--accent-1));
+      box-shadow: 0 0 22px var(--accent-glow);
+      flex: 0 0 auto;
+    }
+
+    h1, h2, h3 {
+      font-family: var(--font-display);
+      line-height: 1.06;
+      letter-spacing: -0.02em;
+    }
+
+    h1 { font-size: var(--title-size); }
+    h2 { font-size: var(--h2-size); }
+    h3 { font-size: var(--h3-size); }
+
+    p { font-size: var(--body-size); color: var(--text-1); line-height: 1.45; }
+
+    .subtitle {
+      font-size: var(--body-size);
+      color: var(--text-1);
+      max-width: min(74ch, 100%);
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: clamp(0.35rem, 0.9vw, 0.65rem);
+    }
+
+    .pill {
+      font-family: var(--font-mono);
+      font-size: var(--small-size);
+      color: rgba(255,255,255,0.82);
+      padding: 0.42em 0.7em;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .pill.accent {
+      border-color: rgba(61, 255, 207, 0.32);
+      background: linear-gradient(180deg, rgba(61, 255, 207, 0.12), rgba(255, 79, 216, 0.06));
+      box-shadow: 0 18px 55px rgba(61, 255, 207, 0.10);
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: clamp(0.8rem, 2.4vw, 2.6rem);
+      align-items: center;
+      max-width: min(1200px, 96vw);
+    }
+
+    .media-card {
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      box-shadow: 0 30px 120px rgba(0,0,0,0.46);
+      overflow: hidden;
+      position: relative;
+      max-height: min(58vh, 520px);
+    }
+
+    .media-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(600px 360px at 20% 10%, rgba(61,255,207,0.12), transparent 60%),
+                  radial-gradient(600px 360px at 85% 40%, rgba(255,79,216,0.10), transparent 62%);
+      pointer-events: none;
+      mix-blend-mode: screen;
+      opacity: 0.7;
+    }
+
+    .media-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      background: rgba(0,0,0,0.22);
+    }
+
+    .bullet-list {
+      list-style: none;
+      display: grid;
+      gap: clamp(0.42rem, 1vh, 0.9rem);
+      padding: 0;
+      margin: 0;
+      max-width: min(78ch, 100%);
+    }
+
+    .bullet-list li {
+      font-size: var(--body-size);
+      line-height: 1.42;
+      color: rgba(255,255,255,0.82);
+      display: grid;
+      grid-template-columns: 20px 1fr;
+      gap: 0.55rem;
+      align-items: start;
+    }
+
+    .bullet-list li::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 10px;
+      margin-top: 0.38em;
+      background: linear-gradient(135deg, var(--accent-0), var(--accent-1));
+      box-shadow: 0 0 18px var(--accent-glow);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+      gap: clamp(0.6rem, 1.6vw, 1.1rem);
+      max-width: min(1200px, 96vw);
+      max-height: min(62vh, 620px);
+      overflow: hidden;
+    }
+
+    .img-tile {
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.04);
+      box-shadow: 0 22px 70px rgba(0,0,0,0.42);
+      min-height: 120px;
+      max-height: min(26vh, 260px);
+    }
+
+    .img-tile img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      background: rgba(0,0,0,0.22);
+    }
+
+    .stats {
+      display: grid;
+      gap: var(--element-gap);
+      max-width: min(44ch, 100%);
+    }
+
+    .stat {
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: linear-gradient(180deg, rgba(61, 255, 207, 0.08), rgba(255, 79, 216, 0.03));
+      padding: clamp(0.8rem, 1.8vw, 1.25rem);
+      box-shadow: 0 20px 80px rgba(61, 255, 207, 0.08);
+    }
+
+    .stat .big {
+      font-family: var(--font-display);
+      font-size: clamp(1.35rem, 3vw, 2.4rem);
+      letter-spacing: -0.03em;
+      color: rgba(255,255,255,0.96);
+    }
+
+    .stat .small {
+      font-family: var(--font-mono);
+      font-size: var(--small-size);
+      color: var(--text-2);
+      margin-top: 0.4rem;
+    }
+
+    .section-watermark {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      opacity: 0.25;
+      filter: blur(0px);
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+    }
+
+    .section-watermark img {
+      width: min(1100px, 92vw);
+      max-height: min(62vh, 620px);
+      object-fit: contain;
+      filter: saturate(1.1) contrast(1.04);
+      opacity: 0.85;
+    }
+
+    .section-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background:
+        radial-gradient(900px 620px at 10% 15%, rgba(61,255,207,0.10), transparent 60%),
+        radial-gradient(900px 620px at 86% 35%, rgba(255,79,216,0.10), transparent 62%),
+        linear-gradient(180deg, rgba(0,0,0,0.12), rgba(0,0,0,0.50));
+    }
+
+    .note {
+      font-family: var(--font-mono);
+      font-size: var(--small-size);
+      color: var(--text-2);
+    }
+
+    .mono-card {
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.04);
+      padding: clamp(0.75rem, 1.4vw, 1.05rem);
+      font-family: var(--font-mono);
+      font-size: var(--small-size);
+      color: rgba(255,255,255,0.78);
+      line-height: 1.45;
+      max-width: min(78ch, 100%);
+      box-shadow: 0 18px 70px rgba(0,0,0,0.35);
+    }
+
+    /* Reveal animations: triggered by IntersectionObserver */
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition:
+        opacity var(--dur) var(--ease-out-expo),
+        transform var(--dur) var(--ease-out-expo),
+        filter var(--dur) var(--ease-out-expo);
+      filter: blur(4px);
+    }
+
+    .slide.visible .reveal {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+
+    /* Stagger within each slide */
+    .slide.visible .reveal:nth-child(1) { transition-delay: 60ms; }
+    .slide.visible .reveal:nth-child(2) { transition-delay: 140ms; }
+    .slide.visible .reveal:nth-child(3) { transition-delay: 220ms; }
+    .slide.visible .reveal:nth-child(4) { transition-delay: 300ms; }
+    .slide.visible .reveal:nth-child(5) { transition-delay: 380ms; }
+    .slide.visible .reveal:nth-child(6) { transition-delay: 460ms; }
+
+    /* UI: progress bar, dots, counter */
+    .progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 100vw;
+      z-index: 50;
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .progress > div {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-0), var(--accent-1), var(--accent-2));
+      box-shadow: 0 0 22px var(--accent-glow);
+      transition: width var(--dur-fast) var(--ease-out);
+    }
+
+    .nav-dots {
+      position: fixed;
+      right: clamp(0.6rem, 1.8vw, 1.4rem);
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 10px 8px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.18);
+      border: 1px solid rgba(255,255,255,0.10);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .nav-dots button {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.20);
+      background: rgba(255,255,255,0.08);
+      cursor: pointer;
+      transition: transform var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+    }
+
+    .nav-dots button[aria-current="true"] {
+      background: linear-gradient(135deg, var(--accent-0), var(--accent-1));
+      border-color: rgba(61,255,207,0.55);
+      transform: scale(1.25);
+      box-shadow: 0 0 18px var(--accent-glow), 0 0 26px var(--pink-glow);
+    }
+
+    .counter {
+      position: fixed;
+      left: clamp(0.7rem, 2vw, 1.6rem);
+      bottom: clamp(0.7rem, 2vw, 1.4rem);
+      z-index: 50;
+      font-family: var(--font-mono);
+      font-size: var(--small-size);
+      color: rgba(255,255,255,0.68);
+      background: rgba(0,0,0,0.18);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 999px;
+      padding: 0.5em 0.75em;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .hint {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: clamp(0.7rem, 2vw, 1.4rem);
+      z-index: 50;
+      font-family: var(--font-mono);
+      font-size: var(--small-size);
+      color: rgba(255,255,255,0.56);
+      padding: 0.5em 0.8em;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(0,0,0,0.14);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      opacity: 0;
+      transition: opacity var(--dur-slow) var(--ease-out);
+      pointer-events: none;
+    }
+
+    body.ready .hint {
+      opacity: 1;
+    }
+
+    /* ===========================================
+       RESPONSIVE BREAKPOINTS (mandatory)
+       =========================================== */
+    @media (max-height: 700px) {
+      :root {
+        --slide-padding: clamp(0.85rem, 3vw, 2rem);
+        --content-gap: clamp(0.55rem, 1.6vw, 1.05rem);
+        --title-size: clamp(1.45rem, 4.8vw, 3.1rem);
+        --h2-size: clamp(1.15rem, 3vw, 2.0rem);
+      }
+      .nav-dots { gap: 8px; }
+    }
+
+    @media (max-height: 600px) {
+      :root {
+        --slide-padding: clamp(0.65rem, 2.6vw, 1.5rem);
+        --content-gap: clamp(0.45rem, 1.2vw, 0.85rem);
+        --body-size: clamp(0.72rem, 1.15vw, 0.95rem);
+      }
+      .nav-dots, .hint { display: none; }
+      .media-card { max-height: min(52vh, 420px); }
+      .img-tile { max-height: min(24vh, 220px); }
+    }
+
+    @media (max-height: 500px) {
+      :root {
+        --slide-padding: clamp(0.5rem, 2.2vw, 1.15rem);
+        --title-size: clamp(1.2rem, 3.6vw, 2.0rem);
+        --h2-size: clamp(1.0rem, 2.5vw, 1.4rem);
+      }
+      .progress { display: none; }
+    }
+
+    @media (max-width: 900px) {
+      .two-col { grid-template-columns: 1fr; }
+      .media-card { max-height: min(52vh, 520px); }
+      .counter { left: 0.7rem; }
+      .nav-dots { right: 0.6rem; }
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.2s !important; }
+      html { scroll-behavior: auto; }
+      .reveal { transform: none; filter: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress" aria-hidden="true"><div id="progressFill"></div></div>
+  <nav class="nav-dots" aria-label="Slide navigation" id="navDots"></nav>
+  <div class="counter" id="counter" aria-live="polite">01 / 30</div>
+  <div class="hint" aria-hidden="true">↑↓ / Space 导航 · 滚动/滑动也可</div>
+
+  <!-- Slide 1 -->
+  <section class="slide" id="slide-1" data-label="封面">
+    <div class="slide-content">
+      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>QCon / 对外分享</div>
+      <h1 class="reveal">AI小软件革命：<br/>智能体平台驱动的万级 PD 提效</h1>
+      <p class="subtitle reveal">马阳阳 · 去哪儿旅行 · 基础平台团队负责人</p>
+      <div class="pill-row reveal" aria-label="Keywords">
+        <span class="pill accent">QMoss</span>
+        <span class="pill">QDify</span>
+        <span class="pill">Agent Platform</span>
+        <span class="pill">运营提效</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 2 -->
+  <section class="slide" id="slide-2" data-label="个人简介">
+    <div class="slide-content two-col">
+      <div>
+        <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>个人简介</div>
+        <h2 class="reveal">马阳阳</h2>
+        <p class="subtitle reveal">去哪儿旅行 · 基础平台团队负责人</p>
+        <ul class="bullet-list reveal">
+          <li>负责研发效率、质量类平台建设：自动化测试、测试环境管理、演练、压测、组件市场等</li>
+          <li>近年探索 AI Agent，主导公司级智能体平台 <span style="color: rgba(255,255,255,0.92)">QMoss</span>，规模化落地，带来万级 PD 提效</li>
+          <li>ArchSubmit、QECon、SECon、A2M 等多届大会明星讲师</li>
+        </ul>
+      </div>
+      <div class="media-card reveal" aria-label="Speaker photo">
+        <img src="智能体平台QMoss+QDify-assets/slide02_img01.jpg" alt="马阳阳 照片" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 3 -->
+  <section class="slide" id="slide-3" data-label="目录">
+    <div class="slide-content">
+      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>目录</div>
+      <h2 class="reveal">从人力到智能，走向 AI 小软件生态</h2>
+      <ul class="bullet-list reveal">
+        <li>01、从人力到智能：LLM 引爆运营新纪元</li>
+        <li>02、打造智能中枢：智能体平台建设实践</li>
+        <li>03、业务创新实践：AI 小软件的多场景落地</li>
+        <li>04、价值与经验：取得成就与经验总结</li>
+        <li>05、迈向未来：自进化的 AI 小软件生态</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Slide 4 -->
+  <section class="slide" id="slide-4" data-label="亮点介绍">
+    <div class="slide-content two-col">
+      <div class="stats">
+        <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>亮点介绍</div>
+        <div class="stat reveal">
+          <div class="big">公司级项目<br/>运营提效 10×</div>
+          <div class="small">从“人力堆”到“智能驱动”的体系化落地</div>
+        </div>
+        <div class="stat reveal">
+          <div class="big">AI 小软件<br/>搭建成本 ↓ 70%+</div>
+          <div class="small">智能体平台 + 多维表格：低/零代码的工程化范式</div>
+        </div>
+      </div>
+      <div>
+        <h2 class="reveal">您能获得</h2>
+        <ul class="bullet-list reveal">
+          <li>产运团队：一套通用的 AI 提效方法与配套工具</li>
+          <li>AI Infra 团队：智能体平台建设体系，以及如何大规模落地</li>
+          <li>研发团队：适合 AI 中等复杂度应用的新研发模式，带来约 70% 提效</li>
+          <li>场景挖掘：AI 落地的系统化拆解与优先级方法</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 5 -->
+  <section class="slide" id="slide-5" data-label="01 运营新纪元">
+    <div class="section-watermark" aria-hidden="true">
+      <img src="智能体平台QMoss+QDify-assets/slide05_img01.png" alt="" />
+    </div>
+    <div class="section-overlay" aria-hidden="true"></div>
+    <div class="slide-content">
+      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>01</div>
+      <h1 class="reveal">从人力到智能：<br/>LLM 引爆运营新纪元</h1>
+      <p class="subtitle reveal">把“运营动作”拆成可复用能力，让工具成为可持续进化的生产力。</p>
+    </div>
+  </section>
+
+  <!-- Slide 6 -->
+  <section class="slide" id="slide-6" data-label="运营岗位日常工作">
+    <div class="slide-content">
+      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>现状</div>
+      <h2 class="reveal">运营岗位日常工作</h2>
+      <div class="two-col" style="grid-template-columns: 1.05fr 0.95fr; align-items: start;">
+        <ul class="bullet-list reveal">
+          <li>业务数据定时播报</li>
+          <li>写文、写贴</li>
+          <li>指标运营</li>
+          <li>用户赔付申请审核</li>
+          <li>社区帖子质量打分</li>
+          <li>……</li>
+        </ul>
+        <div class="grid reveal" aria-label="Examples">
+          <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide06_img01.png" alt="运营工作示意 1" /></div>
+          <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide06_img02.jpg" alt="运营工作示意 2" /></div>
+          <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide06_img03.png" alt="运营工作示意 3" /></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 7 -->
+  <section class="slide" id="slide-7" data-label="新能力">
+    <div class="slide-content">
+      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>能力跃迁</div>
+      <h1 class="reveal">大模型带来的新能力</h1>
+      <div class="pill-row reveal">
+        <span class="pill accent">理解</span>
+        <span class="pill">生成</span>
+        <span class="pill">分析</span>
+        <span class="pill">总结</span>
+        <span class="pill">规划</span>
+      </div>
+      <p class="subtitle reveal">（本页为原 PPT 的过渡页：强调“能力供给”的变化，为后续 AI 小软件与平台化铺垫。）</p>
+    </div>
+  </section>
+
+  <!-- Slide 8 -->
+  <section class="slide" id="slide-8" data-label="AI 小软件">
+    <div class="slide-content two-col">
+      <div>
+        <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>概念</div>
+        <h2 class="reveal">AI 小软件：特点 & 想象空间</h2>
+        <ul class="bullet-list reveal">
+          <li>解决硬编码路径的痛点：成本高、周期长、ROI 不过关</li>
+          <li>低/零代码平台降低开发门槛：业务想法可快速变成可运行工具</li>
+        </ul>
+      </div>
+      <div class="media-card reveal">
+        <img src="智能体平台QMoss+QDify-assets/slide08_img01.png" alt="AI 小软件 示意图" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 9 -->
+  <section class="slide" id="slide-9" data-label="最佳实践">
+    <div class="slide-content two-col">
+      <div>
+        <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>最佳实践</div>
+        <h2 class="reveal">智能体平台 + 多维表格</h2>
+        <ul class="bullet-list reveal">
+          <li>形成一套新研发模式：把 AI 小软件做成“可配置、可复用、可运营”的能力</li>
+          <li>搭建与运行成本降低 70%+；显著降低门槛，非技术角色也能主导</li>
+        </ul>
+      </div>
+      <div class="media-card reveal">
+        <img src="智能体平台QMoss+QDify-assets/slide09_img01.png" alt="智能体平台 + 多维表格 示意图" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 10 -->
+  <section class="slide" id="slide-10" data-label="02 平台实践">
+    <div class="section-watermark" aria-hidden="true">
+      <img src="智能体平台QMoss+QDify-assets/slide10_img01.png" alt="" />
+    </div>
+    <div class="section-overlay" aria-hidden="true"></div>
+    <div class="slide-content">
+      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>02</div>
+      <h1 class="reveal">打造智能中枢：<br/>智能体平台建设实践</h1>
+      <p class="subtitle reveal">从“能用”到“可规模化”：参数、升级、稳定性、可观测性、MCP 网关。</p>
+    </div>
+  </section>
+
+  <!-- Slide 11 -->
+  <section class="slide" id="slide-11" data-label="整体规划">
+    <div class="slide-content">
+      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>规划</div>
+      <h2 class="reveal">智能体平台整体规划</h2>
+      <div class="pill-row reveal">
+        <span class="pill accent">开源</span>
+        <span class="pill">coze</span>
+      </div>
+      <div class="grid reveal" aria-label="Planning diagrams">
+        <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide11_img01.png" alt="整体规划 图 1" /></div>
+        <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide11_img02.png" alt="整体规划 图 2" /></div>
+        <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide11_img03.png" alt="整体规划 图 3" /></div>
+        <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide11_img04.jpg" alt="整体规划 图 4" /></div>
+        <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide11_img05.png" alt="整体规划 图 5" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 12 -->
+  <section class="slide" id="slide-12" data-label="参数调优">
+    <div class="slide-content">
+      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>关键点一</div>
+      <h2 class="reveal">常用参数调优</h2>
+      <div class="two-col" style="align-items: start;">
+        <ul class="bullet-list reveal">
+          <li>整体框架</li>
+          <li>功能类参数</li>
+          <li>性能类参数</li>
+        </ul>
+        <div class="grid reveal" aria-label="Tuning diagrams">
+          <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide12_img01.png" alt="参数调优 图 1" /></div>
+          <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide12_img02.png" alt="参数调优 图 2" /></div>
+          <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide12_img03.png" alt="参数调优 图 3" /></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 13 -->
+  <section class="slide" id="slide-13" data-label="升级机制">
+    <div class="slide-content two-col">
+      <div>
+        <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>关键点二</div>
+        <h2 class="reveal">建立升级机制</h2>
+        <ul class="bullet-list reveal">
+          <li>大版本不升级：规避变化大、bug 多</li>
+          <li>升级前确认 GitHub 无严重 bug 类 issue</li>
+          <li>固化并持续完善：升级/扩容 SOP、Checklist</li>
+          <li>提前演练升级与回滚方案</li>
+        </ul>
+      </div>
+      <div class="grid reveal" aria-label="Upgrade visuals">
+        <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide13_img01.png" alt="升级机制 图 1" /></div>
+        <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide13_img02.png" alt="升级机制 图 2" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 14 -->
+  <section class="slide" id="slide-14" data-label="差异化设计">
+    <div class="slide-content two-col">
+      <div>
+        <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>设计思考</div>
+        <h2 class="reveal">自研平台 vs 开源平台：差异化设计</h2>
+        <p class="subtitle reveal">开源方案很好用，但在企业级规模化落地时，往往需要围绕“稳定性 / 可运营 / 可治理”做体系补齐。</p>
+        <div class="mono-card reveal">
+          开源，<br/>
+          开源的
+          <div class="note" style="margin-top: 0.5rem;">（原 PPT 本页含对比示意图，已保留如下）</div>
+        </div>
+      </div>
+      <div class="media-card reveal">
+        <img src="智能体平台QMoss+QDify-assets/slide14_img01.png" alt="自研与开源差异化设计 示意图" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 15 -->
+  <section class="slide" id="slide-15" data-label="稳定性体系">
+    <div class="slide-content">
+      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>QMoss 关键设计</div>
+      <h2 class="reveal">稳定性体系</h2>
+      <div class="grid reveal" aria-label="Stability visuals" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)); max-height: min(60vh, 640px);">
+        <div class="img-tile" style="max-height: min(30vh, 320px);"><img src="智能体平台QMoss+QDify-assets/slide15_img01.png" alt="稳定性体系 图 1" /></div>
+        <div class="img-tile" style="max-height: min(30vh, 320px);"><img src="智能体平台QMoss+QDify-assets/slide15_img02.png" alt="稳定性体系 图 2" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 16 -->
+  <section class="slide" id="slide-16" data-label="可观测性">
+    <div class="slide-content two-col">
+      <div>
+        <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>核心基建一</div>
+        <h2 class="reveal">可观测性：Langfuse</h2>
+        <ul class="bullet-list reveal">
+          <li>开源产品选型</li>
+          <li>整体设计</li>
+        </ul>
+        <div class="mono-card reveal" role="note">
+          参考实现：<a href="https://github.com/langchain4j/langchain4j/pull/2499/files" target="_blank" rel="noreferrer">langchain4j PR #2499</a>
+        </div>
+      </div>
+      <div class="grid reveal" aria-label="Observability visuals" style="max-height: min(60vh, 640px);">
+        <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide16_img01.png" alt="Langfuse 设计 图 1" /></div>
+        <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide16_img02.png" alt="Langfuse 设计 图 2" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 17 -->
+  <section class="slide" id="slide-17" data-label="MCP 网关">
+    <div class="slide-content">
+      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>核心基建二</div>
+      <h2 class="reveal">MCP 网关</h2>
+      <div class="two-col" style="align-items: start;">
+        <div>
+          <ul class="bullet-list reveal">
+            <li>整体框架</li>
+            <li>关键决策</li>
+            <li>核心实现：客户端 / 服务端选型</li>
+          </ul>
+          <div class="mono-card reveal" style="margin-top: var(--element-gap);">
+            客户端：<span style="color: rgba(255,255,255,0.92)">dev.langchain4j</span> · <span style="color: rgba(255,255,255,0.92)">langchain4j-mcp</span><br/>
+            服务端：<span style="color: rgba(255,255,255,0.92)">io.modelcontextprotocol.sdk</span> · <span style="color: rgba(255,255,255,0.92)">mcp-spring-webmvc</span>
+          </div>
+        </div>
+        <div class="grid reveal" aria-label="MCP gateway diagrams" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); max-height: min(62vh, 640px);">
+          <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide17_img01.png" alt="MCP 网关 图 1" /></div>
+          <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide17_img02.png" alt="MCP 网关 图 2" /></div>
+          <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide17_img03.png" alt="MCP 网关 图 3" /></div>
+          <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide17_img04.png" alt="MCP 网关 图 4" /></div>
+          <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide17_img05.png" alt="MCP 网关 图 5" /></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 18 -->
+  <section class="slide" id="slide-18" data-label="03 多场景落地">
+    <div class="section-watermark" aria-hidden="true">
+      <img src="智能体平台QMoss+QDify-assets/slide18_img01.png" alt="" />
+    </div>
+    <div class="section-overlay" aria-hidden="true"></div>
+    <div class="slide-content">
+      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>03</div>
+      <h1 class="reveal">业务创新实践：<br/>AI 小软件的多场景落地</h1>
+      <p class="subtitle reveal">体系化、Workflow、Agent 三类案例，覆盖从地图到落地到运营闭环。</p>
+    </div>
+  </section>
+
+  <!-- Slide 19 -->
+  <section class="slide" id="slide-19" data-label="案例1 体系化">
+    <div class="slide-content two-col">
+      <div>
+        <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>案例 1（体系化）</div>
+        <h2 class="reveal">OTA 全场景运营自动化建设</h2>
+        <p class="subtitle reveal">如何在已成熟的业务中，体系化落地？</p>
+        <div class="two-col" style="grid-template-columns: 1fr 1fr; gap: clamp(0.6rem, 1.8vw, 1.2rem); align-items: start;">
+          <ul class="bullet-list reveal" style="max-width: none;">
+            <li>收集全部的运营动作</li>
+            <li>将动作归类到业务域、场景类</li>
+            <li>评估每个场景的价值空间，形成全局地图</li>
+            <li>根据 ROI 定优先级</li>
+          </ul>
+          <ul class="bullet-list reveal" style="max-width: none;">
+            <li>选择少量高 ROI 场景，跑 MVP</li>
+            <li>沉淀经验与最佳实践</li>
+            <li>跑通后复制到其他场景，并行推进</li>
+            <li>持续更新全局地图，汇总价值</li>
+          </ul>
+        </div>
+        <div class="note reveal">（上图为示意信息）</div>
+      </div>
+      <div class="media-card reveal">
+        <img src="智能体平台QMoss+QDify-assets/slide19_img01.png" alt="OTA 全场景运营自动化 示意图" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 20 -->
+  <section class="slide" id="slide-20" data-label="准确性">
+    <div class="slide-content">
+      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>案例 1（体系化）</div>
+      <h2 class="reveal">共性且核心问题：准确性</h2>
+      <p class="subtitle reveal">体系化落地过程中，一个共性且核心问题：如何提升 AI 小软件的准确性</p>
+      <div class="grid reveal" aria-label="Accuracy visuals" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)); max-height: min(62vh, 640px);">
+        <div class="img-tile" style="max-height: min(30vh, 340px);"><img src="智能体平台QMoss+QDify-assets/slide20_img01.png" alt="准确性 图 1" /></div>
+        <div class="img-tile" style="max-height: min(30vh, 340px);"><img src="智能体平台QMoss+QDify-assets/slide20_img02.png" alt="准确性 图 2" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 21 -->
+  <section class="slide" id="slide-21" data-label="案例2 Workflow">
+    <div class="slide-content two-col">
+      <div>
+        <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>案例 2（Workflow）</div>
+        <h2 class="reveal">质量运营与归因场景落地</h2>
+        <ul class="bullet-list reveal">
+          <li>运营同学能搭建出怎样的 AI 小软件？</li>
+          <li>利用 AI 的理解力与分析力：运行效率提升 80%，周期从“天”降低到“小时”</li>
+        </ul>
+        <div class="pill-row reveal">
+          <span class="pill accent">质量</span>
+          <span class="pill">归因</span>
+          <span class="pill">Workflow</span>
+        </div>
+      </div>
+      <div class="grid reveal" aria-label="Workflow visuals" style="max-height: min(60vh, 640px);">
+        <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide21_img01.png" alt="Workflow 图 1" /></div>
+        <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide21_img02.png" alt="Workflow 图 2" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 22 -->
+  <section class="slide" id="slide-22" data-label="示意图">
+    <div class="slide-content">
+      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>案例 2（Workflow）</div>
+      <h2 class="reveal">示意图（仅供参考）</h2>
+      <div class="grid reveal" aria-label="Workflow reference diagrams" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); max-height: min(66vh, 700px);">
+        <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide22_img01.png" alt="示意图 1（仅供参考）" /></div>
+        <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide22_img02.png" alt="示意图 2（仅供参考）" /></div>
+        <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide22_img03.png" alt="示意图 3（仅供参考）" /></div>
+      </div>
+      <div class="note reveal">示意图，仅供参考</div>
+    </div>
+  </section>
+
+  <!-- Slide 23 -->
+  <section class="slide" id="slide-23" data-label="案例3 Agent">
+    <div class="slide-content two-col">
+      <div>
+        <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>案例 3（Agent）</div>
+        <h2 class="reveal">AI 助手建设</h2>
+        <ul class="bullet-list reveal">
+          <li>每天超过 150+ 问题咨询</li>
+          <li>有效处理约 100，仍积压 50+</li>
+          <li>每年耗费 3000+ PD</li>
+        </ul>
+      </div>
+      <div class="media-card reveal">
+        <img src="智能体平台QMoss+QDify-assets/slide23_img01.png" alt="AI 助手建设 示意图" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 24 -->
+  <section class="slide" id="slide-24" data-label="0代码实现">
+    <div class="slide-content">
+      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>案例 3（Agent）</div>
+      <h2 class="reveal">“0 代码”实现 AI 助手</h2>
+      <div class="two-col" style="align-items: start;">
+        <div>
+          <ul class="bullet-list reveal">
+            <li>使用智能体平台搭建：业务同学也能完成端到端的助手配置</li>
+            <li>多维表格 + 文档管理知识库：运营维护知识库，持续沉淀与迭代</li>
+          </ul>
+        </div>
+        <div class="grid reveal" aria-label="No-code implementation visuals" style="max-height: min(62vh, 640px);">
+          <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide24_img01.png" alt="0代码实现 图 1" /></div>
+          <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide24_img02.png" alt="0代码实现 图 2" /></div>
+          <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide24_img03.png" alt="0代码实现 图 3" /></div>
+          <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide24_img04.png" alt="0代码实现 图 4" /></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 25 -->
+  <section class="slide" id="slide-25" data-label="04 价值经验">
+    <div class="section-watermark" aria-hidden="true">
+      <img src="智能体平台QMoss+QDify-assets/slide25_img01.png" alt="" />
+    </div>
+    <div class="section-overlay" aria-hidden="true"></div>
+    <div class="slide-content">
+      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>04</div>
+      <h1 class="reveal">价值与经验：<br/>智能体平台的提效成就</h1>
+      <p class="subtitle reveal">从体系到工具，从工具到生态：复用能力、沉淀方法、规模化提效。</p>
+    </div>
+  </section>
+
+  <!-- Slide 26 -->
+  <section class="slide" id="slide-26" data-label="成果展示">
+    <div class="slide-content">
+      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>成果</div>
+      <h2 class="reveal">成果展示</h2>
+      <div class="media-card reveal" style="max-height: min(68vh, 720px);">
+        <img src="智能体平台QMoss+QDify-assets/slide26_img01.png" alt="成果展示 图" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 27 -->
+  <section class="slide" id="slide-27" data-label="经验总结">
+    <div class="slide-content two-col">
+      <div>
+        <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>经验总结</div>
+        <h2 class="reveal">经验总结</h2>
+        <ul class="bullet-list reveal">
+          <li>这套 AI 小软件体系复用性极高，可直接跨行业迁移</li>
+        </ul>
+      </div>
+      <div class="media-card reveal">
+        <img src="智能体平台QMoss+QDify-assets/slide27_img01.png" alt="经验总结 图" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 28 -->
+  <section class="slide" id="slide-28" data-label="05 迈向未来">
+    <div class="section-watermark" aria-hidden="true">
+      <img src="智能体平台QMoss+QDify-assets/slide28_img01.png" alt="" />
+    </div>
+    <div class="section-overlay" aria-hidden="true"></div>
+    <div class="slide-content">
+      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>05</div>
+      <h1 class="reveal">迈向未来：<br/>自进化的 AI 小软件生态</h1>
+      <p class="subtitle reveal">让“业务想法 → 可运行工具 → 持续运营迭代”成为组织能力。</p>
+    </div>
+  </section>
+
+  <!-- Slide 29 -->
+  <section class="slide" id="slide-29" data-label="未来展望">
+    <div class="slide-content">
+      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>未来展望</div>
+      <h2 class="reveal">未来展望</h2>
+      <div class="media-card reveal" style="max-height: min(70vh, 740px);">
+        <img src="智能体平台QMoss+QDify-assets/slide29_img01.png" alt="未来展望 图" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 30 -->
+  <section class="slide" id="slide-30" data-label="二维码">
+    <div class="slide-content two-col">
+      <div>
+        <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>资料获取</div>
+        <h2 class="reveal">扫码关注公众号</h2>
+        <p class="subtitle reveal">获取 PPT 下载链接</p>
+        <div class="pill-row reveal">
+          <span class="pill accent">PPT</span>
+          <span class="pill">下载链接</span>
+          <span class="pill">公众号</span>
+        </div>
+      </div>
+      <div class="media-card reveal" style="max-height: min(54vh, 420px);">
+        <img src="智能体平台QMoss+QDify-assets/slide30_img01.jpg" alt="二维码" />
+      </div>
+    </div>
+  </section>
+
+  <script>
+    /* ===========================================
+       SLIDE PRESENTATION CONTROLLER
+       - Keyboard navigation (↑↓ ←→ Space PageUp PageDown Home End)
+       - Touch swipe navigation
+       - Wheel navigation (throttled)
+       - Progress bar, nav dots, counter
+       - IntersectionObserver for reveal animations
+       =========================================== */
+    class SlidePresentation {
+      constructor() {
+        this.slides = Array.from(document.querySelectorAll(".slide"));
+        this.navDots = document.getElementById("navDots");
+        this.progressFill = document.getElementById("progressFill");
+        this.counter = document.getElementById("counter");
+        this.reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        this.activeIndex = 0;
+        this._wheelLock = false;
+        this._touchStartY = null;
+        this._touchStartX = null;
+
+        this._buildDots();
+        this._bind();
+        this._observe();
+
+        requestAnimationFrame(() => {
+          document.body.classList.add("ready");
+          this._syncActiveFromScroll();
+        });
+      }
+
+      _buildDots() {
+        this.navDots.innerHTML = "";
+        this.slides.forEach((slide, index) => {
+          const label = slide.getAttribute("data-label") || `Slide ${index + 1}`;
+          const button = document.createElement("button");
+          button.type = "button";
+          button.setAttribute("aria-label", `Go to ${label}`);
+          button.addEventListener("click", () => this.goTo(index));
+          this.navDots.appendChild(button);
+        });
+      }
+
+      _bind() {
+        window.addEventListener("keydown", (e) => {
+          const key = e.key;
+          const isNavKey = ["ArrowDown", "ArrowRight", "PageDown", " ", "Enter", "ArrowUp", "ArrowLeft", "PageUp", "Home", "End"].includes(key);
+          if (!isNavKey) return;
+
+          // Prevent page scroll / spacebar jump.
+          e.preventDefault();
+
+          if (key === "Home") return this.goTo(0);
+          if (key === "End") return this.goTo(this.slides.length - 1);
+
+          if (key === "ArrowUp" || key === "ArrowLeft" || key === "PageUp") return this.prev();
+          return this.next();
+        }, { passive: false });
+
+        window.addEventListener("wheel", (e) => {
+          if (this._wheelLock) return;
+          const dy = e.deltaY || 0;
+          if (Math.abs(dy) < 14) return;
+
+          this._wheelLock = true;
+          if (dy > 0) this.next();
+          else this.prev();
+
+          window.setTimeout(() => { this._wheelLock = false; }, 380);
+        }, { passive: true });
+
+        window.addEventListener("scroll", () => {
+          this._syncActiveFromScroll();
+        }, { passive: true });
+
+        window.addEventListener("touchstart", (e) => {
+          const t = e.changedTouches && e.changedTouches[0];
+          if (!t) return;
+          this._touchStartY = t.clientY;
+          this._touchStartX = t.clientX;
+        }, { passive: true });
+
+        window.addEventListener("touchend", (e) => {
+          const t = e.changedTouches && e.changedTouches[0];
+          if (!t || this._touchStartY == null || this._touchStartX == null) return;
+
+          const dy = t.clientY - this._touchStartY;
+          const dx = t.clientX - this._touchStartX;
+          this._touchStartY = null;
+          this._touchStartX = null;
+
+          // Prefer vertical swipe.
+          if (Math.abs(dy) < 38) return;
+          if (Math.abs(dy) < Math.abs(dx)) return;
+          if (dy < 0) this.next();
+          else this.prev();
+        }, { passive: true });
+      }
+
+      _observe() {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) entry.target.classList.add("visible");
+          });
+        }, { threshold: 0.35 });
+
+        this.slides.forEach((s) => observer.observe(s));
+      }
+
+      _syncActiveFromScroll() {
+        const viewportMid = window.scrollY + window.innerHeight / 2;
+        let bestIndex = 0;
+        let bestDist = Infinity;
+
+        for (let i = 0; i < this.slides.length; i++) {
+          const rect = this.slides[i].getBoundingClientRect();
+          const slideMid = window.scrollY + rect.top + rect.height / 2;
+          const dist = Math.abs(slideMid - viewportMid);
+          if (dist < bestDist) {
+            bestDist = dist;
+            bestIndex = i;
+          }
+        }
+
+        this._setActive(bestIndex);
+      }
+
+      _setActive(index) {
+        const bounded = Math.max(0, Math.min(index, this.slides.length - 1));
+        if (bounded === this.activeIndex) {
+          this._renderUI();
+          return;
+        }
+        this.activeIndex = bounded;
+        this._renderUI();
+      }
+
+      _renderUI() {
+        const total = this.slides.length;
+        const current = this.activeIndex + 1;
+        const pad2 = (n) => String(n).padStart(2, "0");
+
+        this.counter.textContent = `${pad2(current)} / ${pad2(total)}`;
+        const percent = (this.activeIndex / Math.max(1, total - 1)) * 100;
+        this.progressFill.style.width = `${percent}%`;
+
+        const dots = Array.from(this.navDots.querySelectorAll("button"));
+        dots.forEach((b, i) => b.setAttribute("aria-current", i === this.activeIndex ? "true" : "false"));
+      }
+
+      goTo(index) {
+        const slide = this.slides[index];
+        if (!slide) return;
+        slide.scrollIntoView({ behavior: this.reduceMotion ? "auto" : "smooth", block: "start" });
+        this._setActive(index);
+      }
+
+      next() { this.goTo(this.activeIndex + 1); }
+      prev() { this.goTo(this.activeIndex - 1); }
+    }
+
+    new SlidePresentation();
+  </script>
+</body>
+</html>
+
