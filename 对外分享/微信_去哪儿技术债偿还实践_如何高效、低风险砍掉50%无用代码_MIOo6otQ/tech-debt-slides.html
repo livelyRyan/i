@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>去哪儿技术债偿还实践：高效、低风险砍掉50%无用代码</title>
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600&f[]=satoshi@400,500,700&display=swap">
+  <style>
+    /* ===========================================
+       VIEWPORT FITTING: MANDATORY BASE STYLES
+       =========================================== */
+    html, body {
+      height: 100%;
+      overflow-x: hidden;
+    }
+
+    html {
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+    }
+
+    :root {
+      --bg-primary: #0c1220;
+      --bg-secondary: #111a2b;
+      --bg-soft: #0f1930;
+      --text-primary: #f5f7fb;
+      --text-secondary: #b7c0d1;
+      --accent: #4bb3ff;
+      --accent-2: #6ee7ff;
+      --accent-3: #7cf0c6;
+      --grid: rgba(255, 255, 255, 0.05);
+
+      --font-display: 'Clash Display', sans-serif;
+      --font-body: 'Satoshi', sans-serif;
+
+      --title-size: clamp(1.9rem, 6vw, 4.4rem);
+      --h2-size: clamp(1.4rem, 3.6vw, 2.6rem);
+      --h3-size: clamp(1.05rem, 2.6vw, 1.6rem);
+      --body-size: clamp(0.86rem, 1.4vw, 1.08rem);
+      --small-size: clamp(0.7rem, 1vw, 0.9rem);
+
+      --slide-padding: clamp(1.2rem, 4vw, 3.6rem);
+      --content-gap: clamp(0.6rem, 2vw, 1.8rem);
+      --element-gap: clamp(0.35rem, 1vw, 0.9rem);
+
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --duration-normal: 0.6s;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      overflow-x: hidden;
+    }
+
+    .slide {
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      scroll-snap-align: start;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      padding: var(--slide-padding);
+    }
+
+    .slide::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 15% 20%, rgba(75, 179, 255, 0.12), transparent 45%),
+        radial-gradient(circle at 80% 10%, rgba(110, 231, 255, 0.08), transparent 50%),
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+      background-size: auto, auto, 48px 48px, 48px 48px;
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    .slide-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: var(--content-gap);
+      max-height: 100%;
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+    }
+
+    h1, h2, h3 {
+      font-family: var(--font-display);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    h1 { font-size: var(--title-size); }
+    h2 { font-size: var(--h2-size); }
+    h3 { font-size: var(--h3-size); }
+
+    p, li {
+      font-size: var(--body-size);
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .title-slide .subtitle {
+      font-size: clamp(0.95rem, 2vw, 1.25rem);
+      color: var(--accent-2);
+      letter-spacing: 0.6px;
+    }
+
+    .eyebrow {
+      font-size: var(--small-size);
+      color: var(--accent-3);
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
+
+    .highlight {
+      color: var(--text-primary);
+    }
+
+    .accent {
+      color: var(--accent);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+      gap: clamp(0.7rem, 2vw, 1.2rem);
+    }
+
+    .card {
+      background: rgba(17, 26, 43, 0.85);
+      border: 1px solid rgba(75, 179, 255, 0.25);
+      border-radius: 18px;
+      padding: clamp(0.8rem, 2vw, 1.4rem);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+      max-height: min(80vh, 520px);
+    }
+
+    .card h3 {
+      margin-bottom: var(--element-gap);
+      color: var(--text-primary);
+    }
+
+    .bullet-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--element-gap);
+    }
+
+    .bullet-list li {
+      position: relative;
+      padding-left: 1.2rem;
+    }
+
+    .bullet-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.55rem;
+      width: 0.5rem;
+      height: 0.5rem;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 12px rgba(75, 179, 255, 0.6);
+    }
+
+    .image-frame {
+      width: 100%;
+      max-height: min(58vh, 520px);
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(75, 179, 255, 0.2);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+      background: rgba(12, 18, 32, 0.6);
+    }
+
+    .image-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+      gap: clamp(1rem, 2.2vw, 1.8rem);
+      align-items: center;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: clamp(0.8rem, 2vw, 1.2rem);
+    }
+
+    .metric {
+      background: rgba(15, 25, 48, 0.9);
+      border: 1px solid rgba(110, 231, 255, 0.25);
+      border-radius: 14px;
+      padding: clamp(0.6rem, 1.6vw, 1rem);
+    }
+
+    .metric .value {
+      font-family: var(--font-display);
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      color: var(--accent-2);
+    }
+
+    .metric .label {
+      font-size: var(--small-size);
+      color: var(--text-secondary);
+    }
+
+    .section-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: var(--small-size);
+      color: var(--accent-2);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+    }
+
+    .section-badge::before {
+      content: "";
+      width: 18px;
+      height: 2px;
+      background: var(--accent-2);
+      display: inline-block;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      z-index: 10;
+      transition: width 0.2s ease;
+    }
+
+    .nav-dots {
+      position: fixed;
+      right: clamp(0.5rem, 2vw, 1.2rem);
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      z-index: 9;
+    }
+
+    .nav-dots button {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(255, 255, 255, 0.3);
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .nav-dots button.active {
+      background: var(--accent-2);
+      transform: scale(1.4);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity var(--duration-normal) var(--ease-out-expo),
+                  transform var(--duration-normal) var(--ease-out-expo);
+    }
+
+    .slide.visible .reveal {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal:nth-child(1) { transition-delay: 0.08s; }
+    .reveal:nth-child(2) { transition-delay: 0.16s; }
+    .reveal:nth-child(3) { transition-delay: 0.24s; }
+    .reveal:nth-child(4) { transition-delay: 0.32s; }
+    .reveal:nth-child(5) { transition-delay: 0.4s; }
+
+    @media (max-height: 700px) {
+      :root {
+        --slide-padding: clamp(0.9rem, 3vw, 2.4rem);
+        --content-gap: clamp(0.5rem, 1.6vw, 1.1rem);
+      }
+    }
+
+    @media (max-height: 600px) {
+      :root {
+        --slide-padding: clamp(0.7rem, 2.5vw, 1.8rem);
+        --body-size: clamp(0.75rem, 1.2vw, 0.95rem);
+      }
+      .nav-dots { display: none; }
+    }
+
+    @media (max-width: 700px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.2s !important;
+      }
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress-bar" id="progress"></div>
+  <nav class="nav-dots" id="navDots" aria-label="Slide navigation"></nav>
+
+  <main>
+    <!-- Title -->
+    <section class="slide title-slide">
+      <div class="slide-content">
+        <div class="eyebrow reveal">Qunar Tech Talk</div>
+        <h1 class="reveal">去哪儿“技术债”偿还实践</h1>
+        <p class="subtitle reveal">如何高效、低风险砍掉50%无用代码</p>
+        <p class="reveal">马阳阳 · 去哪儿旅行基础架构组</p>
+      </div>
+    </section>
+
+    <!-- Agenda -->
+    <section class="slide">
+      <div class="slide-content">
+        <div class="section-badge reveal">Outline</div>
+        <h2 class="reveal">分享主线</h2>
+        <ul class="bullet-list reveal">
+          <li>背景与挑战：为什么必须做“瘦身”</li>
+          <li>目标与策略：两阶段法 + 四步筛选模型</li>
+          <li>服务精简：自动化且低风险的服务收缩</li>
+          <li>代码精简：找到无流量方法并清理</li>
+          <li>最终效果与总结展望</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- One minute highlight -->
+    <section class="slide">
+      <div class="slide-content">
+        <div class="section-badge reveal">一分钟精华</div>
+        <h2 class="reveal">关键结论速览</h2>
+        <div class="metrics reveal">
+          <div class="metric">
+            <div class="value">-50%</div>
+            <div class="label">代码量（主指标）</div>
+          </div>
+          <div class="metric">
+            <div class="value">-26%</div>
+            <div class="label">服务数量</div>
+          </div>
+          <div class="metric">
+            <div class="value">+9.5%</div>
+            <div class="label">发布效率</div>
+          </div>
+          <div class="metric">
+            <div class="value">-10.9%</div>
+            <div class="label">需求平均耗时</div>
+          </div>
+          <div class="metric">
+            <div class="value">&lt;0.3%</div>
+            <div class="label">故障率持续下降</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Author -->
+    <section class="slide">
+      <div class="slide-content two-col">
+        <div>
+          <div class="section-badge reveal">作者介绍</div>
+          <h2 class="reveal">马阳阳</h2>
+          <ul class="bullet-list reveal">
+            <li>去哪儿旅行基础架构组技术专家</li>
+            <li>云原生 SIG 成员，聚焦研发效能</li>
+            <li>负责测试环境治理平台、代码精简平台、组件市场等</li>
+            <li>深度参与“线上代码精简50%”项目并获公司级技术型一等奖</li>
+          </ul>
+        </div>
+        <div class="image-frame reveal">
+          <img src="assets/f73367eaad606a117b498b8606d2df18b982d49b.png" alt="作者介绍">
+        </div>
+      </div>
+    </section>
+
+    <!-- Background -->
+    <section class="slide">
+      <div class="slide-content">
+        <div class="section-badge reveal">背景</div>
+        <h2 class="reveal">历史债务让系统“失速”</h2>
+        <ul class="bullet-list reveal">
+          <li>历史包袱不断堆积：废弃模块、无用代码、维护成本上升</li>
+          <li>平均每人维护约 6 个应用，单人代码量十几万行</li>
+          <li>20% 应用一年无变更，线上方法覆盖率仅 40%</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Background data image -->
+    <section class="slide">
+      <div class="slide-content">
+        <h2 class="reveal">背景数据与现状</h2>
+        <div class="image-frame reveal">
+          <img src="assets/78b6927ab15d7ceae4c5170d18cdba2eb1b89e26.png" alt="背景数据">
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 1 -->
+    <section class="slide">
+      <div class="slide-content">
+        <div class="section-badge reveal">一、目标与策略</div>
+        <h2 class="reveal">系统瘦身目标 & 挑战</h2>
+        <ul class="bullet-list reveal">
+          <li>目标：代码与服务数量均削减 50%，代码精简是主指标</li>
+          <li>挑战：目标高、范围广，覆盖所有业务线</li>
+          <li>要求：在系统稳定前提下完成大规模精简</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Planning -->
+    <section class="slide">
+      <div class="slide-content two-col">
+        <div>
+          <h2 class="reveal">整体规划</h2>
+          <ul class="bullet-list reveal">
+            <li>时间规划：前 2 个月服务精简，后续代码精简</li>
+            <li>组织规划：建立公共支持团队，提供工具与技术支撑</li>
+          </ul>
+        </div>
+        <div class="grid reveal">
+          <div class="image-frame"><img src="assets/4385887eb2934d60b450e8d417ee318808452026.png" alt="时间规划"></div>
+          <div class="image-frame"><img src="assets/b56122142e1423c2a18e055ad2e3875ab5802488.png" alt="组织架构规划"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Strategy -->
+    <section class="slide">
+      <div class="slide-content">
+        <h2 class="reveal">策略选择</h2>
+        <div class="grid reveal">
+          <div class="card">
+            <h3>两阶段法</h3>
+            <p>先“找得到”，再“删得好”。先定位可精简对象，再执行清理与优化。</p>
+            <div class="image-frame" style="margin-top: 0.8rem;">
+              <img src="assets/d1e5b208681dac37735ebf03eeb3991050123ae4.png" alt="两阶段法">
+            </div>
+          </div>
+          <div class="card">
+            <h3>四步筛选模型</h3>
+            <p>挖掘特征 → 度量特征 → 收集数据 → 匹配特征，关键步骤自动化。</p>
+            <div class="image-frame" style="margin-top: 0.8rem;">
+              <img src="assets/c65638bc1c7f8fbe468e36fc2dd772a4611851b7.png" alt="四步筛选模型">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2 -->
+    <section class="slide">
+      <div class="slide-content">
+        <div class="section-badge reveal">二、服务精简</div>
+        <h2 class="reveal">自动化且低风险的服务收缩</h2>
+        <ul class="bullet-list reveal">
+          <li>识别可精简服务：低价值、无流量、长期不迭代</li>
+          <li>度量特征：南北流量、东西流量、服务内部流量</li>
+          <li>删除服务：平台化、流程标准化</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Service identification -->
+    <section class="slide">
+      <div class="slide-content two-col">
+        <div>
+          <h2 class="reveal">识别 + 度量</h2>
+          <ul class="bullet-list reveal">
+            <li>低价值服务：无流量 + 无迭代</li>
+            <li>度量三类流量：网关、调用链、内部调用</li>
+            <li>结合日志与历史数据形成候选集</li>
+          </ul>
+        </div>
+        <div class="grid reveal">
+          <div class="image-frame"><img src="assets/0ae6f9001c22b8555c01d886570e2fac2ab52e15.png" alt="服务识别"></div>
+          <div class="image-frame"><img src="assets/63f96cb82d7288dd87a3b5334a45a06e4da9c6db.png" alt="度量特征"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Platform -->
+    <section class="slide">
+      <div class="slide-content">
+        <h2 class="reveal">建立服务精简平台</h2>
+        <p class="reveal">流程标准化后平台化，支持自动化下线。</p>
+        <div class="image-frame reveal">
+          <img src="assets/efedd31fb5ebc26140fbb3eb8f78bd3f650635fb.png" alt="服务精简平台">
+        </div>
+      </div>
+    </section>
+
+    <!-- Service delete flow -->
+    <section class="slide">
+      <div class="slide-content">
+        <h2 class="reveal">服务删除流程</h2>
+        <div class="grid reveal">
+          <div class="image-frame"><img src="assets/8c76de4fe55dcd62b999fc18350297914a226c87.png" alt="服务删除流程"></div>
+          <div class="image-frame"><img src="assets/8ea3dd48e477e0f8fc43c752b62a9de60c9cd705.png" alt="删除流程阶段"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section class="slide">
+      <div class="slide-content">
+        <div class="section-badge reveal">三、代码精简</div>
+        <h2 class="reveal">精准找到线上无流量方法</h2>
+        <ul class="bullet-list reveal">
+          <li>策略：可精简代码特征分析 + 运行态度量</li>
+          <li>技术选型：AOP / Agent / SA 三方案对比</li>
+          <li>关键点：线上零性能损耗、零故障风险</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Code features -->
+    <section class="slide">
+      <div class="slide-content">
+        <h2 class="reveal">可精简代码特征</h2>
+        <div class="two-col reveal">
+          <div>
+            <ul class="bullet-list">
+              <li>静态扫描：未被引用的方法</li>
+              <li>运行态分析：无流量方法</li>
+              <li>重构优化：简化流程、减少重复</li>
+            </ul>
+          </div>
+          <div class="image-frame">
+            <img src="assets/f142ea6759014fd7409caafb71e9bd1f2a8f823c.png" alt="可精简代码特征">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Measurement options -->
+    <section class="slide">
+      <div class="slide-content">
+        <h2 class="reveal">度量选型：三种方案</h2>
+        <div class="grid reveal">
+          <div class="card">
+            <h3>AOP</h3>
+            <p>方法前置切面记录日志，再分析无流量方法。</p>
+            <div class="image-frame" style="margin-top: 0.7rem;">
+              <img src="assets/0e3bd414e78c4b203eb24b3f6878ab75ca403d08.png" alt="AOP 方案">
+            </div>
+          </div>
+          <div class="card">
+            <h3>Agent 插桩</h3>
+            <p>JVM 启动时字节码插桩，记录方法执行情况。</p>
+            <div class="image-frame" style="margin-top: 0.7rem;">
+              <img src="assets/95eaa7f8e18afd16a1ea1e04c209fafa3fb8f208.png" alt="Agent 方案">
+            </div>
+          </div>
+          <div class="card">
+            <h3>SA 工具</h3>
+            <p>读取 JVM 内部方法执行次数，性能损耗低。</p>
+            <div class="image-frame" style="margin-top: 0.7rem;">
+              <img src="assets/dae6e2b5090a8c9a205d91712f400aab2a09b762.png" alt="SA 方案">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comparison -->
+    <section class="slide">
+      <div class="slide-content">
+        <h2 class="reveal">方案对比与选择</h2>
+        <p class="reveal">综合性能损耗、故障风险与实现复杂度，最终选择 SA 方案。</p>
+        <div class="image-frame reveal">
+          <img src="assets/18225bedb4fe43d91585a78d5ea128d915126849.png" alt="三方案对比">
+        </div>
+      </div>
+    </section>
+
+    <!-- Implementation steps -->
+    <section class="slide">
+      <div class="slide-content">
+        <h2 class="reveal">度量关键步骤</h2>
+        <div class="two-col reveal">
+          <div>
+            <ul class="bullet-list">
+              <li>定时跑数：下线 Pod 后探测，避免影响业务</li>
+              <li>下线时跑数：与发布/重启流程联动</li>
+              <li>SA 跑数实现：区分解释执行与编译执行</li>
+            </ul>
+          </div>
+          <div class="grid">
+            <div class="image-frame"><img src="assets/a8d8636cda7ccdd6778078903b99dc8ecfcfe028.png" alt="定时跑数"></div>
+            <div class="image-frame"><img src="assets/70a7a901714760ca2a46341ca37877048be742ef.png" alt="SA 跑数"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Method set + flow -->
+    <section class="slide">
+      <div class="slide-content">
+        <h2 class="reveal">计算可精简方法集</h2>
+        <div class="grid reveal">
+          <div class="image-frame"><img src="assets/0e6aacc833d4dba39e4916f82216c7b454e87cb8.png" alt="可精简方法集"></div>
+          <div class="image-frame"><img src="assets/c797dd07b66dc8415ea0284b72ab603171aac107.png" alt="业务流程图"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cleanup strategies -->
+    <section class="slide">
+      <div class="slide-content">
+        <h2 class="reveal">代码清理策略</h2>
+        <div class="grid reveal">
+          <div class="card">
+            <h3>全自动化</h3>
+            <p>克隆代码 → 自动删除 → 推送分支 → CR → 发布。</p>
+            <div class="image-frame" style="margin-top: 0.7rem;">
+              <img src="assets/604c97d89d273d8d5459a035223916a4a95aab9e.png" alt="全自动化策略">
+            </div>
+          </div>
+          <div class="card">
+            <h3>半自动化</h3>
+            <p>IDEA 插件辅助人工删除，提升可控性与信任度。</p>
+            <div class="image-frame" style="margin-top: 0.7rem;">
+              <img src="assets/58e0f94737fc751ed3a373e57bc8c743bcbab505.png" alt="半自动化策略">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Best practices -->
+    <section class="slide">
+      <div class="slide-content two-col">
+        <div>
+          <h2 class="reveal">清理最佳实践</h2>
+          <ul class="bullet-list reveal">
+            <li>低重要业务：优先全自动化</li>
+            <li>高重要业务：优先半自动化</li>
+            <li>持续复盘与经验沉淀</li>
+          </ul>
+        </div>
+        <div class="grid reveal">
+          <div class="image-frame"><img src="assets/b986335c6c1a9668938b7ee74f09ce1a0af01037.png" alt="最佳实践"></div>
+          <div class="image-frame"><img src="assets/3e4955ddede2b113cd1e3a17819bb8595abdc32c.png" alt="实践经验"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results -->
+    <section class="slide">
+      <div class="slide-content">
+        <div class="section-badge reveal">四、最终效果</div>
+        <h2 class="reveal">目标达成与稳定性提升</h2>
+        <div class="two-col reveal">
+          <div>
+            <ul class="bullet-list">
+              <li>代码量减少 50%，服务减少 26%</li>
+              <li>故障率持续下降，维持在 0.3% 以下</li>
+              <li>需求处理平均耗时减少 10.9%，发布效率提升 9.5%</li>
+              <li>项目周期超半年，期间无严重故障</li>
+            </ul>
+          </div>
+          <div class="grid">
+            <div class="image-frame"><img src="assets/a151bdd07083ea82785604618fc306b2e20c528a.png" alt="效果 1"></div>
+            <div class="image-frame"><img src="assets/5bece2a8d844b34768c39f8d3c0eb98b613a26f8.png" alt="效果 2"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Summary -->
+    <section class="slide">
+      <div class="slide-content">
+        <div class="section-badge reveal">五、总结展望</div>
+        <h2 class="reveal">“给我一个 API，我就能减少一半代码”</h2>
+        <p class="reveal">底层技术虽不显眼，却能显著提升服务质量、用户体验与整体效率。</p>
+        <div class="image-frame reveal">
+          <img src="assets/35c0c899a9d192f2592858c53bdfa6f7d227c5f7.png" alt="总结图">
+        </div>
+      </div>
+    </section>
+
+    <!-- Closing -->
+    <section class="slide">
+      <div class="slide-content">
+        <div class="section-badge reveal">Thanks</div>
+        <h2 class="reveal">欢迎交流</h2>
+        <p class="reveal">更深入的细节与平台化实践，欢迎线下探讨。</p>
+        <div class="image-frame reveal" style="max-height: min(45vh, 380px);">
+          <img src="assets/90156b4468071307b7a31a701c65d2ec8a742f12.jpeg" alt="交流">
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    class SlidePresentation {
+      constructor() {
+        this.slides = Array.from(document.querySelectorAll('.slide'));
+        this.progress = document.getElementById('progress');
+        this.navDots = document.getElementById('navDots');
+        this.currentIndex = 0;
+        this.createNavDots();
+        this.bindEvents();
+        this.observeSlides();
+        this.updateProgress();
+      }
+
+      createNavDots() {
+        this.slides.forEach((_, index) => {
+          const dot = document.createElement('button');
+          dot.setAttribute('aria-label', `Go to slide ${index + 1}`);
+          dot.addEventListener('click', () => this.scrollToSlide(index));
+          this.navDots.appendChild(dot);
+        });
+        this.updateNav();
+      }
+
+      bindEvents() {
+        window.addEventListener('keydown', (e) => {
+          if (['ArrowDown', 'ArrowRight', 'PageDown', ' '].includes(e.key)) {
+            e.preventDefault();
+            this.nextSlide();
+          }
+          if (['ArrowUp', 'ArrowLeft', 'PageUp'].includes(e.key)) {
+            e.preventDefault();
+            this.prevSlide();
+          }
+        });
+
+        let touchStartY = 0;
+        window.addEventListener('touchstart', (e) => {
+          touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+
+        window.addEventListener('touchend', (e) => {
+          const touchEndY = e.changedTouches[0].clientY;
+          const delta = touchStartY - touchEndY;
+          if (Math.abs(delta) > 60) {
+            delta > 0 ? this.nextSlide() : this.prevSlide();
+          }
+        });
+
+        window.addEventListener('scroll', () => this.updateProgress());
+      }
+
+      observeSlides() {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              this.currentIndex = this.slides.indexOf(entry.target);
+              this.updateNav();
+              this.updateProgress();
+            }
+          });
+        }, { threshold: 0.55 });
+
+        this.slides.forEach((slide) => observer.observe(slide));
+      }
+
+      scrollToSlide(index) {
+        this.slides[index].scrollIntoView({ behavior: 'smooth' });
+      }
+
+      nextSlide() {
+        if (this.currentIndex < this.slides.length - 1) {
+          this.scrollToSlide(this.currentIndex + 1);
+        }
+      }
+
+      prevSlide() {
+        if (this.currentIndex > 0) {
+          this.scrollToSlide(this.currentIndex - 1);
+        }
+      }
+
+      updateProgress() {
+        const total = document.body.scrollHeight - window.innerHeight;
+        const progress = total > 0 ? (window.scrollY / total) * 100 : 0;
+        this.progress.style.width = `${progress}%`;
+      }
+
+      updateNav() {
+        const dots = Array.from(this.navDots.children);
+        dots.forEach((dot, idx) => {
+          dot.classList.toggle('active', idx === this.currentIndex);
+        });
+      }
+    }
+
+    new SlidePresentation();
+  </script>
+</body>
+</html>
