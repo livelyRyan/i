@@ -346,8 +346,8 @@
     }
 
     .stack {
-      padding-top: clamp(0.2rem, 2vh, 1.2rem);
-      gap: clamp(0.4rem, 1.4vw, 1.1rem);
+      padding-top: clamp(0.2rem, 1.6vh, 0.9rem);
+      gap: clamp(0.25rem, 1vw, 0.75rem);
     }
 
     .stack .two-col {
@@ -356,11 +356,40 @@
 
     .stack .grid {
       grid-template-columns: 1fr;
-      gap: clamp(0.5rem, 1.6vw, 1rem);
+      gap: clamp(0.4rem, 1.2vw, 0.85rem);
     }
 
     .stack .image-frame {
-      max-height: min(54vh, 520px);
+      height: min(28vh, 320px);
+      max-height: min(28vh, 320px);
+    }
+
+    .stack .card .image-frame {
+      height: min(20vh, 240px);
+      max-height: min(20vh, 240px);
+    }
+
+    .stack.compact .image-frame {
+      height: min(22vh, 260px);
+      max-height: min(22vh, 260px);
+    }
+
+    .stack.compact .card .image-frame {
+      height: min(12vh, 160px);
+      max-height: min(12vh, 160px);
+    }
+
+    .stack .card {
+      padding: clamp(0.5rem, 1.2vw, 0.9rem);
+    }
+
+    .stack.compact {
+      padding-top: clamp(0.1rem, 1.2vh, 0.7rem);
+      gap: clamp(0.18rem, 0.7vw, 0.5rem);
+    }
+
+    .stack.compact .card {
+      padding: clamp(0.35rem, 0.9vw, 0.7rem);
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -471,7 +500,7 @@
 
     <!-- Planning -->
     <section class="slide">
-      <div class="slide-content stack">
+      <div class="slide-content stack compact">
         <h2 class="reveal">整体规划</h2>
         <ul class="bullet-list reveal">
           <li>时间规划：前 2 个月服务精简，后续代码精简</li>
@@ -522,7 +551,7 @@
 
     <!-- Service identification -->
     <section class="slide">
-      <div class="slide-content stack">
+      <div class="slide-content stack compact">
         <h2 class="reveal">识别 + 度量</h2>
         <ul class="bullet-list reveal">
           <li>低价值服务：无流量 + 无迭代</li>
