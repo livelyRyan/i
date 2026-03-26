@@ -3,15 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI小软件革命：智能体平台驱动的万级PD提效</title>
+  <title>智能体平台 QMoss + QDify（PPT → HTML）</title>
 
-  <!-- Distinctive fonts (Fontshare) -->
-  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@600,700&f[]=satoshi@400,500,700&f[]=jet-brains-mono@400,600&display=swap" />
+  <!-- Fonts (distinctive, but the PPT layout drives typography) -->
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&f[]=jet-brains-mono@400,600&display=swap" />
 
   <style>
     /* ===========================================
        VIEWPORT FITTING: MANDATORY BASE STYLES
-       (from frontend-slides skill; adapted to this deck)
        =========================================== */
     html, body {
       height: 100%;
@@ -24,42 +23,21 @@
     }
 
     :root {
-      /* Colors */
       --bg-0: #070911;
       --bg-1: #0b1020;
-      --bg-2: rgba(255, 255, 255, 0.06);
-      --text-0: rgba(255, 255, 255, 0.94);
-      --text-1: rgba(255, 255, 255, 0.72);
-      --text-2: rgba(255, 255, 255, 0.52);
+      --glass: rgba(255, 255, 255, 0.06);
+      --glass-2: rgba(255, 255, 255, 0.03);
+      --line: rgba(255, 255, 255, 0.12);
+      --text-0: rgba(255, 255, 255, 0.92);
+      --text-1: rgba(255, 255, 255, 0.70);
+      --accent: #3dffcf;
 
-      --accent-0: #3dffcf;
-      --accent-1: #ff4fd8;
-      --accent-2: #7c5cff;
-      --accent-glow: rgba(61, 255, 207, 0.28);
-      --pink-glow: rgba(255, 79, 216, 0.18);
-
-      /* Typography (MUST use clamp()) */
-      --font-display: "Clash Display", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
       --font-body: "Satoshi", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
       --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
 
-      --title-size: clamp(1.75rem, 5.4vw, 4.5rem);
-      --h2-size: clamp(1.25rem, 3.3vw, 2.6rem);
-      --h3-size: clamp(1.05rem, 2.2vw, 1.6rem);
-      --body-size: clamp(0.78rem, 1.35vw, 1.08rem);
-      --small-size: clamp(0.68rem, 1.05vw, 0.92rem);
-
-      /* Spacing (MUST use clamp()) */
-      --slide-padding: clamp(1rem, 4vw, 4rem);
-      --content-gap: clamp(0.7rem, 2.1vw, 2rem);
-      --element-gap: clamp(0.45rem, 1.1vw, 1rem);
-
-      /* Animation */
-      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-      --dur-fast: 240ms;
-      --dur: 650ms;
-      --dur-slow: 920ms;
+      --slide-padding: clamp(0.75rem, 3.4vw, 3rem);
+      --content-gap: clamp(0.6rem, 1.8vw, 1.3rem);
+      --ui-size: clamp(0.68rem, 1vw, 0.92rem);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -75,322 +53,109 @@
       overflow-x: hidden;
     }
 
-    a { color: inherit; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-
     .slide {
       width: 100vw;
       height: 100vh;
       height: 100dvh;
-      overflow: hidden; /* CRITICAL: prevent overflow */
+      overflow: hidden;
       scroll-snap-align: start;
       display: flex;
       flex-direction: column;
       position: relative;
       padding: var(--slide-padding);
-      isolation: isolate;
-    }
-
-    .slide::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,0.15) 40%, transparent 41%),
-        radial-gradient(1px 1px at 72% 22%, rgba(255,255,255,0.14) 40%, transparent 41%),
-        radial-gradient(1px 1px at 88% 68%, rgba(255,255,255,0.11) 40%, transparent 41%),
-        radial-gradient(1px 1px at 22% 78%, rgba(255,255,255,0.09) 40%, transparent 41%),
-        radial-gradient(1000px 700px at 50% 15%, rgba(255,255,255,0.04), transparent 70%);
-      pointer-events: none;
-      z-index: -2;
-      opacity: 0.9;
-    }
-
-    .slide::after {
-      content: "";
-      position: absolute;
-      inset: -40px;
-      background:
-        linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px),
-        linear-gradient(0deg, rgba(255,255,255,0.06) 1px, transparent 1px);
-      background-size: 68px 68px;
-      mask-image: radial-gradient(closest-side at 25% 30%, rgba(0,0,0,0.9), transparent 70%);
-      pointer-events: none;
-      z-index: -3;
-      opacity: 0.28;
-      transform: translate3d(0,0,0);
     }
 
     .slide-content {
       flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      max-height: 100%;
-      overflow: hidden;
-      gap: var(--content-gap);
-    }
-
-    .kicker {
-      font-family: var(--font-mono);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      font-size: var(--small-size);
-      color: var(--text-2);
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      width: fit-content;
-    }
-
-    .kicker .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 99px;
-      background: linear-gradient(135deg, var(--accent-0), var(--accent-1));
-      box-shadow: 0 0 22px var(--accent-glow);
-      flex: 0 0 auto;
-    }
-
-    h1, h2, h3 {
-      font-family: var(--font-display);
-      line-height: 1.06;
-      letter-spacing: -0.02em;
-    }
-
-    h1 { font-size: var(--title-size); }
-    h2 { font-size: var(--h2-size); }
-    h3 { font-size: var(--h3-size); }
-
-    p { font-size: var(--body-size); color: var(--text-1); line-height: 1.45; }
-
-    .subtitle {
-      font-size: var(--body-size);
-      color: var(--text-1);
-      max-width: min(74ch, 100%);
-    }
-
-    .pill-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: clamp(0.35rem, 0.9vw, 0.65rem);
-    }
-
-    .pill {
-      font-family: var(--font-mono);
-      font-size: var(--small-size);
-      color: rgba(255,255,255,0.82);
-      padding: 0.42em 0.7em;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-    }
-
-    .pill.accent {
-      border-color: rgba(61, 255, 207, 0.32);
-      background: linear-gradient(180deg, rgba(61, 255, 207, 0.12), rgba(255, 79, 216, 0.06));
-      box-shadow: 0 18px 55px rgba(61, 255, 207, 0.10);
-    }
-
-    .two-col {
-      display: grid;
-      grid-template-columns: 1.05fr 0.95fr;
-      gap: clamp(0.8rem, 2.4vw, 2.6rem);
-      align-items: center;
-      max-width: min(1200px, 96vw);
-    }
-
-    .media-card {
-      border-radius: 22px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-      box-shadow: 0 30px 120px rgba(0,0,0,0.46);
-      overflow: hidden;
-      position: relative;
-      max-height: min(58vh, 520px);
-    }
-
-    .media-card::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(600px 360px at 20% 10%, rgba(61,255,207,0.12), transparent 60%),
-                  radial-gradient(600px 360px at 85% 40%, rgba(255,79,216,0.10), transparent 62%);
-      pointer-events: none;
-      mix-blend-mode: screen;
-      opacity: 0.7;
-    }
-
-    .media-card img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: block;
-      background: rgba(0,0,0,0.22);
-    }
-
-    .bullet-list {
-      list-style: none;
-      display: grid;
-      gap: clamp(0.42rem, 1vh, 0.9rem);
-      padding: 0;
-      margin: 0;
-      max-width: min(78ch, 100%);
-    }
-
-    .bullet-list li {
-      font-size: var(--body-size);
-      line-height: 1.42;
-      color: rgba(255,255,255,0.82);
-      display: grid;
-      grid-template-columns: 20px 1fr;
-      gap: 0.55rem;
-      align-items: start;
-    }
-
-    .bullet-list li::before {
-      content: "";
-      width: 10px;
-      height: 10px;
-      border-radius: 10px;
-      margin-top: 0.38em;
-      background: linear-gradient(135deg, var(--accent-0), var(--accent-1));
-      box-shadow: 0 0 18px var(--accent-glow);
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
-      gap: clamp(0.6rem, 1.6vw, 1.1rem);
-      max-width: min(1200px, 96vw);
-      max-height: min(62vh, 620px);
-      overflow: hidden;
-    }
-
-    .img-tile {
-      border-radius: 18px;
-      overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.04);
-      box-shadow: 0 22px 70px rgba(0,0,0,0.42);
-      min-height: 120px;
-      max-height: min(26vh, 260px);
-    }
-
-    .img-tile img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: block;
-      background: rgba(0,0,0,0.22);
-    }
-
-    .stats {
-      display: grid;
-      gap: var(--element-gap);
-      max-width: min(44ch, 100%);
-    }
-
-    .stat {
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: linear-gradient(180deg, rgba(61, 255, 207, 0.08), rgba(255, 79, 216, 0.03));
-      padding: clamp(0.8rem, 1.8vw, 1.25rem);
-      box-shadow: 0 20px 80px rgba(61, 255, 207, 0.08);
-    }
-
-    .stat .big {
-      font-family: var(--font-display);
-      font-size: clamp(1.35rem, 3vw, 2.4rem);
-      letter-spacing: -0.03em;
-      color: rgba(255,255,255,0.96);
-    }
-
-    .stat .small {
-      font-family: var(--font-mono);
-      font-size: var(--small-size);
-      color: var(--text-2);
-      margin-top: 0.4rem;
-    }
-
-    .section-watermark {
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      opacity: 0.25;
-      filter: blur(0px);
       display: grid;
       place-items: center;
-      pointer-events: none;
+      max-height: 100%;
+      overflow: hidden;
     }
 
-    .section-watermark img {
-      width: min(1100px, 92vw);
-      max-height: min(62vh, 620px);
-      object-fit: contain;
-      filter: saturate(1.1) contrast(1.04);
-      opacity: 0.85;
+    /* PPT artboard: preserve 16:9-ish layout and place elements in percentages. */
+    .artboard {
+      position: relative;
+      width: min(96vw, calc(92vh * var(--ratio)));
+      aspect-ratio: var(--ratio);
+      background: linear-gradient(180deg, var(--glass), var(--glass-2));
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 30px 140px rgba(0, 0, 0, 0.55);
+      overflow: hidden;
+      transform: translateZ(0);
     }
 
-    .section-overlay {
+    /* Items are positioned via CSS vars in %; font sizes scale with artboard height. */
+    .ppt-item {
       position: absolute;
-      inset: 0;
-      z-index: -1;
-      pointer-events: none;
-      background:
-        radial-gradient(900px 620px at 10% 15%, rgba(61,255,207,0.10), transparent 60%),
-        radial-gradient(900px 620px at 86% 35%, rgba(255,79,216,0.10), transparent 62%),
-        linear-gradient(180deg, rgba(0,0,0,0.12), rgba(0,0,0,0.50));
+      left: var(--x);
+      top: var(--y);
+      width: var(--w);
+      height: var(--h);
+      transform: rotate(var(--rot, 0deg));
+      transform-origin: center;
     }
 
-    .note {
-      font-family: var(--font-mono);
-      font-size: var(--small-size);
-      color: var(--text-2);
+    .ppt-text {
+      display: block;
+      color: var(--tc, rgba(255,255,255,0.92));
+      background: var(--bg, transparent);
+      border: var(--bw, 0px) solid var(--bd, transparent);
+      border-radius: 12px;
+      overflow: hidden;
+      padding: var(--pad, 0);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
 
-    .mono-card {
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.04);
-      padding: clamp(0.75rem, 1.4vw, 1.05rem);
-      font-family: var(--font-mono);
-      font-size: var(--small-size);
-      color: rgba(255,255,255,0.78);
-      line-height: 1.45;
-      max-width: min(78ch, 100%);
-      box-shadow: 0 18px 70px rgba(0,0,0,0.35);
+    .ppt-text-inner {
+      width: 100%;
+      height: 100%;
+      font-size: calc(var(--s, 1) * var(--fs, 18px));
+      line-height: 1.15;
+      color: inherit;
+      overflow: hidden;
+      word-break: break-word;
+      white-space: normal;
     }
 
-    /* Reveal animations: triggered by IntersectionObserver */
-    .reveal {
-      opacity: 0;
-      transform: translateY(18px);
-      transition:
-        opacity var(--dur) var(--ease-out-expo),
-        transform var(--dur) var(--ease-out-expo),
-        filter var(--dur) var(--ease-out-expo);
-      filter: blur(4px);
+    .ppt-shape {
+      background: var(--bg, transparent);
+      border: var(--bw, 1px) solid var(--bd, rgba(255,255,255,0.15));
+      border-radius: 12px;
+      opacity: 0.9;
     }
 
-    .slide.visible .reveal {
-      opacity: 1;
-      transform: translateY(0);
-      filter: blur(0);
+    .ppt-line {
+      background: transparent;
+      border-top: var(--bw, 2px) solid var(--bd, rgba(255,255,255,0.55));
+      height: 0;
+      width: var(--w);
     }
 
-    /* Stagger within each slide */
-    .slide.visible .reveal:nth-child(1) { transition-delay: 60ms; }
-    .slide.visible .reveal:nth-child(2) { transition-delay: 140ms; }
-    .slide.visible .reveal:nth-child(3) { transition-delay: 220ms; }
-    .slide.visible .reveal:nth-child(4) { transition-delay: 300ms; }
-    .slide.visible .reveal:nth-child(5) { transition-delay: 380ms; }
-    .slide.visible .reveal:nth-child(6) { transition-delay: 460ms; }
+    /* Clickable images with full-size lightbox */
+    .ppt-img {
+      padding: 0;
+      border: none;
+      background: transparent;
+      cursor: zoom-in;
+    }
+    .ppt-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.18);
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.40);
+      transition: transform 180ms ease;
+    }
+    .ppt-img:hover img {
+      transform: scale(1.01);
+    }
 
-    /* UI: progress bar, dots, counter */
+    /* UI */
     .progress {
       position: fixed;
       top: 0;
@@ -402,24 +167,23 @@
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
     }
-
     .progress > div {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, var(--accent-0), var(--accent-1), var(--accent-2));
-      box-shadow: 0 0 22px var(--accent-glow);
-      transition: width var(--dur-fast) var(--ease-out);
+      background: linear-gradient(90deg, #3dffcf, #ff4fd8, #7c5cff);
+      box-shadow: 0 0 22px rgba(61, 255, 207, 0.26);
+      transition: width 220ms ease;
     }
 
     .nav-dots {
       position: fixed;
-      right: clamp(0.6rem, 1.8vw, 1.4rem);
+      right: clamp(0.55rem, 1.6vw, 1.2rem);
       top: 50%;
       transform: translateY(-50%);
       z-index: 50;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 9px;
       padding: 10px 8px;
       border-radius: 999px;
       background: rgba(0,0,0,0.18);
@@ -427,7 +191,6 @@
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
     }
-
     .nav-dots button {
       width: 10px;
       height: 10px;
@@ -435,24 +198,23 @@
       border: 1px solid rgba(255,255,255,0.20);
       background: rgba(255,255,255,0.08);
       cursor: pointer;
-      transition: transform var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+      transition: transform 220ms ease, background 220ms ease, border-color 220ms ease;
     }
-
     .nav-dots button[aria-current="true"] {
-      background: linear-gradient(135deg, var(--accent-0), var(--accent-1));
+      background: linear-gradient(135deg, #3dffcf, #ff4fd8);
       border-color: rgba(61,255,207,0.55);
       transform: scale(1.25);
-      box-shadow: 0 0 18px var(--accent-glow), 0 0 26px var(--pink-glow);
+      box-shadow: 0 0 18px rgba(61,255,207,0.22);
     }
 
     .counter {
       position: fixed;
-      left: clamp(0.7rem, 2vw, 1.6rem);
-      bottom: clamp(0.7rem, 2vw, 1.4rem);
+      left: clamp(0.65rem, 2vw, 1.4rem);
+      bottom: clamp(0.65rem, 2vw, 1.2rem);
       z-index: 50;
       font-family: var(--font-mono);
-      font-size: var(--small-size);
-      color: rgba(255,255,255,0.68);
+      font-size: var(--ui-size);
+      color: rgba(255,255,255,0.66);
       background: rgba(0,0,0,0.18);
       border: 1px solid rgba(255,255,255,0.10);
       border-radius: 999px;
@@ -461,28 +223,81 @@
       -webkit-backdrop-filter: blur(10px);
     }
 
-    .hint {
+    /* Lightbox */
+    .lightbox {
       position: fixed;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: clamp(0.7rem, 2vw, 1.4rem);
-      z-index: 50;
-      font-family: var(--font-mono);
-      font-size: var(--small-size);
-      color: rgba(255,255,255,0.56);
-      padding: 0.5em 0.8em;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.10);
-      background: rgba(0,0,0,0.14);
+      inset: 0;
+      z-index: 200;
+      display: none;
+      place-items: center;
+      background: rgba(0,0,0,0.74);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      opacity: 0;
-      transition: opacity var(--dur-slow) var(--ease-out);
-      pointer-events: none;
+      padding: clamp(0.8rem, 2.5vw, 2rem);
     }
-
-    body.ready .hint {
-      opacity: 1;
+    .lightbox.open {
+      display: grid;
+    }
+    .lightbox-card {
+      width: min(96vw, 1400px);
+      height: min(92vh, 900px);
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(10, 12, 20, 0.55);
+      box-shadow: 0 40px 200px rgba(0,0,0,0.65);
+      overflow: hidden;
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+    .lightbox-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+    }
+    .lightbox-bar .title {
+      font-family: var(--font-mono);
+      font-size: var(--ui-size);
+      color: rgba(255,255,255,0.70);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 70%;
+    }
+    .lightbox-actions {
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .lightbox-actions a,
+    .lightbox-actions button {
+      font-family: var(--font-mono);
+      font-size: var(--ui-size);
+      color: rgba(255,255,255,0.82);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px;
+      padding: 0.45em 0.75em;
+      cursor: pointer;
+    }
+    .lightbox-actions a:hover,
+    .lightbox-actions button:hover {
+      border-color: rgba(61,255,207,0.32);
+    }
+    .lightbox-stage {
+      display: grid;
+      place-items: center;
+      padding: 12px;
+      overflow: hidden;
+    }
+    .lightbox-stage img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: rgba(0,0,0,0.25);
+      border-radius: 12px;
     }
 
     /* ===========================================
@@ -490,46 +305,24 @@
        =========================================== */
     @media (max-height: 700px) {
       :root {
-        --slide-padding: clamp(0.85rem, 3vw, 2rem);
-        --content-gap: clamp(0.55rem, 1.6vw, 1.05rem);
-        --title-size: clamp(1.45rem, 4.8vw, 3.1rem);
-        --h2-size: clamp(1.15rem, 3vw, 2.0rem);
+        --slide-padding: clamp(0.55rem, 2.6vw, 1.6rem);
       }
-      .nav-dots { gap: 8px; }
     }
-
     @media (max-height: 600px) {
-      :root {
-        --slide-padding: clamp(0.65rem, 2.6vw, 1.5rem);
-        --content-gap: clamp(0.45rem, 1.2vw, 0.85rem);
-        --body-size: clamp(0.72rem, 1.15vw, 0.95rem);
-      }
-      .nav-dots, .hint { display: none; }
-      .media-card { max-height: min(52vh, 420px); }
-      .img-tile { max-height: min(24vh, 220px); }
+      .nav-dots { display: none; }
     }
-
     @media (max-height: 500px) {
-      :root {
-        --slide-padding: clamp(0.5rem, 2.2vw, 1.15rem);
-        --title-size: clamp(1.2rem, 3.6vw, 2.0rem);
-        --h2-size: clamp(1.0rem, 2.5vw, 1.4rem);
-      }
       .progress { display: none; }
     }
-
     @media (max-width: 900px) {
-      .two-col { grid-template-columns: 1fr; }
-      .media-card { max-height: min(52vh, 520px); }
-      .counter { left: 0.7rem; }
-      .nav-dots { right: 0.6rem; }
+      .nav-dots { right: 0.55rem; }
+      .counter { left: 0.65rem; }
+      .artboard { width: min(96vw, calc(88vh * var(--ratio))); }
     }
 
-    /* Reduced motion */
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.2s !important; }
       html { scroll-behavior: auto; }
-      .reveal { transform: none; filter: none; }
+      * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
     }
   </style>
 </head>
@@ -537,545 +330,737 @@
   <div class="progress" aria-hidden="true"><div id="progressFill"></div></div>
   <nav class="nav-dots" aria-label="Slide navigation" id="navDots"></nav>
   <div class="counter" id="counter" aria-live="polite">01 / 30</div>
-  <div class="hint" aria-hidden="true">↑↓ / Space 导航 · 滚动/滑动也可</div>
 
-  <!-- Slide 1 -->
-  <section class="slide" id="slide-1" data-label="封面">
-    <div class="slide-content">
-      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>QCon / 对外分享</div>
-      <h1 class="reveal">AI小软件革命：<br/>智能体平台驱动的万级 PD 提效</h1>
-      <p class="subtitle reveal">马阳阳 · 去哪儿旅行 · 基础平台团队负责人</p>
-      <div class="pill-row reveal" aria-label="Keywords">
-        <span class="pill accent">QMoss</span>
-        <span class="pill">QDify</span>
-        <span class="pill">Agent Platform</span>
-        <span class="pill">运营提效</span>
-      </div>
-    </div>
-  </section>
+  <!-- Slides -->
 
-  <!-- Slide 2 -->
-  <section class="slide" id="slide-2" data-label="个人简介">
-    <div class="slide-content two-col">
-      <div>
-        <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>个人简介</div>
-        <h2 class="reveal">马阳阳</h2>
-        <p class="subtitle reveal">去哪儿旅行 · 基础平台团队负责人</p>
-        <ul class="bullet-list reveal">
-          <li>负责研发效率、质量类平台建设：自动化测试、测试环境管理、演练、压测、组件市场等</li>
-          <li>近年探索 AI Agent，主导公司级智能体平台 <span style="color: rgba(255,255,255,0.92)">QMoss</span>，规模化落地，带来万级 PD 提效</li>
-          <li>ArchSubmit、QECon、SECon、A2M 等多届大会明星讲师</li>
-        </ul>
-      </div>
-      <div class="media-card reveal" aria-label="Speaker photo">
-        <img src="智能体平台QMoss+QDify-assets/slide02_img01.jpg" alt="马阳阳 照片" />
-      </div>
-    </div>
-  </section>
+    <section class="slide" id="slide-1" data-label="P01">
+      <div class="slide-content">
+        <div class="artboard" data-base-w="1280.000" data-base-h="720.000" style="--ratio:1.777778;">
 
-  <!-- Slide 3 -->
-  <section class="slide" id="slide-3" data-label="目录">
-    <div class="slide-content">
-      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>目录</div>
-      <h2 class="reveal">从人力到智能，走向 AI 小软件生态</h2>
-      <ul class="bullet-list reveal">
-        <li>01、从人力到智能：LLM 引爆运营新纪元</li>
-        <li>02、打造智能中枢：智能体平台建设实践</li>
-        <li>03、业务创新实践：AI 小软件的多场景落地</li>
-        <li>04、价值与经验：取得成就与经验总结</li>
-        <li>05、迈向未来：自进化的 AI 小软件生态</li>
-      </ul>
-    </div>
-  </section>
+          <div class="ppt-item ppt-text" style="--x:6.630208%;--y:31.944444%;--w:92.755208%;--h:22.870370%;z-index:1;--fs:64.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">AI小软件革命：<br/>智能体平台驱动的万级PD提效</div>
+          </div>
 
-  <!-- Slide 4 -->
-  <section class="slide" id="slide-4" data-label="亮点介绍">
-    <div class="slide-content two-col">
-      <div class="stats">
-        <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>亮点介绍</div>
-        <div class="stat reveal">
-          <div class="big">公司级项目<br/>运营提效 10×</div>
-          <div class="small">从“人力堆”到“智能驱动”的体系化落地</div>
-        </div>
-        <div class="stat reveal">
-          <div class="big">AI 小软件<br/>搭建成本 ↓ 70%+</div>
-          <div class="small">智能体平台 + 多维表格：低/零代码的工程化范式</div>
-        </div>
-      </div>
-      <div>
-        <h2 class="reveal">您能获得</h2>
-        <ul class="bullet-list reveal">
-          <li>产运团队：一套通用的 AI 提效方法与配套工具</li>
-          <li>AI Infra 团队：智能体平台建设体系，以及如何大规模落地</li>
-          <li>研发团队：适合 AI 中等复杂度应用的新研发模式，带来约 70% 提效</li>
-          <li>场景挖掘：AI 落地的系统化拆解与优先级方法</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- Slide 5 -->
-  <section class="slide" id="slide-5" data-label="01 运营新纪元">
-    <div class="section-watermark" aria-hidden="true">
-      <img src="智能体平台QMoss+QDify-assets/slide05_img01.png" alt="" />
-    </div>
-    <div class="section-overlay" aria-hidden="true"></div>
-    <div class="slide-content">
-      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>01</div>
-      <h1 class="reveal">从人力到智能：<br/>LLM 引爆运营新纪元</h1>
-      <p class="subtitle reveal">把“运营动作”拆成可复用能力，让工具成为可持续进化的生产力。</p>
-    </div>
-  </section>
-
-  <!-- Slide 6 -->
-  <section class="slide" id="slide-6" data-label="运营岗位日常工作">
-    <div class="slide-content">
-      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>现状</div>
-      <h2 class="reveal">运营岗位日常工作</h2>
-      <div class="two-col" style="grid-template-columns: 1.05fr 0.95fr; align-items: start;">
-        <ul class="bullet-list reveal">
-          <li>业务数据定时播报</li>
-          <li>写文、写贴</li>
-          <li>指标运营</li>
-          <li>用户赔付申请审核</li>
-          <li>社区帖子质量打分</li>
-          <li>……</li>
-        </ul>
-        <div class="grid reveal" aria-label="Examples">
-          <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide06_img01.png" alt="运营工作示意 1" /></div>
-          <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide06_img02.jpg" alt="运营工作示意 2" /></div>
-          <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide06_img03.png" alt="运营工作示意 3" /></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Slide 7 -->
-  <section class="slide" id="slide-7" data-label="新能力">
-    <div class="slide-content">
-      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>能力跃迁</div>
-      <h1 class="reveal">大模型带来的新能力</h1>
-      <div class="pill-row reveal">
-        <span class="pill accent">理解</span>
-        <span class="pill">生成</span>
-        <span class="pill">分析</span>
-        <span class="pill">总结</span>
-        <span class="pill">规划</span>
-      </div>
-      <p class="subtitle reveal">（本页为原 PPT 的过渡页：强调“能力供给”的变化，为后续 AI 小软件与平台化铺垫。）</p>
-    </div>
-  </section>
-
-  <!-- Slide 8 -->
-  <section class="slide" id="slide-8" data-label="AI 小软件">
-    <div class="slide-content two-col">
-      <div>
-        <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>概念</div>
-        <h2 class="reveal">AI 小软件：特点 & 想象空间</h2>
-        <ul class="bullet-list reveal">
-          <li>解决硬编码路径的痛点：成本高、周期长、ROI 不过关</li>
-          <li>低/零代码平台降低开发门槛：业务想法可快速变成可运行工具</li>
-        </ul>
-      </div>
-      <div class="media-card reveal">
-        <img src="智能体平台QMoss+QDify-assets/slide08_img01.png" alt="AI 小软件 示意图" />
-      </div>
-    </div>
-  </section>
-
-  <!-- Slide 9 -->
-  <section class="slide" id="slide-9" data-label="最佳实践">
-    <div class="slide-content two-col">
-      <div>
-        <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>最佳实践</div>
-        <h2 class="reveal">智能体平台 + 多维表格</h2>
-        <ul class="bullet-list reveal">
-          <li>形成一套新研发模式：把 AI 小软件做成“可配置、可复用、可运营”的能力</li>
-          <li>搭建与运行成本降低 70%+；显著降低门槛，非技术角色也能主导</li>
-        </ul>
-      </div>
-      <div class="media-card reveal">
-        <img src="智能体平台QMoss+QDify-assets/slide09_img01.png" alt="智能体平台 + 多维表格 示意图" />
-      </div>
-    </div>
-  </section>
-
-  <!-- Slide 10 -->
-  <section class="slide" id="slide-10" data-label="02 平台实践">
-    <div class="section-watermark" aria-hidden="true">
-      <img src="智能体平台QMoss+QDify-assets/slide10_img01.png" alt="" />
-    </div>
-    <div class="section-overlay" aria-hidden="true"></div>
-    <div class="slide-content">
-      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>02</div>
-      <h1 class="reveal">打造智能中枢：<br/>智能体平台建设实践</h1>
-      <p class="subtitle reveal">从“能用”到“可规模化”：参数、升级、稳定性、可观测性、MCP 网关。</p>
-    </div>
-  </section>
-
-  <!-- Slide 11 -->
-  <section class="slide" id="slide-11" data-label="整体规划">
-    <div class="slide-content">
-      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>规划</div>
-      <h2 class="reveal">智能体平台整体规划</h2>
-      <div class="pill-row reveal">
-        <span class="pill accent">开源</span>
-        <span class="pill">coze</span>
-      </div>
-      <div class="grid reveal" aria-label="Planning diagrams">
-        <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide11_img01.png" alt="整体规划 图 1" /></div>
-        <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide11_img02.png" alt="整体规划 图 2" /></div>
-        <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide11_img03.png" alt="整体规划 图 3" /></div>
-        <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide11_img04.jpg" alt="整体规划 图 4" /></div>
-        <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide11_img05.png" alt="整体规划 图 5" /></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Slide 12 -->
-  <section class="slide" id="slide-12" data-label="参数调优">
-    <div class="slide-content">
-      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>关键点一</div>
-      <h2 class="reveal">常用参数调优</h2>
-      <div class="two-col" style="align-items: start;">
-        <ul class="bullet-list reveal">
-          <li>整体框架</li>
-          <li>功能类参数</li>
-          <li>性能类参数</li>
-        </ul>
-        <div class="grid reveal" aria-label="Tuning diagrams">
-          <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide12_img01.png" alt="参数调优 图 1" /></div>
-          <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide12_img02.png" alt="参数调优 图 2" /></div>
-          <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide12_img03.png" alt="参数调优 图 3" /></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Slide 13 -->
-  <section class="slide" id="slide-13" data-label="升级机制">
-    <div class="slide-content two-col">
-      <div>
-        <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>关键点二</div>
-        <h2 class="reveal">建立升级机制</h2>
-        <ul class="bullet-list reveal">
-          <li>大版本不升级：规避变化大、bug 多</li>
-          <li>升级前确认 GitHub 无严重 bug 类 issue</li>
-          <li>固化并持续完善：升级/扩容 SOP、Checklist</li>
-          <li>提前演练升级与回滚方案</li>
-        </ul>
-      </div>
-      <div class="grid reveal" aria-label="Upgrade visuals">
-        <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide13_img01.png" alt="升级机制 图 1" /></div>
-        <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide13_img02.png" alt="升级机制 图 2" /></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Slide 14 -->
-  <section class="slide" id="slide-14" data-label="差异化设计">
-    <div class="slide-content two-col">
-      <div>
-        <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>设计思考</div>
-        <h2 class="reveal">自研平台 vs 开源平台：差异化设计</h2>
-        <p class="subtitle reveal">开源方案很好用，但在企业级规模化落地时，往往需要围绕“稳定性 / 可运营 / 可治理”做体系补齐。</p>
-        <div class="mono-card reveal">
-          开源，<br/>
-          开源的
-          <div class="note" style="margin-top: 0.5rem;">（原 PPT 本页含对比示意图，已保留如下）</div>
-        </div>
-      </div>
-      <div class="media-card reveal">
-        <img src="智能体平台QMoss+QDify-assets/slide14_img01.png" alt="自研与开源差异化设计 示意图" />
-      </div>
-    </div>
-  </section>
-
-  <!-- Slide 15 -->
-  <section class="slide" id="slide-15" data-label="稳定性体系">
-    <div class="slide-content">
-      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>QMoss 关键设计</div>
-      <h2 class="reveal">稳定性体系</h2>
-      <div class="grid reveal" aria-label="Stability visuals" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)); max-height: min(60vh, 640px);">
-        <div class="img-tile" style="max-height: min(30vh, 320px);"><img src="智能体平台QMoss+QDify-assets/slide15_img01.png" alt="稳定性体系 图 1" /></div>
-        <div class="img-tile" style="max-height: min(30vh, 320px);"><img src="智能体平台QMoss+QDify-assets/slide15_img02.png" alt="稳定性体系 图 2" /></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Slide 16 -->
-  <section class="slide" id="slide-16" data-label="可观测性">
-    <div class="slide-content two-col">
-      <div>
-        <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>核心基建一</div>
-        <h2 class="reveal">可观测性：Langfuse</h2>
-        <ul class="bullet-list reveal">
-          <li>开源产品选型</li>
-          <li>整体设计</li>
-        </ul>
-        <div class="mono-card reveal" role="note">
-          参考实现：<a href="https://github.com/langchain4j/langchain4j/pull/2499/files" target="_blank" rel="noreferrer">langchain4j PR #2499</a>
-        </div>
-      </div>
-      <div class="grid reveal" aria-label="Observability visuals" style="max-height: min(60vh, 640px);">
-        <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide16_img01.png" alt="Langfuse 设计 图 1" /></div>
-        <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide16_img02.png" alt="Langfuse 设计 图 2" /></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Slide 17 -->
-  <section class="slide" id="slide-17" data-label="MCP 网关">
-    <div class="slide-content">
-      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>核心基建二</div>
-      <h2 class="reveal">MCP 网关</h2>
-      <div class="two-col" style="align-items: start;">
-        <div>
-          <ul class="bullet-list reveal">
-            <li>整体框架</li>
-            <li>关键决策</li>
-            <li>核心实现：客户端 / 服务端选型</li>
-          </ul>
-          <div class="mono-card reveal" style="margin-top: var(--element-gap);">
-            客户端：<span style="color: rgba(255,255,255,0.92)">dev.langchain4j</span> · <span style="color: rgba(255,255,255,0.92)">langchain4j-mcp</span><br/>
-            服务端：<span style="color: rgba(255,255,255,0.92)">io.modelcontextprotocol.sdk</span> · <span style="color: rgba(255,255,255,0.92)">mcp-spring-webmvc</span>
+          <div class="ppt-item ppt-text" style="--x:6.630430%;--y:64.167221%;--w:75.000000%;--h:6.712963%;z-index:2;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">马阳阳 去哪儿旅行 基础平台团队负责人</div>
           </div>
         </div>
-        <div class="grid reveal" aria-label="MCP gateway diagrams" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); max-height: min(62vh, 640px);">
-          <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide17_img01.png" alt="MCP 网关 图 1" /></div>
-          <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide17_img02.png" alt="MCP 网关 图 2" /></div>
-          <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide17_img03.png" alt="MCP 网关 图 3" /></div>
-          <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide17_img04.png" alt="MCP 网关 图 4" /></div>
-          <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide17_img05.png" alt="MCP 网关 图 5" /></div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-2" data-label="P02">
+      <div class="slide-content">
+        <div class="artboard" data-base-w="1280.000" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.182292%;--y:5.342593%;--w:67.578125%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">个人简介</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:46.355348%;--y:23.758034%;--w:33.665157%;--h:10.001444%;z-index:2;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:500;">马阳阳</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:46.355348%;--y:32.709493%;--w:41.343176%;--h:6.299913%;z-index:3;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:500;">去哪儿旅行 基础平台团队负责人</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:46.354167%;--y:42.500000%;--w:48.713542%;--h:28.259259%;z-index:4;--fs:21.333px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">负责公司研发效率、质量类平台建设，如 自动化测试平台、测试环境管理平台、演练平台、压测平台、组件市场等<br/>近年探索 AI Agent，主导自研的公司级智能体平台 QMoss，已实现规模化落地，带来万级 PD 提效<br/>ArchSubmit、QECon、SECon、A2M 等多届大会明星讲师</div>
+          </div>
+<div class="ppt-item ppt-line" style="--x:47.242290%;--y:39.062103%;--w:43.115026%;--h:0.000000%;z-index:5;--bd:#ffffff;--bw:1.00px;" aria-hidden="true"></div>
+
+          <button class="ppt-item ppt-img" style="--x:8.098958%;--y:14.953704%;--w:29.416667%;--h:70.092593%;z-index:6;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide02_pic01.jpg" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide02_pic01.jpg" alt="图片 7" loading="lazy" />
+          </button>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Slide 18 -->
-  <section class="slide" id="slide-18" data-label="03 多场景落地">
-    <div class="section-watermark" aria-hidden="true">
-      <img src="智能体平台QMoss+QDify-assets/slide18_img01.png" alt="" />
-    </div>
-    <div class="section-overlay" aria-hidden="true"></div>
-    <div class="slide-content">
-      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>03</div>
-      <h1 class="reveal">业务创新实践：<br/>AI 小软件的多场景落地</h1>
-      <p class="subtitle reveal">体系化、Workflow、Agent 三类案例，覆盖从地图到落地到运营闭环。</p>
-    </div>
-  </section>
+    <section class="slide" id="slide-3" data-label="P03">
+      <div class="slide-content">
+        <div class="artboard" data-base-w="1280.000" data-base-h="720.000" style="--ratio:1.777778;">
 
-  <!-- Slide 19 -->
-  <section class="slide" id="slide-19" data-label="案例1 体系化">
-    <div class="slide-content two-col">
-      <div>
-        <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>案例 1（体系化）</div>
-        <h2 class="reveal">OTA 全场景运营自动化建设</h2>
-        <p class="subtitle reveal">如何在已成熟的业务中，体系化落地？</p>
-        <div class="two-col" style="grid-template-columns: 1fr 1fr; gap: clamp(0.6rem, 1.8vw, 1.2rem); align-items: start;">
-          <ul class="bullet-list reveal" style="max-width: none;">
-            <li>收集全部的运营动作</li>
-            <li>将动作归类到业务域、场景类</li>
-            <li>评估每个场景的价值空间，形成全局地图</li>
-            <li>根据 ROI 定优先级</li>
-          </ul>
-          <ul class="bullet-list reveal" style="max-width: none;">
-            <li>选择少量高 ROI 场景，跑 MVP</li>
-            <li>沉淀经验与最佳实践</li>
-            <li>跑通后复制到其他场景，并行推进</li>
-            <li>持续更新全局地图，汇总价值</li>
-          </ul>
-        </div>
-        <div class="note reveal">（上图为示意信息）</div>
-      </div>
-      <div class="media-card reveal">
-        <img src="智能体平台QMoss+QDify-assets/slide19_img01.png" alt="OTA 全场景运营自动化 示意图" />
-      </div>
-    </div>
-  </section>
+          <div class="ppt-item ppt-text" style="--x:12.234375%;--y:25.638889%;--w:75.531250%;--h:48.722222%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">01、从人力到智能：LLM 引爆运营新纪元<br/> 02、打造智能中枢：智能体平台建设实践<br/> 03、业务创新实践：AI 小软件的多场景落地<br/> 04、价值与经验：取得成就与经验总结<br/> 05、迈向未来：自进化的 AI 小软件生态</div>
+          </div>
 
-  <!-- Slide 20 -->
-  <section class="slide" id="slide-20" data-label="准确性">
-    <div class="slide-content">
-      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>案例 1（体系化）</div>
-      <h2 class="reveal">共性且核心问题：准确性</h2>
-      <p class="subtitle reveal">体系化落地过程中，一个共性且核心问题：如何提升 AI 小软件的准确性</p>
-      <div class="grid reveal" aria-label="Accuracy visuals" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)); max-height: min(62vh, 640px);">
-        <div class="img-tile" style="max-height: min(30vh, 340px);"><img src="智能体平台QMoss+QDify-assets/slide20_img01.png" alt="准确性 图 1" /></div>
-        <div class="img-tile" style="max-height: min(30vh, 340px);"><img src="智能体平台QMoss+QDify-assets/slide20_img02.png" alt="准确性 图 2" /></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Slide 21 -->
-  <section class="slide" id="slide-21" data-label="案例2 Workflow">
-    <div class="slide-content two-col">
-      <div>
-        <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>案例 2（Workflow）</div>
-        <h2 class="reveal">质量运营与归因场景落地</h2>
-        <ul class="bullet-list reveal">
-          <li>运营同学能搭建出怎样的 AI 小软件？</li>
-          <li>利用 AI 的理解力与分析力：运行效率提升 80%，周期从“天”降低到“小时”</li>
-        </ul>
-        <div class="pill-row reveal">
-          <span class="pill accent">质量</span>
-          <span class="pill">归因</span>
-          <span class="pill">Workflow</span>
+          <div class="ppt-item ppt-text" style="--x:10.892159%;--y:5.401721%;--w:35.294898%;--h:6.731773%;z-index:2;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">目录</div>
+          </div>
         </div>
       </div>
-      <div class="grid reveal" aria-label="Workflow visuals" style="max-height: min(60vh, 640px);">
-        <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide21_img01.png" alt="Workflow 图 1" /></div>
-        <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide21_img02.png" alt="Workflow 图 2" /></div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Slide 22 -->
-  <section class="slide" id="slide-22" data-label="示意图">
-    <div class="slide-content">
-      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>案例 2（Workflow）</div>
-      <h2 class="reveal">示意图（仅供参考）</h2>
-      <div class="grid reveal" aria-label="Workflow reference diagrams" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); max-height: min(66vh, 700px);">
-        <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide22_img01.png" alt="示意图 1（仅供参考）" /></div>
-        <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide22_img02.png" alt="示意图 2（仅供参考）" /></div>
-        <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide22_img03.png" alt="示意图 3（仅供参考）" /></div>
-      </div>
-      <div class="note reveal">示意图，仅供参考</div>
-    </div>
-  </section>
+    <section class="slide" id="slide-4" data-label="P04">
+      <div class="slide-content">
+        <div class="artboard" data-base-w="1280.000" data-base-h="720.000" style="--ratio:1.777778;">
 
-  <!-- Slide 23 -->
-  <section class="slide" id="slide-23" data-label="案例3 Agent">
-    <div class="slide-content two-col">
-      <div>
-        <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>案例 3（Agent）</div>
-        <h2 class="reveal">AI 助手建设</h2>
-        <ul class="bullet-list reveal">
-          <li>每天超过 150+ 问题咨询</li>
-          <li>有效处理约 100，仍积压 50+</li>
-          <li>每年耗费 3000+ PD</li>
-        </ul>
-      </div>
-      <div class="media-card reveal">
-        <img src="智能体平台QMoss+QDify-assets/slide23_img01.png" alt="AI 助手建设 示意图" />
-      </div>
-    </div>
-  </section>
+          <div class="ppt-item ppt-text" style="--x:5.833333%;--y:19.740741%;--w:91.104167%;--h:48.037037%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">公司级项目，运营提效 10x 倍<br/><br/>您能获得：<br/>产运团队：一种通用的 AI 提效方法及配套工具<br/>AI Infra 团队：智能体平台建设体系，及如何大规模落地<br/>研发团队：<br/>掌握一套适合 AI 中等复杂度应用，带来 70% 提效的新研发模式<br/>AI 落地的场景挖掘思路</div>
+          </div>
 
-  <!-- Slide 24 -->
-  <section class="slide" id="slide-24" data-label="0代码实现">
-    <div class="slide-content">
-      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>案例 3（Agent）</div>
-      <h2 class="reveal">“0 代码”实现 AI 助手</h2>
-      <div class="two-col" style="align-items: start;">
-        <div>
-          <ul class="bullet-list reveal">
-            <li>使用智能体平台搭建：业务同学也能完成端到端的助手配置</li>
-            <li>多维表格 + 文档管理知识库：运营维护知识库，持续沉淀与迭代</li>
-          </ul>
-        </div>
-        <div class="grid reveal" aria-label="No-code implementation visuals" style="max-height: min(62vh, 640px);">
-          <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide24_img01.png" alt="0代码实现 图 1" /></div>
-          <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide24_img02.png" alt="0代码实现 图 2" /></div>
-          <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide24_img03.png" alt="0代码实现 图 3" /></div>
-          <div class="img-tile"><img src="智能体平台QMoss+QDify-assets/slide24_img04.png" alt="0代码实现 图 4" /></div>
+          <div class="ppt-item ppt-text" style="--x:11.181463%;--y:5.341514%;--w:15.221440%;--h:6.731773%;z-index:2;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">亮点介绍</div>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Slide 25 -->
-  <section class="slide" id="slide-25" data-label="04 价值经验">
-    <div class="section-watermark" aria-hidden="true">
-      <img src="智能体平台QMoss+QDify-assets/slide25_img01.png" alt="" />
-    </div>
-    <div class="section-overlay" aria-hidden="true"></div>
-    <div class="slide-content">
-      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>04</div>
-      <h1 class="reveal">价值与经验：<br/>智能体平台的提效成就</h1>
-      <p class="subtitle reveal">从体系到工具，从工具到生态：复用能力、沉淀方法、规模化提效。</p>
-    </div>
-  </section>
+    <section class="slide" id="slide-5" data-label="P05">
+      <div class="slide-content">
+        <div class="artboard" data-base-w="1280.000" data-base-h="720.000" style="--ratio:1.777778;">
 
-  <!-- Slide 26 -->
-  <section class="slide" id="slide-26" data-label="成果展示">
-    <div class="slide-content">
-      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>成果</div>
-      <h2 class="reveal">成果展示</h2>
-      <div class="media-card reveal" style="max-height: min(68vh, 720px);">
-        <img src="智能体平台QMoss+QDify-assets/slide26_img01.png" alt="成果展示 图" />
-      </div>
-    </div>
-  </section>
+          <button class="ppt-item ppt-img" style="--x:11.032406%;--y:26.190216%;--w:77.935179%;--h:54.024030%;z-index:1;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide05_pic01.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide05_pic01.png" alt="图片 4" loading="lazy" />
+          </button>
 
-  <!-- Slide 27 -->
-  <section class="slide" id="slide-27" data-label="经验总结">
-    <div class="slide-content two-col">
-      <div>
-        <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>经验总结</div>
-        <h2 class="reveal">经验总结</h2>
-        <ul class="bullet-list reveal">
-          <li>这套 AI 小软件体系复用性极高，可直接跨行业迁移</li>
-        </ul>
-      </div>
-      <div class="media-card reveal">
-        <img src="智能体平台QMoss+QDify-assets/slide27_img01.png" alt="经验总结 图" />
-      </div>
-    </div>
-  </section>
-
-  <!-- Slide 28 -->
-  <section class="slide" id="slide-28" data-label="05 迈向未来">
-    <div class="section-watermark" aria-hidden="true">
-      <img src="智能体平台QMoss+QDify-assets/slide28_img01.png" alt="" />
-    </div>
-    <div class="section-overlay" aria-hidden="true"></div>
-    <div class="slide-content">
-      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>05</div>
-      <h1 class="reveal">迈向未来：<br/>自进化的 AI 小软件生态</h1>
-      <p class="subtitle reveal">让“业务想法 → 可运行工具 → 持续运营迭代”成为组织能力。</p>
-    </div>
-  </section>
-
-  <!-- Slide 29 -->
-  <section class="slide" id="slide-29" data-label="未来展望">
-    <div class="slide-content">
-      <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>未来展望</div>
-      <h2 class="reveal">未来展望</h2>
-      <div class="media-card reveal" style="max-height: min(70vh, 740px);">
-        <img src="智能体平台QMoss+QDify-assets/slide29_img01.png" alt="未来展望 图" />
-      </div>
-    </div>
-  </section>
-
-  <!-- Slide 30 -->
-  <section class="slide" id="slide-30" data-label="二维码">
-    <div class="slide-content two-col">
-      <div>
-        <div class="kicker reveal"><span class="dot" aria-hidden="true"></span>资料获取</div>
-        <h2 class="reveal">扫码关注公众号</h2>
-        <p class="subtitle reveal">获取 PPT 下载链接</p>
-        <div class="pill-row reveal">
-          <span class="pill accent">PPT</span>
-          <span class="pill">下载链接</span>
-          <span class="pill">公众号</span>
+          <div class="ppt-item ppt-text" style="--x:12.001083%;--y:32.346413%;--w:76.000000%;--h:41.722222%;z-index:2;--fs:80.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">01、从人力到智能：<br/>LLM 引爆运营新纪元</div>
+          </div>
         </div>
       </div>
-      <div class="media-card reveal" style="max-height: min(54vh, 420px);">
-        <img src="智能体平台QMoss+QDify-assets/slide30_img01.jpg" alt="二维码" />
+    </section>
+
+    <section class="slide" id="slide-6" data-label="P06">
+      <div class="slide-content">
+        <div class="artboard" data-base-w="1280.000" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.182292%;--y:5.342593%;--w:29.276042%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">运营岗位日常工作</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:4.098958%;--y:55.675926%;--w:26.942708%;--h:34.990741%;z-index:2;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide06_pic01.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide06_pic01.png" alt="图片 1" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:4.911458%;--y:17.046296%;--w:19.359375%;--h:33.638889%;z-index:3;--fs:21.333px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">业务数据定时播报<br/>写文、写贴<br/>指标运营<br/>用户赔付申请审核<br/>社区帖子质量打分<br/>......</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:71.609375%;--y:13.000000%;--w:24.046875%;--h:66.851852%;z-index:4;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide06_pic02.jpg" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide06_pic02.jpg" alt="图片 7" loading="lazy" />
+          </button>
+
+          <button class="ppt-item ppt-img" style="--x:35.437500%;--y:13.000000%;--w:31.776042%;--h:77.685185%;z-index:5;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide06_pic03.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide06_pic03.png" alt="图片 10" loading="lazy" />
+          </button>
+<div class="ppt-item ppt-shape" style="--x:73.276042%;--y:29.120370%;--w:21.083333%;--h:5.907407%;z-index:7;--bg:#f9fafc;--bd:#f9fafc;--bw:1.00px;" aria-hidden="true"></div>
+<div class="ppt-item ppt-shape" style="--x:76.755208%;--y:11.138889%;--w:21.083333%;--h:5.907407%;z-index:8;--bg:#f9fafc;--bd:#f9fafc;--bw:1.00px;" aria-hidden="true"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-7" data-label="P07">
+      <div class="slide-content">
+        <div class="artboard" data-base-w="1280.000" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.182292%;--y:5.342593%;--w:67.578125%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">大模型带来的新能力</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:5.317708%;--y:52.657159%;--w:87.333403%;--h:40.546544%;z-index:2;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide07_pic01.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide07_pic01.png" alt="图片 5" loading="lazy" />
+          </button>
+
+          <button class="ppt-item ppt-img" style="--x:5.317708%;--y:13.601852%;--w:87.333403%;--h:39.187442%;z-index:3;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide07_pic02.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide07_pic02.png" alt="图片 6" loading="lazy" />
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-8" data-label="P08">
+      <div class="slide-content">
+        <div class="artboard" data-base-w="1280.000" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.182292%;--y:5.342593%;--w:67.578125%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">AI 小软件概念&amp;特点&amp;想象空间</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:2.239583%;--y:51.814815%;--w:95.526042%;--h:30.824074%;z-index:2;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide08_pic01.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide08_pic01.png" alt="图片 4" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:5.000000%;--y:20.027778%;--w:75.578125%;--h:25.722222%;z-index:3;--fs:24.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">AI 小软件可以解决过去靠程序员硬编码带来的成本高、周期长、ROI 不过关的问题<br/><br/>低/零代码平台降低开发门槛，业务想法可以立即变成可运行的工具</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-9" data-label="P09">
+      <div class="slide-content">
+        <div class="artboard" data-base-w="1280.000" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.182292%;--y:5.342593%;--w:67.578125%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">AI 小软件的落地最佳实践：智能体平台 + 多维表格</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:5.000000%;--y:16.027778%;--w:72.677083%;--h:16.527778%;z-index:2;--fs:32.000px;--pad:0;--tc:#c00000;">
+            <div class="ppt-text-inner" style="font-weight:700;">探索了一套新研发模式，利用“智能体平台 + 多维表格”，已成为 最佳实践<br/>AI 小软件的搭建及运行成本降低 70%+；大幅降低搭建门槛，非技术角色也能主导</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:2.244792%;--y:46.194444%;--w:10.776042%;--h:6.962963%;z-index:3;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:500;">交互层</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:2.244792%;--y:56.453704%;--w:10.776042%;--h:6.962963%;z-index:4;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:500;">执行引擎</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:2.244792%;--y:66.712963%;--w:10.776042%;--h:6.962963%;z-index:5;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:500;">数据层</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:15.197917%;--y:36.527778%;--w:84.427083%;--h:54.231481%;z-index:7;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide09_pic01.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide09_pic01.png" alt="图片 9" loading="lazy" />
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-10" data-label="P10">
+      <div class="slide-content">
+        <div class="artboard" data-base-w="1280.000" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <button class="ppt-item ppt-img" style="--x:11.032406%;--y:26.190216%;--w:77.935179%;--h:54.024030%;z-index:1;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide10_pic01.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide10_pic01.png" alt="图片 4" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:12.001083%;--y:32.346413%;--w:72.750000%;--h:41.722222%;z-index:2;--fs:80.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">02、打造智能中枢：<br/>智能体平台建设实践</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-11" data-label="P11">
+      <div class="slide-content">
+        <div class="artboard" data-base-w="1280.000" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.182292%;--y:5.342593%;--w:67.578125%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">智能体平台整体规划</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:42.578125%;--y:7.175926%;--w:56.046875%;--h:83.592593%;z-index:2;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide11_pic01.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide11_pic01.png" alt="图片 11" loading="lazy" />
+          </button>
+
+          <button class="ppt-item ppt-img" style="--x:1.796875%;--y:14.564815%;--w:46.338542%;--h:21.981481%;z-index:3;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide11_pic02.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide11_pic02.png" alt="图片 1" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:20.682292%;--y:31.962963%;--w:3.729167%;--h:1.907407%;z-index:4;--fs:12.000px;--pad:0.32em;--bg:#f1f4fa;--bd:#f1f4fa;--bw:1.00px;--tc:#22272c;">
+            <div class="ppt-text-inner" style="font-weight:700;">开源</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:2.236983%;--y:42.305556%;--w:15.859375%;--h:20.555556%;z-index:5;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide11_pic03.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide11_pic03.png" alt="图片 3" loading="lazy" />
+          </button>
+
+          <button class="ppt-item ppt-img" style="--x:19.421875%;--y:41.527778%;--w:21.197917%;--h:21.972222%;z-index:6;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide11_pic04.jpg" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide11_pic04.jpg" alt="图片 5" loading="lazy" />
+          </button>
+
+          <button class="ppt-item ppt-img" style="--x:9.739583%;--y:68.018519%;--w:12.364583%;--h:21.981481%;z-index:7;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide11_pic05.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide11_pic05.png" alt="图片 14" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:22.875000%;--y:74.398148%;--w:10.156250%;--h:9.222222%;z-index:8;--fs:48.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">coze</div>
+          </div>
+<div class="ppt-item ppt-shape" style="--x:68.437500%;--y:11.388889%;--w:19.343750%;--h:7.083333%;z-index:9;--bg:#d6dcf3;--bd:#d6dcf3;--bw:1.00px;" aria-hidden="true"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-12" data-label="P12">
+      <div class="slide-content">
+        <div class="artboard" data-base-w="1280.000" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.182292%;--y:5.342593%;--w:67.578125%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">关键点一：常用参数调优</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:2.005208%;--y:65.620370%;--w:49.166667%;--h:27.907407%;z-index:2;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide12_pic01.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide12_pic01.png" alt="图片 1" loading="lazy" />
+          </button>
+
+          <button class="ppt-item ppt-img" style="--x:51.875000%;--y:19.379630%;--w:47.739583%;--h:52.675926%;z-index:3;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide12_pic02.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide12_pic02.png" alt="图片 2" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:2.005208%;--y:12.055556%;--w:26.375000%;--h:6.712963%;z-index:4;--fs:21.333px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">1、整体框架</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:2.005208%;--y:57.759259%;--w:26.375000%;--h:6.712963%;z-index:5;--fs:21.333px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">2、功能类参数</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:51.875000%;--y:12.055556%;--w:26.375000%;--h:6.712963%;z-index:6;--fs:21.333px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">3、性能类参数</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:2.005208%;--y:19.379630%;--w:49.526042%;--h:38.750000%;z-index:7;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide12_pic03.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide12_pic03.png" alt="图片 7" loading="lazy" />
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-13" data-label="P13">
+      <div class="slide-content">
+        <div class="artboard" data-base-w="1280.000" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.182292%;--y:5.342593%;--w:67.578125%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">关键点二：建立升级机制</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:50.255208%;--y:8.564815%;--w:44.036458%;--h:26.287037%;z-index:2;--fs:24.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">大版本不升级（规避变化大、bug 多）<br/>升级前，确认 github 上无严重 bug 类 issue<br/>固化并持续完善 升级、扩容等 SOP<br/>固化并持续完善 checklist<br/>提前演练升级、回滚方案</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:4.822917%;--y:12.777778%;--w:40.567708%;--h:81.074074%;z-index:3;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide13_pic01.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide13_pic01.png" alt="图片 6" loading="lazy" />
+          </button>
+
+          <button class="ppt-item ppt-img" style="--x:51.567708%;--y:35.731481%;--w:32.953125%;--h:58.120370%;z-index:4;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide13_pic02.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide13_pic02.png" alt="图片 7" loading="lazy" />
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-14" data-label="P14">
+      <div class="slide-content">
+        <div class="artboard" data-base-w="1280.000" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.182292%;--y:5.342593%;--w:67.578125%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">自研智能体平台，与开源平台的差异化设计思考</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:0.000000%;--y:16.231481%;--w:100.000000%;--h:67.546296%;z-index:2;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide14_pic01.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide14_pic01.png" alt="图片 7" loading="lazy" />
+          </button>
+<div class="ppt-item ppt-shape" style="--x:80.390625%;--y:40.916667%;--w:3.854167%;--h:3.287037%;z-index:3;--bd:#7355b0;--bw:1.00px;" aria-hidden="true"></div>
+
+          <div class="ppt-item ppt-text" style="--x:12.140625%;--y:20.370370%;--w:3.031250%;--h:2.518519%;z-index:4;--fs:14.000px;--pad:0.32em;--bg:#f3f5fc;--bd:#f3f5fc;--bw:1.00px;--tc:#5f5f60;">
+            <div class="ppt-text-inner" style="font-weight:700;">开源，</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:12.520833%;--y:30.046296%;--w:3.473958%;--h:2.518519%;z-index:5;--fs:14.667px;--pad:0.32em;--bg:#f3f5fc;--bd:#f3f5fc;--bw:1.00px;--tc:#5f5f60;">
+            <div class="ppt-text-inner" style="font-weight:700;">开源的</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-15" data-label="P15">
+      <div class="slide-content">
+        <div class="artboard" data-base-w="1280.000" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.182292%;--y:5.342593%;--w:67.578125%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">QMoss 关键设计：稳定性体系</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:5.078125%;--y:12.055556%;--w:46.447917%;--h:81.944444%;z-index:2;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide15_pic01.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide15_pic01.png" alt="图片 4" loading="lazy" />
+          </button>
+
+          <button class="ppt-item ppt-img" style="--x:53.515625%;--y:7.620370%;--w:44.932292%;--h:85.111111%;z-index:3;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide15_pic02.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide15_pic02.png" alt="图片 5" loading="lazy" />
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-16" data-label="P16">
+      <div class="slide-content">
+        <div class="artboard" data-base-w="1280.000" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <button class="ppt-item ppt-img" style="--x:15.171875%;--y:55.888889%;--w:66.432292%;--h:34.407407%;z-index:1;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide16_pic01.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide16_pic01.png" alt="图片 10" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:11.182292%;--y:5.342593%;--w:67.578125%;--h:6.712963%;z-index:2;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">其他核心基建一：可观测性 Langfuse</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:3.130208%;--y:12.055556%;--w:26.375000%;--h:6.712963%;z-index:3;--fs:21.333px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">1、开源产品选型</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:3.932292%;--y:55.472222%;--w:26.375000%;--h:6.712963%;z-index:4;--fs:21.333px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">2、整体设计</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:3.932292%;--y:88.277778%;--w:61.317708%;--h:6.712963%;z-index:5;--fs:21.333px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">参考实现：https://github.com/langchain4j/langchain4j/pull/2499/files</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:3.932292%;--y:18.768519%;--w:86.526042%;--h:37.675926%;z-index:6;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide16_pic02.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide16_pic02.png" alt="图片 12" loading="lazy" />
+          </button>
+<div class="ppt-item ppt-shape" style="--x:72.062500%;--y:71.287037%;--w:7.416667%;--h:7.861111%;z-index:7;--bg:#dff5e5;--bd:#dff5e5;--bw:1.00px;" aria-hidden="true"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-17" data-label="P17">
+      <div class="slide-content">
+        <div class="artboard" data-base-w="1280.000" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.182292%;--y:5.342593%;--w:67.578125%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">其他核心基建二：MCP 网关</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:4.296875%;--y:20.592593%;--w:31.359375%;--h:31.361111%;z-index:2;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide17_pic01.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide17_pic01.png" alt="图片 1" loading="lazy" />
+          </button>
+
+          <button class="ppt-item ppt-img" style="--x:7.234375%;--y:61.259259%;--w:25.489583%;--h:31.944444%;z-index:3;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide17_pic02.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide17_pic02.png" alt="图片 2" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:3.130208%;--y:12.712963%;--w:26.375000%;--h:6.712963%;z-index:4;--fs:21.333px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">1、整体框架</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:3.130208%;--y:53.333333%;--w:26.375000%;--h:6.712963%;z-index:5;--fs:21.333px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">2、关键决策</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:66.697917%;--y:23.944444%;--w:31.567708%;--h:29.722222%;z-index:6;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide17_pic03.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide17_pic03.png" alt="图片 5" loading="lazy" />
+          </button>
+
+          <button class="ppt-item ppt-img" style="--x:39.958333%;--y:57.222222%;--w:58.208333%;--h:34.555556%;z-index:7;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide17_pic04.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide17_pic04.png" alt="图片 6" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:44.666667%;--y:4.537037%;--w:54.317708%;--h:17.481481%;z-index:8;--fs:21.333px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">3、核心实现<br/>客户端：基于dev.langchain4j：langchain4j-mcp<br/>服务端：基于io.modelcontextprotocol.sdk：mcp-spring-webmvc</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:39.958333%;--y:27.972222%;--w:25.338542%;--h:23.962963%;z-index:9;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide17_pic05.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide17_pic05.png" alt="图片 11" loading="lazy" />
+          </button>
+<div class="ppt-item ppt-line" style="--x:37.578125%;--y:13.898148%;--w:0.000000%;--h:78.759259%;z-index:10;--bd:#ffffff;--bw:1.00px;" aria-hidden="true"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-18" data-label="P18">
+      <div class="slide-content">
+        <div class="artboard" data-base-w="1280.000" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <button class="ppt-item ppt-img" style="--x:11.032406%;--y:26.190216%;--w:77.935179%;--h:54.024030%;z-index:1;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide18_pic01.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide18_pic01.png" alt="图片 4" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:12.001083%;--y:32.346413%;--w:82.125000%;--h:41.722222%;z-index:2;--fs:80.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">03、业务创新实践：<br/>AI 小软件的多场景落地</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-19" data-label="P19">
+      <div class="slide-content">
+        <div class="artboard" data-base-w="1280.000" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.182292%;--y:5.342593%;--w:67.578125%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">案例 1（体系化）：OTA 全场景运营自动化建设</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:4.223958%;--y:14.916667%;--w:50.536458%;--h:18.601852%;z-index:2;--fs:24.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">如何在已成熟的业务中，体系化落地？</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:54.760417%;--y:20.398148%;--w:44.036458%;--h:67.481481%;z-index:3;--fs:24.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">1、收集全部的运营动作<br/>2、将动作归类到业务域、场景类<br/>3、评估每个场景的价值空间，形成全局地图<br/>4、根据 ROI 定优先级<br/>5、选择少量高 ROI 场景，跑 MVP<br/>6、沉淀经验与最佳实践<br/>7、一个场景跑通后，复制到其他场景，并行推进<br/>8、持续更新全局地图，方便汇总价值</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:2.973958%;--y:20.398148%;--w:46.078125%;--h:66.398148%;z-index:4;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide19_pic01.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide19_pic01.png" alt="图片 2" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:4.223958%;--y:88.712963%;--w:25.010417%;--h:5.398148%;z-index:5;--fs:24.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">（上图为示意信息）</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-20" data-label="P20">
+      <div class="slide-content">
+        <div class="artboard" data-base-w="1280.000" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <button class="ppt-item ppt-img" style="--x:52.239583%;--y:61.287037%;--w:45.632558%;--h:30.472222%;z-index:1;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide20_pic01.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide20_pic01.png" alt="图片 4" loading="lazy" />
+          </button>
+
+          <button class="ppt-item ppt-img" style="--x:63.206811%;--y:61.287037%;--w:35.668189%;--h:30.472222%;z-index:2;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide20_pic02.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide20_pic02.png" alt="图片 5" loading="lazy" />
+          </button>
+
+          <button class="ppt-item ppt-img" style="--x:1.598958%;--y:11.055556%;--w:50.109375%;--h:80.703704%;z-index:3;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide20_pic03.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide20_pic03.png" alt="图片 2" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:11.182292%;--y:5.342593%;--w:58.088542%;--h:6.712963%;z-index:4;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">案例 1（体系化）：OTA 全场景运营自动化建设</div>
+          </div>
+<div class="ppt-item ppt-line" style="--x:22.802083%;--y:78.907407%;--w:29.437500%;--h:0.000000%;z-index:5;--bd:#ffffff;--bw:3.33px;" aria-hidden="true"></div>
+<div class="ppt-item ppt-line" style="--x:24.208333%;--y:49.055556%;--w:55.531250%;--h:32.027778%;z-index:6;--bd:#ffffff;--bw:3.33px;" aria-hidden="true"></div>
+
+          <div class="ppt-item ppt-text" style="--x:60.598958%;--y:14.222222%;--w:37.125000%;--h:12.305556%;z-index:7;--fs:24.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">体系化落地过程中，一个共性且核心问题：<br/>如何提升 AI 小软件的准确性</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:60.598958%;--y:28.694444%;--w:38.276042%;--h:20.361111%;z-index:8;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide20_pic04.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide20_pic04.png" alt="图片 20" loading="lazy" />
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-21" data-label="P21">
+      <div class="slide-content">
+        <div class="artboard" data-base-w="1280.000" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.182292%;--y:5.342593%;--w:67.578125%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">案例 2（Workflow）：质量运营与归因场景落地</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:56.109375%;--y:15.064815%;--w:37.802083%;--h:18.601852%;z-index:2;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide21_pic01.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide21_pic01.png" alt="图片 7" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:5.562500%;--y:17.259259%;--w:49.614583%;--h:18.601852%;z-index:3;--fs:24.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">运营同学能搭建出怎样的 AI 小软件？<br/>如何利用 AI 的理解力与分析力，提升 80% 运行效率，周期从天降低到小时？</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:5.562500%;--y:34.694444%;--w:80.197917%;--h:59.240741%;z-index:4;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide21_pic02.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide21_pic02.png" alt="图片 14" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:26.171875%;--y:40.083333%;--w:2.104167%;--h:2.111111%;z-index:5;--fs:9.333px;--pad:0.32em;--bg:#f0f4fc;--bd:#f0f4fc;--bw:1.00px;--tc:#656a70;">
+            <div class="ppt-text-inner" style="font-weight:700;">质量</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-22" data-label="P22">
+      <div class="slide-content">
+        <div class="artboard" data-base-w="1280.000" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.182292%;--y:5.342593%;--w:67.578125%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">案例 2（Workflow）：质量运营与归因场景落地</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:1.489583%;--y:12.055556%;--w:65.156250%;--h:52.129630%;z-index:2;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide22_pic01.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide22_pic01.png" alt="图片 1" loading="lazy" />
+          </button>
+
+          <button class="ppt-item ppt-img" style="--x:1.489583%;--y:65.462963%;--w:91.166667%;--h:28.148148%;z-index:3;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide22_pic02.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide22_pic02.png" alt="图片 2" loading="lazy" />
+          </button>
+
+          <button class="ppt-item ppt-img" style="--x:69.062500%;--y:7.018519%;--w:28.442708%;--h:57.166667%;z-index:4;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide22_pic03.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide22_pic03.png" alt="图片 3" loading="lazy" />
+          </button>
+<div class="ppt-item ppt-shape" style="--x:46.411458%;--y:16.750000%;--w:2.203125%;--h:3.240741%;z-index:5;--bg:#fffffd;--bd:#fffffd;--bw:1.00px;" aria-hidden="true"></div>
+<div class="ppt-item ppt-shape" style="--x:3.968750%;--y:24.731481%;--w:2.671875%;--h:2.407407%;z-index:6;--bg:#fffffd;--bd:#fffffd;--bw:1.00px;" aria-hidden="true"></div>
+<div class="ppt-item ppt-shape" style="--x:6.125000%;--y:33.231481%;--w:1.046875%;--h:2.407407%;z-index:7;--bg:#fffffd;--bd:#fffffd;--bw:1.00px;" aria-hidden="true"></div>
+
+          <div class="ppt-item ppt-text" style="--x:1.197917%;--y:46.231481%;--w:10.375000%;--h:9.407407%;z-index:8;--pad:0;--tc:#878b92;">
+            <div class="ppt-text-inner" style="font-weight:700;">示意图，仅供参考</div>
+          </div>
+<div class="ppt-item ppt-shape" style="--x:65.395833%;--y:80.990741%;--w:5.994792%;--h:5.203704%;z-index:9;--bg:#ebebeb;--bd:#ebebeb;--bw:1.00px;" aria-hidden="true"></div>
+<div class="ppt-item ppt-shape" style="--x:2.942708%;--y:79.870370%;--w:3.697917%;--h:1.611111%;z-index:10;--bg:#ebebeb;--bd:#ebebeb;--bw:1.00px;" aria-hidden="true"></div>
+<div class="ppt-item ppt-shape" style="--x:69.401042%;--y:15.092593%;--w:27.140625%;--h:3.731481%;z-index:11;--bg:#202020;--bd:#202020;--bw:1.00px;" aria-hidden="true"></div>
+<div class="ppt-item ppt-shape" style="--x:78.166667%;--y:8.935185%;--w:5.421875%;--h:1.620370%;z-index:12;--bg:#202020;--bd:#202020;--bw:1.00px;" aria-hidden="true"></div>
+<div class="ppt-item ppt-shape" style="--x:83.322917%;--y:10.787037%;--w:6.000000%;--h:1.620370%;z-index:13;--bg:#202020;--bd:#202020;--bw:1.00px;" aria-hidden="true"></div>
+<div class="ppt-item ppt-shape" style="--x:69.401042%;--y:23.361111%;--w:27.140625%;--h:3.731481%;z-index:14;--bg:#202020;--bd:#202020;--bw:1.00px;" aria-hidden="true"></div>
+<div class="ppt-item ppt-shape" style="--x:69.401042%;--y:30.537037%;--w:27.140625%;--h:1.620370%;z-index:15;--bg:#202020;--bd:#202020;--bw:1.00px;" aria-hidden="true"></div>
+<div class="ppt-item ppt-shape" style="--x:69.401042%;--y:34.731481%;--w:27.140625%;--h:1.620370%;z-index:16;--bg:#202020;--bd:#202020;--bw:1.00px;" aria-hidden="true"></div>
+<div class="ppt-item ppt-shape" style="--x:69.401042%;--y:39.092593%;--w:27.140625%;--h:1.620370%;z-index:17;--bg:#202020;--bd:#202020;--bw:1.00px;" aria-hidden="true"></div>
+
+          <div class="ppt-item ppt-text" style="--x:86.166667%;--y:15.324074%;--w:10.375000%;--h:9.407407%;z-index:18;--pad:0;--tc:#878b92;">
+            <div class="ppt-text-inner" style="font-weight:700;">示意图，仅供参考</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-23" data-label="P23">
+      <div class="slide-content">
+        <div class="artboard" data-base-w="1280.000" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.182292%;--y:5.342593%;--w:67.578125%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">案例 3（Agent）：AI 助手建设</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:5.562500%;--y:17.259259%;--w:38.645833%;--h:32.740741%;z-index:2;--fs:24.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">运营状况：<br/>每天超过 150+ 问题咨询<br/>有效处理 100 左右，积压 50+<br/>每年耗费 3000+PD</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:18.078125%;--y:50.000000%;--w:63.838542%;--h:39.138889%;z-index:3;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide23_pic01.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide23_pic01.png" alt="图片 1" loading="lazy" />
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-24" data-label="P24">
+      <div class="slide-content">
+        <div class="artboard" data-base-w="1280.000" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.182292%;--y:5.342593%;--w:53.307292%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">案例 3（Agent）：AI 助手建设</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:5.114583%;--y:14.148148%;--w:40.458333%;--h:5.101852%;z-index:3;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">使用智能体平台“0代码”实现 AI 助手</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:76.286458%;--y:57.731481%;--w:23.713542%;--h:42.268519%;z-index:4;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide24_pic01.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide24_pic01.png" alt="图片 13" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:48.203125%;--y:14.138889%;--w:47.135417%;--h:7.203704%;z-index:5;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">多维表格 + 文档管理知识库，维护运营维护知识库</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:48.364583%;--y:57.731481%;--w:27.921875%;--h:42.268519%;z-index:6;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide24_pic02.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide24_pic02.png" alt="图片 10" loading="lazy" />
+          </button>
+
+          <button class="ppt-item ppt-img" style="--x:3.515625%;--y:20.481481%;--w:43.651042%;--h:72.120370%;z-index:7;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide24_pic03.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide24_pic03.png" alt="图片 2" loading="lazy" />
+          </button>
+
+          <button class="ppt-item ppt-img" style="--x:52.260417%;--y:19.250000%;--w:40.463542%;--h:38.064815%;z-index:8;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide24_pic04.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide24_pic04.png" alt="图片 3" loading="lazy" />
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-25" data-label="P25">
+      <div class="slide-content">
+        <div class="artboard" data-base-w="1280.000" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <button class="ppt-item ppt-img" style="--x:11.032406%;--y:26.190216%;--w:77.935179%;--h:54.024030%;z-index:1;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide25_pic01.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide25_pic01.png" alt="图片 4" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:12.001083%;--y:32.346413%;--w:79.000000%;--h:41.722222%;z-index:2;--fs:80.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">04、价值与经验：<br/>智能体平台的提效成就</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-26" data-label="P26">
+      <div class="slide-content">
+        <div class="artboard" data-base-w="1280.000" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.182292%;--y:5.342593%;--w:67.578125%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">成果展示</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:2.718750%;--y:12.444444%;--w:94.562500%;--h:80.518519%;z-index:2;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide26_pic01.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide26_pic01.png" alt="图片 1" loading="lazy" />
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-27" data-label="P27">
+      <div class="slide-content">
+        <div class="artboard" data-base-w="1280.000" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.182292%;--y:5.074074%;--w:20.468750%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">经验总结</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:5.515625%;--y:11.759259%;--w:89.364583%;--h:82.712963%;z-index:2;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide27_pic01.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide27_pic01.png" alt="图片 3" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:33.010417%;--y:5.046296%;--w:60.520833%;--h:6.712963%;z-index:3;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">这套 AI 小软件体系复用性极高，可直接跨行业迁移</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-28" data-label="P28">
+      <div class="slide-content">
+        <div class="artboard" data-base-w="1280.000" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <button class="ppt-item ppt-img" style="--x:11.032406%;--y:26.190216%;--w:77.935179%;--h:54.024030%;z-index:1;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide28_pic01.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide28_pic01.png" alt="图片 4" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:12.001083%;--y:32.346413%;--w:85.250000%;--h:41.722222%;z-index:2;--fs:80.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">05、迈向未来：<br/>自进化的 AI 小软件生态</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-29" data-label="P29">
+      <div class="slide-content">
+        <div class="artboard" data-base-w="1280.000" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.182292%;--y:5.342593%;--w:67.578125%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">未来展望</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:1.427083%;--y:16.842593%;--w:97.140625%;--h:66.555556%;z-index:2;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide29_pic01.png" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide29_pic01.png" alt="图片 4" loading="lazy" />
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-30" data-label="P30">
+      <div class="slide-content">
+        <div class="artboard" data-base-w="1280.000" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:7.794455%;--y:63.504783%;--w:20.186015%;--h:11.336498%;z-index:2;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">扫码关注公众号<br/>获取 PPT 下载链接</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:48.901042%;--y:8.259259%;--w:30.880208%;--h:74.842593%;z-index:3;" type="button" data-lightbox="智能体平台QMoss+QDify-assets/slide30_pic01.jpg" aria-label="Open image">
+            <img src="智能体平台QMoss+QDify-assets/slide30_pic01.jpg" alt="图片 1" loading="lazy" />
+          </button>
+        </div>
+      </div>
+    </section>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <div class="lightbox-card" role="dialog" aria-modal="true" aria-label="Image viewer">
+      <div class="lightbox-bar">
+        <div class="title" id="lightboxTitle">image</div>
+        <div class="lightbox-actions">
+          <a id="lightboxOpen" href="#" target="_blank" rel="noreferrer">Open</a>
+          <button type="button" id="lightboxClose">Close (Esc)</button>
+        </div>
+      </div>
+      <div class="lightbox-stage" id="lightboxStage">
+        <img id="lightboxImg" alt="Full-size preview" />
       </div>
     </div>
-  </section>
+  </div>
 
   <script>
-    /* ===========================================
-       SLIDE PRESENTATION CONTROLLER
-       - Keyboard navigation (↑↓ ←→ Space PageUp PageDown Home End)
-       - Touch swipe navigation
-       - Wheel navigation (throttled)
-       - Progress bar, nav dots, counter
-       - IntersectionObserver for reveal animations
-       =========================================== */
     class SlidePresentation {
       constructor() {
         this.slides = Array.from(document.querySelectorAll(".slide"));
@@ -1083,20 +1068,26 @@
         this.progressFill = document.getElementById("progressFill");
         this.counter = document.getElementById("counter");
         this.reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
         this.activeIndex = 0;
         this._wheelLock = false;
-        this._touchStartY = null;
-        this._touchStartX = null;
 
         this._buildDots();
         this._bind();
-        this._observe();
+        this._syncActiveFromScroll();
+        this._installArtboardScaling();
+      }
 
-        requestAnimationFrame(() => {
-          document.body.classList.add("ready");
-          this._syncActiveFromScroll();
-        });
+      _installArtboardScaling() {
+        const boards = Array.from(document.querySelectorAll(".artboard"));
+        const updateOne = (b) => {
+          const baseH = parseFloat(b.getAttribute("data-base-h") || "0");
+          if (!baseH) return;
+          const scale = b.clientHeight / baseH;
+          b.style.setProperty("--s", String(scale));
+        };
+        const updateAll = () => boards.forEach(updateOne);
+        updateAll();
+        window.addEventListener("resize", () => updateAll(), { passive: true });
       }
 
       _buildDots() {
@@ -1114,94 +1105,38 @@
       _bind() {
         window.addEventListener("keydown", (e) => {
           const key = e.key;
-          const isNavKey = ["ArrowDown", "ArrowRight", "PageDown", " ", "Enter", "ArrowUp", "ArrowLeft", "PageUp", "Home", "End"].includes(key);
+          const isNavKey = ["ArrowDown","ArrowRight","PageDown"," ","Enter","ArrowUp","ArrowLeft","PageUp","Home","End"].includes(key);
           if (!isNavKey) return;
-
-          // Prevent page scroll / spacebar jump.
           e.preventDefault();
-
           if (key === "Home") return this.goTo(0);
           if (key === "End") return this.goTo(this.slides.length - 1);
-
           if (key === "ArrowUp" || key === "ArrowLeft" || key === "PageUp") return this.prev();
           return this.next();
-        }, { passive: false });
+        }, { passive: false } );
 
         window.addEventListener("wheel", (e) => {
           if (this._wheelLock) return;
           const dy = e.deltaY || 0;
           if (Math.abs(dy) < 14) return;
-
           this._wheelLock = true;
-          if (dy > 0) this.next();
-          else this.prev();
-
-          window.setTimeout(() => { this._wheelLock = false; }, 380);
+          if (dy > 0) this.next(); else this.prev();
+          window.setTimeout(() => { this._wheelLock = false; }, 360);
         }, { passive: true });
 
-        window.addEventListener("scroll", () => {
-          this._syncActiveFromScroll();
-        }, { passive: true });
-
-        window.addEventListener("touchstart", (e) => {
-          const t = e.changedTouches && e.changedTouches[0];
-          if (!t) return;
-          this._touchStartY = t.clientY;
-          this._touchStartX = t.clientX;
-        }, { passive: true });
-
-        window.addEventListener("touchend", (e) => {
-          const t = e.changedTouches && e.changedTouches[0];
-          if (!t || this._touchStartY == null || this._touchStartX == null) return;
-
-          const dy = t.clientY - this._touchStartY;
-          const dx = t.clientX - this._touchStartX;
-          this._touchStartY = null;
-          this._touchStartX = null;
-
-          // Prefer vertical swipe.
-          if (Math.abs(dy) < 38) return;
-          if (Math.abs(dy) < Math.abs(dx)) return;
-          if (dy < 0) this.next();
-          else this.prev();
-        }, { passive: true });
-      }
-
-      _observe() {
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) entry.target.classList.add("visible");
-          });
-        }, { threshold: 0.35 });
-
-        this.slides.forEach((s) => observer.observe(s));
+        window.addEventListener("scroll", () => this._syncActiveFromScroll(), { passive: true });
       }
 
       _syncActiveFromScroll() {
         const viewportMid = window.scrollY + window.innerHeight / 2;
         let bestIndex = 0;
         let bestDist = Infinity;
-
         for (let i = 0; i < this.slides.length; i++) {
           const rect = this.slides[i].getBoundingClientRect();
           const slideMid = window.scrollY + rect.top + rect.height / 2;
           const dist = Math.abs(slideMid - viewportMid);
-          if (dist < bestDist) {
-            bestDist = dist;
-            bestIndex = i;
-          }
+          if (dist < bestDist) { bestDist = dist; bestIndex = i; }
         }
-
-        this._setActive(bestIndex);
-      }
-
-      _setActive(index) {
-        const bounded = Math.max(0, Math.min(index, this.slides.length - 1));
-        if (bounded === this.activeIndex) {
-          this._renderUI();
-          return;
-        }
-        this.activeIndex = bounded;
+        this.activeIndex = bestIndex;
         this._renderUI();
       }
 
@@ -1209,11 +1144,9 @@
         const total = this.slides.length;
         const current = this.activeIndex + 1;
         const pad2 = (n) => String(n).padStart(2, "0");
-
         this.counter.textContent = `${pad2(current)} / ${pad2(total)}`;
         const percent = (this.activeIndex / Math.max(1, total - 1)) * 100;
         this.progressFill.style.width = `${percent}%`;
-
         const dots = Array.from(this.navDots.querySelectorAll("button"));
         dots.forEach((b, i) => b.setAttribute("aria-current", i === this.activeIndex ? "true" : "false"));
       }
@@ -1222,15 +1155,57 @@
         const slide = this.slides[index];
         if (!slide) return;
         slide.scrollIntoView({ behavior: this.reduceMotion ? "auto" : "smooth", block: "start" });
-        this._setActive(index);
+        this.activeIndex = Math.max(0, Math.min(index, this.slides.length - 1));
+        this._renderUI();
       }
 
       next() { this.goTo(this.activeIndex + 1); }
       prev() { this.goTo(this.activeIndex - 1); }
     }
 
+    class Lightbox {
+      constructor() {
+        this.el = document.getElementById("lightbox");
+        this.img = document.getElementById("lightboxImg");
+        this.title = document.getElementById("lightboxTitle");
+        this.openLink = document.getElementById("lightboxOpen");
+        this.closeBtn = document.getElementById("lightboxClose");
+
+        this.closeBtn.addEventListener("click", () => this.close());
+        this.el.addEventListener("click", (e) => {
+          if (e.target === this.el) this.close();
+        });
+        window.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") this.close();
+        });
+
+        document.body.addEventListener("click", (e) => {
+          const btn = e.target && e.target.closest && e.target.closest("[data-lightbox]");
+          if (!btn) return;
+          const src = btn.getAttribute("data-lightbox");
+          if (!src) return;
+          this.open(src);
+        });
+      }
+
+      open(src) {
+        this.img.src = src;
+        this.title.textContent = src.split("/").pop() || "image";
+        this.openLink.href = src;
+        this.el.classList.add("open");
+        this.el.setAttribute("aria-hidden", "false");
+      }
+
+      close() {
+        if (!this.el.classList.contains("open")) return;
+        this.el.classList.remove("open");
+        this.el.setAttribute("aria-hidden", "true");
+        this.img.src = "";
+      }
+    }
+
     new SlidePresentation();
+    new Lightbox();
   </script>
 </body>
 </html>
-
