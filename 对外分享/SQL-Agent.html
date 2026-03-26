@@ -21,26 +21,26 @@
     }
 
     :root {
-      --bg-0: #f6f7fb;
-      --bg-1: #eef1f6;
-      --glass: rgba(0, 0, 0, 0.06);
-      --glass-2: rgba(0, 0, 0, 0.03);
-      --line: rgba(0, 0, 0, 0.12);
-      --text-0: rgba(15, 18, 25, 0.92);
+      --bg-0: #070911;
+      --bg-1: #0b1020;
+      --glass: rgba(255, 255, 255, 0.06);
+      --glass-2: rgba(255, 255, 255, 0.03);
+      --line: rgba(255, 255, 255, 0.12);
+      --text-0: rgba(255, 255, 255, 0.92);
+      --text-1: rgba(255, 255, 255, 0.70);
+      --accent: #3dffcf;
       --font-body: "Satoshi", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
       --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
       --slide-padding: clamp(0.75rem, 3.4vw, 3rem);
       --ui-size: clamp(0.68rem, 1vw, 0.92rem);
-      --artboard-bg: #ffffff;
-      --artboard-border: rgba(0, 0, 0, 0.12);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: var(--font-body);
-      background: radial-gradient(1200px 900px at 15% 10%, rgba(90, 120, 255, 0.08), transparent 60%),
-                  radial-gradient(900px 700px at 80% 20%, rgba(0, 180, 160, 0.06), transparent 55%),
-                  radial-gradient(900px 700px at 65% 88%, rgba(255, 140, 80, 0.08), transparent 55%),
+      background: radial-gradient(1200px 900px at 15% 10%, rgba(124, 92, 255, 0.18), transparent 60%),
+                  radial-gradient(900px 700px at 80% 20%, rgba(61, 255, 207, 0.12), transparent 55%),
+                  radial-gradient(900px 700px at 65% 88%, rgba(255, 79, 216, 0.10), transparent 55%),
                   linear-gradient(180deg, var(--bg-0), var(--bg-1));
       color: var(--text-0);
       height: 100%;
@@ -71,10 +71,10 @@
       position: relative;
       width: min(96vw, calc(92vh * var(--ratio)));
       aspect-ratio: var(--ratio);
-      background: var(--artboard-bg);
-      border: 1px solid var(--artboard-border);
+      background: linear-gradient(180deg, var(--glass), var(--glass-2));
+      border: 1px solid var(--line);
       border-radius: 18px;
-      box-shadow: 0 30px 120px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 30px 140px rgba(0, 0, 0, 0.55);
       overflow: hidden;
       transform: translateZ(0);
     }
