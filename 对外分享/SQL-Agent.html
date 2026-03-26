@@ -29,8 +29,8 @@
       --text-0: rgba(255, 255, 255, 0.92);
       --text-1: rgba(255, 255, 255, 0.70);
       --accent: #3dffcf;
-      --font-body: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Source Han Sans CN", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-      --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      --font-body: "Microsoft YaHei", "微软雅黑", "Hiragino Sans GB W6", "Hiragino Sans GB", "Source Han Sans CN Heavy", "Source Han Sans CN", "PingFang SC", "Noto Sans CJK SC", system-ui, sans-serif;
+      --font-mono: "JetBrains Mono", "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", monospace;
       --slide-padding: clamp(0.75rem, 3.4vw, 3rem);
       --ui-size: clamp(0.68rem, 1vw, 0.92rem);
       --artboard-bg: #ffffff;
@@ -76,7 +76,7 @@
       background: var(--artboard-bg);
       border: 1px solid var(--artboard-border);
       border-radius: 0;
-      box-shadow: 0 30px 120px rgba(0, 0, 0, 0.25);
+      box-shadow: none;
       overflow: hidden;
       transform: translateZ(0);
     }
@@ -104,7 +104,7 @@
       width: 100%;
       height: 100%;
       font-size: calc(var(--s, 1) * var(--fs, 18px));
-      line-height: 1.15;
+      line-height: 1.2;
       color: inherit;
       overflow: hidden;
       word-break: break-word;
@@ -113,7 +113,7 @@
 
     .ppt-shape {
       background: var(--bg, transparent);
-      border: var(--bw, 1px) solid var(--bd, rgba(0,0,0,0.12));
+      border: var(--bw, 0px) solid var(--bd, rgba(0,0,0,0.12));
       border-radius: 0;
       opacity: 1;
     }
