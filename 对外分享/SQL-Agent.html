@@ -29,7 +29,7 @@
       --text-0: rgba(255, 255, 255, 0.92);
       --text-1: rgba(255, 255, 255, 0.70);
       --accent: #3dffcf;
-      --font-body: "Satoshi", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      --font-body: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Source Han Sans CN", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
       --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
       --slide-padding: clamp(0.75rem, 3.4vw, 3rem);
       --ui-size: clamp(0.68rem, 1vw, 0.92rem);
@@ -75,7 +75,7 @@
       aspect-ratio: var(--ratio);
       background: var(--artboard-bg);
       border: 1px solid var(--artboard-border);
-      border-radius: 18px;
+      border-radius: 0;
       box-shadow: 0 30px 120px rgba(0, 0, 0, 0.25);
       overflow: hidden;
       transform: translateZ(0);
@@ -96,11 +96,9 @@
       color: var(--tc, rgba(15,18,25,0.92));
       background: var(--bg, transparent);
       border: var(--bw, 0px) solid var(--bd, transparent);
-      border-radius: 12px;
+      border-radius: 0;
       overflow: hidden;
       padding: var(--pad, 0);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
     }
     .ppt-text-inner {
       width: 100%;
@@ -116,7 +114,7 @@
     .ppt-shape {
       background: var(--bg, transparent);
       border: var(--bw, 1px) solid var(--bd, rgba(0,0,0,0.12));
-      border-radius: 12px;
+      border-radius: 0;
       opacity: 1;
     }
 
@@ -138,9 +136,9 @@
       height: 100%;
       object-fit: contain;
       display: block;
-      border-radius: 10px;
+      border-radius: 0;
       background: transparent;
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+      box-shadow: none;
       transition: transform 180ms ease;
     }
     .ppt-img:hover img {
