@@ -15,8 +15,7 @@
     }
 
     html {
-      scroll-snap-type: y mandatory;
-      scroll-behavior: smooth;
+      scroll-snap-type: none;
     }
 
     :root {
@@ -33,13 +32,13 @@
       --font-display: 'Clash Display', sans-serif;
       --font-body: 'Satoshi', sans-serif;
 
-      --title-size: clamp(1.9rem, 6vw, 4.4rem);
-      --h2-size: clamp(1.4rem, 3.6vw, 2.6rem);
-      --h3-size: clamp(1.05rem, 2.6vw, 1.6rem);
-      --body-size: clamp(0.86rem, 1.4vw, 1.08rem);
-      --small-size: clamp(0.7rem, 1vw, 0.9rem);
+      --title-size: clamp(2.6rem, 7vw, 6rem);
+      --h2-size: clamp(1.8rem, 4.6vw, 3.4rem);
+      --h3-size: clamp(1.25rem, 3vw, 2rem);
+      --body-size: clamp(1rem, 1.7vw, 1.25rem);
+      --small-size: clamp(0.78rem, 1.1vw, 1rem);
 
-      --slide-padding: clamp(1.2rem, 4vw, 3.6rem);
+      --slide-padding: clamp(1.4rem, 4.5vw, 4.2rem);
       --content-gap: clamp(0.6rem, 2vw, 1.8rem);
       --element-gap: clamp(0.35rem, 1vw, 0.9rem);
 
@@ -58,6 +57,8 @@
       background: var(--bg-primary);
       color: var(--text-primary);
       overflow-x: hidden;
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
     }
 
     .slide {
@@ -66,6 +67,7 @@
       height: 100dvh;
       overflow: hidden;
       scroll-snap-align: start;
+      scroll-snap-stop: always;
       display: flex;
       flex-direction: column;
       position: relative;
@@ -90,12 +92,18 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start;
       gap: var(--content-gap);
       max-height: 100%;
       overflow: hidden;
       position: relative;
       z-index: 1;
+      padding-top: clamp(0.6rem, 3vh, 2.5rem);
+    }
+
+    .title-slide .slide-content {
+      justify-content: center;
+      padding-top: 0;
     }
 
     h1, h2, h3 {
@@ -181,7 +189,7 @@
 
     .image-frame {
       width: 100%;
-      max-height: min(58vh, 520px);
+      max-height: min(70vh, 620px);
       border-radius: 16px;
       overflow: hidden;
       border: 1px solid rgba(75, 179, 255, 0.2);
@@ -309,7 +317,7 @@
     @media (max-height: 600px) {
       :root {
         --slide-padding: clamp(0.7rem, 2.5vw, 1.8rem);
-        --body-size: clamp(0.75rem, 1.2vw, 0.95rem);
+        --body-size: clamp(0.85rem, 1.3vw, 1.05rem);
       }
       .nav-dots { display: none; }
     }
@@ -385,25 +393,6 @@
             <div class="value">&lt;0.3%</div>
             <div class="label">故障率持续下降</div>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Author -->
-    <section class="slide">
-      <div class="slide-content two-col">
-        <div>
-          <div class="section-badge reveal">作者介绍</div>
-          <h2 class="reveal">马阳阳</h2>
-          <ul class="bullet-list reveal">
-            <li>去哪儿旅行基础架构组技术专家</li>
-            <li>云原生 SIG 成员，聚焦研发效能</li>
-            <li>负责测试环境治理平台、代码精简平台、组件市场等</li>
-            <li>深度参与“线上代码精简50%”项目并获公司级技术型一等奖</li>
-          </ul>
-        </div>
-        <div class="image-frame reveal">
-          <img src="assets/f73367eaad606a117b498b8606d2df18b982d49b.png" alt="作者介绍">
         </div>
       </div>
     </section>
@@ -776,6 +765,18 @@
             delta > 0 ? this.nextSlide() : this.prevSlide();
           }
         });
+
+        let wheelLock = false;
+        window.addEventListener('wheel', (e) => {
+          if (wheelLock) return;
+          if (Math.abs(e.deltaY) < 20) return;
+          e.preventDefault();
+          wheelLock = true;
+          e.deltaY > 0 ? this.nextSlide() : this.prevSlide();
+          setTimeout(() => {
+            wheelLock = false;
+          }, 650);
+        }, { passive: false });
 
         window.addEventListener('scroll', () => this.updateProgress());
       }
