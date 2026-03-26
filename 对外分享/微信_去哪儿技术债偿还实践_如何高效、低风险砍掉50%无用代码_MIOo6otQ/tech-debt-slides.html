@@ -289,6 +289,22 @@
       transform: scale(1.4);
     }
 
+    .counter {
+      position: fixed;
+      left: clamp(0.65rem, 2vw, 1.4rem);
+      bottom: clamp(0.65rem, 2vw, 1.2rem);
+      z-index: 11;
+      font-size: var(--small-size);
+      color: rgba(255, 255, 255, 0.7);
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      padding: 0.45em 0.8em;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      letter-spacing: 0.08em;
+    }
+
     .reveal {
       opacity: 0;
       transform: translateY(24px);
@@ -320,12 +336,25 @@
         --body-size: clamp(0.85rem, 1.3vw, 1.05rem);
       }
       .nav-dots { display: none; }
+      .counter { display: none; }
     }
 
     @media (max-width: 700px) {
       .two-col {
         grid-template-columns: 1fr;
       }
+    }
+
+    .stack .two-col {
+      grid-template-columns: 1fr;
+    }
+
+    .stack .grid {
+      grid-template-columns: 1fr;
+    }
+
+    .stack .image-frame {
+      max-height: min(62vh, 640px);
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -340,6 +369,7 @@
 <body>
   <div class="progress-bar" id="progress"></div>
   <nav class="nav-dots" id="navDots" aria-label="Slide navigation"></nav>
+  <div class="counter" id="counter" aria-live="polite">01 / 01</div>
 
   <main>
     <!-- Title -->
@@ -435,14 +465,12 @@
 
     <!-- Planning -->
     <section class="slide">
-      <div class="slide-content two-col">
-        <div>
-          <h2 class="reveal">整体规划</h2>
-          <ul class="bullet-list reveal">
-            <li>时间规划：前 2 个月服务精简，后续代码精简</li>
-            <li>组织规划：建立公共支持团队，提供工具与技术支撑</li>
-          </ul>
-        </div>
+      <div class="slide-content stack">
+        <h2 class="reveal">整体规划</h2>
+        <ul class="bullet-list reveal">
+          <li>时间规划：前 2 个月服务精简，后续代码精简</li>
+          <li>组织规划：建立公共支持团队，提供工具与技术支撑</li>
+        </ul>
         <div class="grid reveal">
           <div class="image-frame"><img src="assets/4385887eb2934d60b450e8d417ee318808452026.png" alt="时间规划"></div>
           <div class="image-frame"><img src="assets/b56122142e1423c2a18e055ad2e3875ab5802488.png" alt="组织架构规划"></div>
@@ -488,15 +516,13 @@
 
     <!-- Service identification -->
     <section class="slide">
-      <div class="slide-content two-col">
-        <div>
-          <h2 class="reveal">识别 + 度量</h2>
-          <ul class="bullet-list reveal">
-            <li>低价值服务：无流量 + 无迭代</li>
-            <li>度量三类流量：网关、调用链、内部调用</li>
-            <li>结合日志与历史数据形成候选集</li>
-          </ul>
-        </div>
+      <div class="slide-content stack">
+        <h2 class="reveal">识别 + 度量</h2>
+        <ul class="bullet-list reveal">
+          <li>低价值服务：无流量 + 无迭代</li>
+          <li>度量三类流量：网关、调用链、内部调用</li>
+          <li>结合日志与历史数据形成候选集</li>
+        </ul>
         <div class="grid reveal">
           <div class="image-frame"><img src="assets/0ae6f9001c22b8555c01d886570e2fac2ab52e15.png" alt="服务识别"></div>
           <div class="image-frame"><img src="assets/63f96cb82d7288dd87a3b5334a45a06e4da9c6db.png" alt="度量特征"></div>
@@ -517,7 +543,7 @@
 
     <!-- Service delete flow -->
     <section class="slide">
-      <div class="slide-content">
+      <div class="slide-content stack">
         <h2 class="reveal">服务删除流程</h2>
         <div class="grid reveal">
           <div class="image-frame"><img src="assets/8c76de4fe55dcd62b999fc18350297914a226c87.png" alt="服务删除流程"></div>
@@ -621,7 +647,7 @@
 
     <!-- Method set + flow -->
     <section class="slide">
-      <div class="slide-content">
+      <div class="slide-content stack">
         <h2 class="reveal">计算可精简方法集</h2>
         <div class="grid reveal">
           <div class="image-frame"><img src="assets/0e6aacc833d4dba39e4916f82216c7b454e87cb8.png" alt="可精简方法集"></div>
@@ -632,22 +658,20 @@
 
     <!-- Cleanup strategies -->
     <section class="slide">
-      <div class="slide-content">
+      <div class="slide-content stack">
         <h2 class="reveal">代码清理策略</h2>
-        <div class="grid reveal">
-          <div class="card">
-            <h3>全自动化</h3>
-            <p>克隆代码 → 自动删除 → 推送分支 → CR → 发布。</p>
-            <div class="image-frame" style="margin-top: 0.7rem;">
-              <img src="assets/604c97d89d273d8d5459a035223916a4a95aab9e.png" alt="全自动化策略">
-            </div>
+        <div class="card reveal">
+          <h3>全自动化</h3>
+          <p>克隆代码 → 自动删除 → 推送分支 → CR → 发布。</p>
+          <div class="image-frame" style="margin-top: 0.7rem;">
+            <img src="assets/604c97d89d273d8d5459a035223916a4a95aab9e.png" alt="全自动化策略">
           </div>
-          <div class="card">
-            <h3>半自动化</h3>
-            <p>IDEA 插件辅助人工删除，提升可控性与信任度。</p>
-            <div class="image-frame" style="margin-top: 0.7rem;">
-              <img src="assets/58e0f94737fc751ed3a373e57bc8c743bcbab505.png" alt="半自动化策略">
-            </div>
+        </div>
+        <div class="card reveal">
+          <h3>半自动化</h3>
+          <p>IDEA 插件辅助人工删除，提升可控性与信任度。</p>
+          <div class="image-frame" style="margin-top: 0.7rem;">
+            <img src="assets/58e0f94737fc751ed3a373e57bc8c743bcbab505.png" alt="半自动化策略">
           </div>
         </div>
       </div>
@@ -724,6 +748,7 @@
         this.slides = Array.from(document.querySelectorAll('.slide'));
         this.progress = document.getElementById('progress');
         this.navDots = document.getElementById('navDots');
+        this.counter = document.getElementById('counter');
         this.currentIndex = 0;
         this.createNavDots();
         this.bindEvents();
@@ -823,6 +848,15 @@
         dots.forEach((dot, idx) => {
           dot.classList.toggle('active', idx === this.currentIndex);
         });
+        this.updateCounter();
+      }
+
+      updateCounter() {
+        if (!this.counter) return;
+        const total = this.slides.length;
+        const current = this.currentIndex + 1;
+        const pad2 = (n) => String(n).padStart(2, '0');
+        this.counter.textContent = `${pad2(current)} / ${pad2(total)}`;
       }
     }
 
