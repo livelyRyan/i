@@ -1,0 +1,1538 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SQL-Agent (PPT → HTML)</title>
+
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&f[]=jet-brains-mono@400,600&display=swap" />
+
+  <style>
+    /* ===========================================
+       VIEWPORT FITTING: MANDATORY BASE STYLES
+       =========================================== */
+    html, body {
+      height: 100%;
+      overflow-x: hidden;
+    }
+    html {
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+    }
+
+    :root {
+      --bg-0: #070911;
+      --bg-1: #0b1020;
+      --glass: rgba(255, 255, 255, 0.06);
+      --glass-2: rgba(255, 255, 255, 0.03);
+      --line: rgba(255, 255, 255, 0.12);
+      --text-0: rgba(255, 255, 255, 0.92);
+      --font-body: "Satoshi", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      --slide-padding: clamp(0.75rem, 3.4vw, 3rem);
+      --ui-size: clamp(0.68rem, 1vw, 0.92rem);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-body);
+      background: radial-gradient(1200px 900px at 15% 10%, rgba(124, 92, 255, 0.18), transparent 60%),
+                  radial-gradient(900px 700px at 80% 20%, rgba(61, 255, 207, 0.12), transparent 55%),
+                  radial-gradient(900px 700px at 65% 88%, rgba(255, 79, 216, 0.10), transparent 55%),
+                  linear-gradient(180deg, var(--bg-0), var(--bg-1));
+      color: var(--text-0);
+      height: 100%;
+      overflow-x: hidden;
+    }
+
+    .slide {
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      scroll-snap-align: start;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      padding: var(--slide-padding);
+    }
+
+    .slide-content {
+      flex: 1;
+      display: grid;
+      place-items: center;
+      max-height: 100%;
+      overflow: hidden;
+    }
+
+    .artboard {
+      position: relative;
+      width: min(96vw, calc(92vh * var(--ratio)));
+      aspect-ratio: var(--ratio);
+      background: linear-gradient(180deg, var(--glass), var(--glass-2));
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 30px 140px rgba(0, 0, 0, 0.55);
+      overflow: hidden;
+      transform: translateZ(0);
+    }
+
+    .ppt-item {
+      position: absolute;
+      left: var(--x);
+      top: var(--y);
+      width: var(--w);
+      height: var(--h);
+      transform: rotate(var(--rot, 0deg));
+      transform-origin: center;
+    }
+
+    .ppt-text {
+      display: block;
+      color: var(--tc, rgba(255,255,255,0.92));
+      background: var(--bg, transparent);
+      border: var(--bw, 0px) solid var(--bd, transparent);
+      border-radius: 12px;
+      overflow: hidden;
+      padding: var(--pad, 0);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .ppt-text-inner {
+      width: 100%;
+      height: 100%;
+      font-size: calc(var(--s, 1) * var(--fs, 18px));
+      line-height: 1.15;
+      overflow: hidden;
+      word-break: break-word;
+      white-space: normal;
+    }
+
+    .ppt-shape {
+      background: var(--bg, transparent);
+      border: var(--bw, 1px) solid var(--bd, rgba(255,255,255,0.15));
+      border-radius: 12px;
+      opacity: 0.9;
+    }
+
+    .ppt-line {
+      background: transparent;
+      border-top: var(--bw, 2px) solid var(--bd, rgba(255,255,255,0.55));
+      height: 0;
+      width: var(--w);
+    }
+
+    .ppt-img {
+      padding: 0;
+      border: none;
+      background: transparent;
+      cursor: zoom-in;
+    }
+    .ppt-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.18);
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.40);
+      transition: transform 180ms ease;
+    }
+    .ppt-img:hover img { transform: scale(1.01); }
+
+    .progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 100vw;
+      z-index: 50;
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .progress > div {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #3dffcf, #ff4fd8, #7c5cff);
+      box-shadow: 0 0 22px rgba(61, 255, 207, 0.26);
+      transition: width 220ms ease;
+    }
+
+    .nav-dots {
+      position: fixed;
+      right: clamp(0.55rem, 1.6vw, 1.2rem);
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 50;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      padding: 10px 8px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.18);
+      border: 1px solid rgba(255,255,255,0.10);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .nav-dots button {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.20);
+      background: rgba(255,255,255,0.08);
+      cursor: pointer;
+      transition: transform 220ms ease, background 220ms ease, border-color 220ms ease;
+    }
+    .nav-dots button[aria-current="true"] {
+      background: linear-gradient(135deg, #3dffcf, #ff4fd8);
+      border-color: rgba(61,255,207,0.55);
+      transform: scale(1.25);
+      box-shadow: 0 0 18px rgba(61,255,207,0.22);
+    }
+
+    .counter {
+      position: fixed;
+      left: clamp(0.65rem, 2vw, 1.4rem);
+      bottom: clamp(0.65rem, 2vw, 1.2rem);
+      z-index: 50;
+      font-family: var(--font-mono);
+      font-size: var(--ui-size);
+      color: rgba(255,255,255,0.66);
+      background: rgba(0,0,0,0.18);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 999px;
+      padding: 0.5em 0.75em;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: none;
+      place-items: center;
+      background: rgba(0,0,0,0.74);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: clamp(0.8rem, 2.5vw, 2rem);
+    }
+    .lightbox.open { display: grid; }
+    .lightbox-card {
+      width: min(96vw, 1400px);
+      height: min(92vh, 900px);
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(10, 12, 20, 0.55);
+      box-shadow: 0 40px 200px rgba(0,0,0,0.65);
+      overflow: hidden;
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+    .lightbox-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+    }
+    .lightbox-bar .title {
+      font-family: var(--font-mono);
+      font-size: var(--ui-size);
+      color: rgba(255,255,255,0.70);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 70%;
+    }
+    .lightbox-actions {
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .lightbox-actions a,
+    .lightbox-actions button {
+      font-family: var(--font-mono);
+      font-size: var(--ui-size);
+      color: rgba(255,255,255,0.82);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px;
+      padding: 0.45em 0.75em;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .lightbox-stage {
+      display: grid;
+      place-items: center;
+      padding: 12px;
+      overflow: hidden;
+    }
+    .lightbox-stage img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: rgba(0,0,0,0.25);
+      border-radius: 12px;
+    }
+
+    /* ===========================================
+       RESPONSIVE BREAKPOINTS (mandatory)
+       =========================================== */
+    @media (max-height: 700px) {
+      :root { --slide-padding: clamp(0.55rem, 2.6vw, 1.6rem); }
+    }
+    @media (max-height: 600px) {
+      .nav-dots { display: none; }
+    }
+    @media (max-height: 500px) {
+      .progress { display: none; }
+    }
+    @media (max-width: 900px) {
+      .artboard { width: min(96vw, calc(88vh * var(--ratio))); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress" aria-hidden="true"><div id="progressFill"></div></div>
+  <nav class="nav-dots" aria-label="Slide navigation" id="navDots"></nav>
+  <div class="counter" id="counter" aria-live="polite">01 / 32</div>
+
+
+    <section class="slide" id="slide-1" data-label="P01">
+      <div class="slide-content">
+        <div class="artboard" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:6.630430%;--y:31.397813%;--w:100.000000%;--h:33.638889%;z-index:1;--fs:64.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">从“取数工单”到“智能取数”——<br/>去哪儿网 SQL Agent 落地实践与取数<br/>效率提升</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-2" data-label="P02">
+      <div class="slide-content">
+        <div class="artboard" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:10.892159%;--y:5.401721%;--w:35.294898%;--h:6.731773%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">目录</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:46.856127%;--y:22.184660%;--w:27.185843%;--h:7.430548%;z-index:2;--fs:28.000px;--pad:0;--tc:#262626;">
+            <div class="ppt-text-inner" style="font-weight:500;">项目背景</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:41.838624%;--y:22.827749%;--w:5.347941%;--h:6.684281%;z-index:4;--fs:28.000px;--pad:0;--tc:#ffffff;">
+            <div class="ppt-text-inner" style="font-weight:500;">01</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:41.838624%;--y:36.090857%;--w:5.347941%;--h:6.684296%;z-index:6;--fs:28.000px;--pad:0;--tc:#ffffff;">
+            <div class="ppt-text-inner" style="font-weight:500;">02</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:46.856127%;--y:35.740260%;--w:27.185843%;--h:7.430548%;z-index:7;--fs:28.000px;--pad:0;--tc:#262626;">
+            <div class="ppt-text-inner" style="font-weight:500;">方案演进与设计</div>
+          </div>
+<div class="ppt-item ppt-line" style="--x:42.056677%;--y:31.890916%;--w:37.581422%;--h:0.000000%;z-index:8;--bd:#ffffff;--bw:1.33px;" aria-hidden="true"></div>
+
+          <div class="ppt-item ppt-text" style="--x:46.856127%;--y:49.415354%;--w:27.185843%;--h:7.430548%;z-index:9;--fs:28.000px;--pad:0;--tc:#262626;">
+            <div class="ppt-text-inner" style="font-weight:500;">落地效果与经验总结</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:41.838624%;--y:49.740668%;--w:5.347941%;--h:6.684281%;z-index:11;--fs:28.000px;--pad:0;--tc:#ffffff;">
+            <div class="ppt-text-inner" style="font-weight:500;">03</div>
+          </div>
+<div class="ppt-item ppt-line" style="--x:42.056677%;--y:58.674876%;--w:37.581422%;--h:0.000000%;z-index:12;--bd:#ffffff;--bw:1.33px;" aria-hidden="true"></div>
+
+          <div class="ppt-item ppt-text" style="--x:46.856127%;--y:63.229615%;--w:27.185843%;--h:7.430548%;z-index:13;--fs:28.000px;--pad:0;--tc:#262626;">
+            <div class="ppt-text-inner" style="font-weight:500;">未来展望</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:41.838624%;--y:63.390478%;--w:5.347941%;--h:6.684281%;z-index:15;--fs:28.000px;--pad:0;--tc:#ffffff;">
+            <div class="ppt-text-inner" style="font-weight:500;">04</div>
+          </div>
+<div class="ppt-item ppt-line" style="--x:42.056677%;--y:45.540726%;--w:37.581422%;--h:0.000000%;z-index:16;--bd:#ffffff;--bw:1.33px;" aria-hidden="true"></div>
+<div class="ppt-item ppt-line" style="--x:42.056677%;--y:72.840347%;--w:37.581422%;--h:0.000000%;z-index:17;--bd:#ffffff;--bw:1.33px;" aria-hidden="true"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-3" data-label="P03">
+      <div class="slide-content">
+        <div class="artboard" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <button class="ppt-item ppt-img" style="--x:11.032406%;--y:26.190216%;--w:77.935179%;--h:54.024030%;z-index:1;" type="button" data-lightbox="SQL-Agent-assets/slide03_pic01.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide03_pic01.png" alt="图片 4" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:34.797958%;--y:41.568635%;--w:26.541667%;--h:14.796296%;z-index:2;--fs:80.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">项目背景</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-4" data-label="P04">
+      <div class="slide-content">
+        <div class="artboard" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.161458%;--y:5.333333%;--w:32.255208%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">项目背景-传统流程</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:16.359375%;--y:31.601852%;--w:7.500000%;--h:13.333333%;z-index:2;" type="button" data-lightbox="SQL-Agent-assets/slide04_pic01.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide04_pic01.png" alt="图片 2" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:17.578125%;--y:46.268519%;--w:7.500000%;--h:5.370370%;z-index:3;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">产运</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:78.442708%;--y:31.601852%;--w:7.500000%;--h:13.333333%;z-index:5;" type="button" data-lightbox="SQL-Agent-assets/slide04_pic02.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide04_pic02.png" alt="图片 8" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:79.864583%;--y:46.268519%;--w:7.500000%;--h:5.370370%;z-index:6;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">数分</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:34.885417%;--y:22.824074%;--w:33.333333%;--h:4.472222%;z-index:7;--fs:18.667px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">帮我查一下昨天的机票订单数量？</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:34.958333%;--y:27.944444%;--w:33.333333%;--h:4.472222%;z-index:8;--fs:18.667px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">帮我查一下昨天的机票订单平均票价？</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:79.864583%;--y:54.796296%;--w:4.843750%;--h:15.027778%;z-index:9;--fs:21.333px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:500;">数据库</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:16.359375%;--y:56.490741%;--w:7.500000%;--h:13.333333%;z-index:10;" type="button" data-lightbox="SQL-Agent-assets/slide04_pic03.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide04_pic03.png" alt="图片 15" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:45.802083%;--y:55.379630%;--w:5.958333%;--h:4.472222%;z-index:12;--fs:18.667px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">返回</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:66.531250%;--y:77.296296%;--w:10.067708%;--h:7.083333%;z-index:13;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">沟通</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:56.463542%;--y:77.296296%;--w:10.067708%;--h:7.083333%;z-index:14;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">排期</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:46.395833%;--y:77.296296%;--w:10.067708%;--h:7.083333%;z-index:15;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">脚本洗表</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:36.328125%;--y:77.296296%;--w:10.067708%;--h:7.083333%;z-index:16;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">SQL</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:26.302083%;--y:77.296296%;--w:10.067708%;--h:7.083333%;z-index:17;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">报告</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-5" data-label="P05">
+      <div class="slide-content">
+        <div class="artboard" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.072884%;--y:4.973943%;--w:15.221440%;--h:6.731773%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">问题与挑战</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:21.729167%;--y:41.648148%;--w:19.031250%;--h:19.675926%;z-index:3;--fs:18.667px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:500;">底表数据庞大<br/>数据管理混乱<br/>口径不够统一<br/>参杂大量脏数据</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:18.796875%;--y:32.027778%;--w:19.031250%;--h:6.009259%;z-index:4;--fs:26.667px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:700;">查数难</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:22.041667%;--y:13.824074%;--w:12.536458%;--h:18.250000%;z-index:6;--fs:32.000px;--pad:0;--tc:#ffffff;">
+            <div class="ppt-text-inner" style="font-weight:700;">01</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:44.927083%;--y:13.824074%;--w:12.536458%;--h:18.240741%;z-index:8;--fs:32.000px;--pad:0;--tc:#ffffff;">
+            <div class="ppt-text-inner" style="font-weight:700;">02</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:41.682292%;--y:32.027778%;--w:19.031250%;--h:6.000000%;z-index:9;--fs:26.667px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:700;">取数难</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:67.812500%;--y:13.824074%;--w:12.536458%;--h:18.231481%;z-index:10;--fs:32.000px;--pad:0;--tc:#ffffff;">
+            <div class="ppt-text-inner" style="font-weight:700;">03</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:65.104167%;--y:32.055556%;--w:19.031250%;--h:6.000000%;z-index:11;--fs:26.667px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:700;">使用难</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:43.604167%;--y:41.638889%;--w:19.031250%;--h:17.037037%;z-index:12;--fs:18.667px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:500;">产运SQL能力有限<br/>复杂SQL编写困难<br/>已有SQL改造复杂</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:67.812500%;--y:41.629630%;--w:19.031250%;--h:13.888889%;z-index:13;--fs:18.667px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:500;">SQL执行流程长<br/>交互复杂，体验差</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-6" data-label="P06">
+      <div class="slide-content">
+        <div class="artboard" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.273507%;--y:5.118941%;--w:15.221440%;--h:6.731773%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">破题思路</div>
+          </div>
+<div class="ppt-item ppt-shape" style="--x:87.943553%;--y:86.666667%;--w:3.024188%;--h:13.333333%;z-index:2;--bg:#ffe92d;--bw:1.00px;" aria-hidden="true"></div>
+
+          <button class="ppt-item ppt-img" style="--x:28.505208%;--y:44.027778%;--w:46.848958%;--h:44.962963%;z-index:3;" type="button" data-lightbox="SQL-Agent-assets/slide06_pic01.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide06_pic01.png" alt="图片 21" loading="lazy" />
+          </button>
+
+          <button class="ppt-item ppt-img" style="--x:14.765625%;--y:20.537037%;--w:11.864583%;--h:21.231481%;z-index:4;" type="button" data-lightbox="SQL-Agent-assets/slide06_pic02.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide06_pic02.png" alt="图片 2" loading="lazy" />
+          </button>
+
+          <button class="ppt-item ppt-img" style="--x:73.364583%;--y:20.537037%;--w:11.859375%;--h:20.268519%;z-index:5;" type="button" data-lightbox="SQL-Agent-assets/slide06_pic03.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide06_pic03.png" alt="图片 3" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:15.942708%;--y:42.694444%;--w:7.760417%;--h:5.370370%;z-index:7;--pad:0;--tc:#ff0000;">
+            <div class="ppt-text-inner" style="font-weight:500;">低效率</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:75.703125%;--y:41.768519%;--w:9.520833%;--h:5.370370%;z-index:8;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">高效率</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:4.484375%;--y:56.861111%;--w:23.666667%;--h:21.527778%;z-index:9;--pad:0;--tc:#ff0000;">
+            <div class="ppt-text-inner" style="font-weight:500;">两大问题：<br/><br/>问题1: 数据问题<br/><br/>问题2: SQL 产生的问题</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:46.114583%;--y:21.759259%;--w:7.760417%;--h:5.370370%;z-index:10;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">变成</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-7" data-label="P07">
+      <div class="slide-content">
+        <div class="artboard" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <button class="ppt-item ppt-img" style="--x:11.032406%;--y:26.190216%;--w:77.935179%;--h:54.024030%;z-index:1;" type="button" data-lightbox="SQL-Agent-assets/slide07_pic01.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide07_pic01.png" alt="图片 4" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:24.975041%;--y:41.568635%;--w:45.322917%;--h:14.796296%;z-index:2;--fs:80.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">方案演进与设计</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-8" data-label="P08">
+      <div class="slide-content">
+        <div class="artboard" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.182292%;--y:5.175926%;--w:23.182292%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">AI基建概览</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:17.166667%;--y:11.888889%;--w:61.723958%;--h:82.750000%;z-index:2;" type="button" data-lightbox="SQL-Agent-assets/slide08_pic01.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide08_pic01.png" alt="图片 4" loading="lazy" />
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-9" data-label="P09">
+      <div class="slide-content">
+        <div class="artboard" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.182292%;--y:5.175926%;--w:23.182292%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">数据是基石</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:15.859375%;--y:17.518519%;--w:65.046875%;--h:75.722222%;z-index:2;" type="button" data-lightbox="SQL-Agent-assets/slide09_pic01.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide09_pic01.png" alt="图片 8" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:6.140625%;--y:11.925926%;--w:31.682292%;--h:5.370370%;z-index:3;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">业务团队数据治理概览</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-10" data-label="P10">
+      <div class="slide-content">
+        <div class="artboard" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.119792%;--y:5.148148%;--w:28.562500%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">SQL Agent的初探</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:3.041667%;--y:19.185185%;--w:68.796875%;--h:64.425926%;z-index:2;" type="button" data-lightbox="SQL-Agent-assets/slide10_pic01.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide10_pic01.png" alt="图片 7" loading="lazy" />
+          </button>
+
+          <button class="ppt-item ppt-img" style="--x:74.328125%;--y:27.129630%;--w:23.333333%;--h:47.490741%;z-index:3;" type="button" data-lightbox="SQL-Agent-assets/slide10_pic02.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide10_pic02.png" alt="图片 3" loading="lazy" />
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-11" data-label="P11">
+      <div class="slide-content">
+        <div class="artboard" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.182292%;--y:4.935185%;--w:30.338542%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">初次探索暴露的问题</div>
+          </div>
+<div class="ppt-item ppt-shape" style="--x:0.697917%;--y:24.759259%;--w:6.239583%;--h:5.370370%;z-index:2;--bg:#ffc000;--bw:1.00px;" aria-hidden="true"></div>
+
+          <div class="ppt-item ppt-text" style="--x:8.062500%;--y:24.759259%;--w:22.953125%;--h:5.370370%;z-index:3;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">“丢三落四”的现象严重！</div>
+          </div>
+<div class="ppt-item ppt-shape" style="--x:0.697917%;--y:42.953704%;--w:6.239583%;--h:5.370370%;z-index:4;--bg:#ffc000;--bw:1.00px;" aria-hidden="true"></div>
+
+          <div class="ppt-item ppt-text" style="--x:9.218750%;--y:42.157407%;--w:19.880208%;--h:13.314815%;z-index:5;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">单Agent既要生成SQL，<br/>还要优化SQL。优化经常遗忘</div>
+          </div>
+<div class="ppt-item ppt-shape" style="--x:0.697917%;--y:69.027778%;--w:6.239583%;--h:5.370370%;z-index:6;--bg:#ffc000;--bw:1.00px;" aria-hidden="true"></div>
+
+          <div class="ppt-item ppt-text" style="--x:8.062500%;--y:68.231481%;--w:25.145833%;--h:9.407407%;z-index:7;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">用户问题表述中，经常携带<br/>行业黑话（术语）。</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:41.515625%;--y:39.453704%;--w:11.140625%;--h:18.722222%;z-index:8;" type="button" data-lightbox="SQL-Agent-assets/slide11_pic01.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide11_pic01.png" alt="图片 3" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:66.546875%;--y:14.074074%;--w:27.510417%;--h:39.675926%;z-index:9;--fs:26.667px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">提示工程<br/>    分阶段提示<br/>先生成初版 SQL，再在第二轮对初版 SQL 进行优化。<br/>    显式约束提醒<br/>在 Prompt 中列出必须保留的字段/注意的条件清单，让模型每次优化都必须校验。<br/>    优化前后的对比要求<br/>让 Agent 输出优化前后的 SQL 对照表，并标记改动点。</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:59.598958%;--y:14.074074%;--w:6.244792%;--h:11.101852%;z-index:10;" type="button" data-lightbox="SQL-Agent-assets/slide11_pic02.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide11_pic02.png" alt="图片 9" loading="lazy" />
+          </button>
+
+          <button class="ppt-item ppt-img" style="--x:58.343750%;--y:70.203704%;--w:7.500000%;--h:13.333333%;z-index:11;" type="button" data-lightbox="SQL-Agent-assets/slide11_pic03.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide11_pic03.png" alt="图片 11" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:69.531250%;--y:65.833333%;--w:26.708333%;--h:25.731481%;z-index:12;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:500;">Agent拆分 + 术语库</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-12" data-label="P12">
+      <div class="slide-content">
+        <div class="artboard" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.140625%;--y:5.083333%;--w:28.255208%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">首次拆分-优化Agent</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:28.963542%;--y:16.185185%;--w:16.526042%;--h:7.324074%;z-index:2;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:500;">生成 Agent</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:2.213542%;--y:16.027778%;--w:16.526042%;--h:7.324074%;z-index:5;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:500;">单 Agent</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:52.598958%;--y:16.027778%;--w:16.526042%;--h:7.324074%;z-index:6;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:500;">优化 Agent</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:4.177083%;--y:35.467600%;--w:59.697917%;--h:50.111111%;z-index:7;" type="button" data-lightbox="SQL-Agent-assets/slide12_pic01.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide12_pic01.png" alt="图片 7" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:24.255208%;--y:85.861111%;--w:17.333333%;--h:5.814815%;z-index:8;--fs:26.667px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">拆分后的流程图</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:68.057292%;--y:32.555556%;--w:27.906250%;--h:50.120370%;z-index:9;" type="button" data-lightbox="SQL-Agent-assets/slide12_pic02.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide12_pic02.png" alt="图片 3" loading="lazy" />
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-13" data-label="P13">
+      <div class="slide-content">
+        <div class="artboard" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.181463%;--y:4.937110%;--w:15.221440%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">存在的问题</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:12.557292%;--y:28.861111%;--w:24.901042%;--h:9.407407%;z-index:2;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">生成的SQL还是有小概率语法错误。</div>
+          </div>
+<div class="ppt-item ppt-shape" style="--x:5.359375%;--y:49.074074%;--w:6.239583%;--h:5.370370%;z-index:3;--bg:#ffc000;--bw:1.00px;" aria-hidden="true"></div>
+
+          <div class="ppt-item ppt-text" style="--x:13.171875%;--y:49.074074%;--w:24.270833%;--h:5.370370%;z-index:4;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">工具一次性调用不满足场景。</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:12.541667%;--y:69.657407%;--w:24.901042%;--h:5.370370%;z-index:5;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">任务复杂，没有任务规划</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:41.213542%;--y:38.268519%;--w:17.578125%;--h:29.537037%;z-index:6;" type="button" data-lightbox="SQL-Agent-assets/slide13_pic01.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide13_pic01.png" alt="图片 14" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:72.171875%;--y:45.175926%;--w:21.083333%;--h:16.629630%;z-index:7;--fs:26.667px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">React机制<br/>先思考，再行动，观察结果，再继续思考，直到解决问题。</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:65.135417%;--y:48.324074%;--w:5.901042%;--h:10.490741%;z-index:8;" type="button" data-lightbox="SQL-Agent-assets/slide13_pic02.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide13_pic02.png" alt="图片 1" loading="lazy" />
+          </button>
+<div class="ppt-item ppt-shape" style="--x:5.703125%;--y:31.101852%;--w:6.239583%;--h:5.370370%;z-index:9;--bg:#ffc000;--bw:1.00px;" aria-hidden="true"></div>
+<div class="ppt-item ppt-shape" style="--x:5.703125%;--y:69.953704%;--w:6.239583%;--h:5.370370%;z-index:10;--bg:#ffc000;--bw:1.00px;" aria-hidden="true"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-14" data-label="P14">
+      <div class="slide-content">
+        <div class="artboard" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.182292%;--y:4.935185%;--w:27.729167%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">引入React机制</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:19.619792%;--y:15.361111%;--w:60.760417%;--h:73.425926%;z-index:2;" type="button" data-lightbox="SQL-Agent-assets/slide14_pic01.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide14_pic01.png" alt="图片 3" loading="lazy" />
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-15" data-label="P15">
+      <div class="slide-content">
+        <div class="artboard" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.181463%;--y:5.080475%;--w:15.221440%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">挑战</div>
+          </div>
+<div class="ppt-item ppt-shape" style="--x:0.000000%;--y:44.842593%;--w:6.239583%;--h:5.370370%;z-index:2;--bg:#ffc000;--bw:1.00px;" aria-hidden="true"></div>
+
+          <div class="ppt-item ppt-text" style="--x:7.364583%;--y:42.824074%;--w:24.901042%;--h:13.444444%;z-index:3;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">SQL 是明确且具体的，而语言到 SQL 的映射是含义模糊的。</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:41.192708%;--y:35.435185%;--w:17.578125%;--h:29.537037%;z-index:4;" type="button" data-lightbox="SQL-Agent-assets/slide15_pic01.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide15_pic01.png" alt="图片 4" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:70.364583%;--y:66.657407%;--w:10.859375%;--h:5.370370%;z-index:5;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">再次拆分</div>
+          </div>
+<div class="ppt-item ppt-shape" style="--x:72.380208%;--y:44.194444%;--w:3.984375%;--h:14.277778%;z-index:6;--bg:#92d050;--bw:1.00px;" aria-hidden="true"></div>
+
+          <div class="ppt-item ppt-text" style="--x:59.651042%;--y:22.148148%;--w:28.083333%;--h:9.537037%;z-index:7;--fs:21.333px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">生成 Agent 同时承担两种不同的认知任务（规则确认 &amp; SQL 生成）</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-16" data-label="P16">
+      <div class="slide-content">
+        <div class="artboard" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.114583%;--y:4.935185%;--w:43.526042%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">规则映射-引入问题细化Agent</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:31.927083%;--y:14.740741%;--w:16.526042%;--h:7.324074%;z-index:2;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:500;">细化 Agent</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:5.177083%;--y:14.583333%;--w:16.526042%;--h:7.324074%;z-index:5;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:500;">生成 Agent</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:55.562500%;--y:14.583333%;--w:15.635417%;--h:7.324074%;z-index:6;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:500;">生成 Agent</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:6.062500%;--y:22.879630%;--w:41.671875%;--h:69.787037%;z-index:7;" type="button" data-lightbox="SQL-Agent-assets/slide16_pic01.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide16_pic01.png" alt="图片 2" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:66.911458%;--y:35.870370%;--w:28.406250%;--h:39.750000%;z-index:8;--pad:0;--tc:#61396b;">
+            <div class="ppt-text-inner" style="font-weight:700;">规则模板：<br/><br/>原始问题：{原始问题}<br/>&lt;查询字段&gt;：{字段}{字段表}<br/>&lt;分组条件&gt;：{分组条件}<br/>&lt;时间范围&gt;：{时间范围}<br/>&lt;筛选条件&gt;：{筛选条件}<br/>&lt;排序条件&gt;：{排序条件}<br/>&lt;关联条件&gt;：{多表关联条件}</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-17" data-label="P17">
+      <div class="slide-content">
+        <div class="artboard" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.116117%;--y:4.937125%;--w:20.957349%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">神奇的现象</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:2.343750%;--y:19.888889%;--w:38.500000%;--h:5.370370%;z-index:2;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">用户问题：查询昨日积分第二名的代理商</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:5.723958%;--y:58.046296%;--w:29.296875%;--h:21.527778%;z-index:3;" type="button" data-lightbox="SQL-Agent-assets/slide17_pic01.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide17_pic01.png" alt="图片 8" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:20.432292%;--y:39.324074%;--w:5.687500%;--h:5.370370%;z-index:5;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">现象</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:3.250000%;--y:58.046296%;--w:1.750000%;--h:2.935185%;z-index:6;" type="button" data-lightbox="SQL-Agent-assets/slide17_pic02.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide17_pic02.png" alt="图片 15" loading="lazy" />
+          </button>
+
+          <button class="ppt-item ppt-img" style="--x:3.250000%;--y:69.851852%;--w:1.744792%;--h:3.407407%;z-index:7;" type="button" data-lightbox="SQL-Agent-assets/slide17_pic03.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide17_pic03.png" alt="图片 16" loading="lazy" />
+          </button>
+
+          <button class="ppt-item ppt-img" style="--x:44.192708%;--y:34.509259%;--w:15.223958%;--h:25.583333%;z-index:8;" type="button" data-lightbox="SQL-Agent-assets/slide17_pic04.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide17_pic04.png" alt="图片 4" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:64.927083%;--y:66.879630%;--w:20.281250%;--h:5.370370%;z-index:9;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">用户问题本身的歧义性</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:60.723958%;--y:19.916667%;--w:30.869792%;--h:5.370370%;z-index:10;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">早期结论：AI天然的不稳定性吧</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:60.723958%;--y:66.212963%;--w:3.630208%;--h:6.453704%;z-index:11;" type="button" data-lightbox="SQL-Agent-assets/slide17_pic05.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide17_pic05.png" alt="图片 3" loading="lazy" />
+          </button>
+<div class="ppt-item ppt-shape" style="--x:72.859375%;--y:38.944444%;--w:3.984375%;--h:14.277778%;z-index:12;--bg:#92d050;--bw:1.00px;" aria-hidden="true"></div>
+
+          <div class="ppt-item ppt-text" style="--x:77.489583%;--y:43.398148%;--w:5.687500%;--h:5.370370%;z-index:13;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">本质</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-18" data-label="P18">
+      <div class="slide-content">
+        <div class="artboard" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.116117%;--y:4.937125%;--w:20.957349%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">增加改写 Agent</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:2.671875%;--y:13.615748%;--w:48.255208%;--h:80.212963%;z-index:2;" type="button" data-lightbox="SQL-Agent-assets/slide18_pic01.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide18_pic01.png" alt="图片 2" loading="lazy" />
+          </button>
+
+          <button class="ppt-item ppt-img" style="--x:60.932292%;--y:9.870370%;--w:28.109375%;--h:46.138889%;z-index:3;" type="button" data-lightbox="SQL-Agent-assets/slide18_pic02.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide18_pic02.png" alt="图片 9" loading="lazy" />
+          </button>
+
+          <button class="ppt-item ppt-img" style="--x:58.500000%;--y:62.296296%;--w:33.854167%;--h:28.842593%;z-index:4;" type="button" data-lightbox="SQL-Agent-assets/slide18_pic03.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide18_pic03.png" alt="图片 4" loading="lazy" />
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-19" data-label="P19">
+      <div class="slide-content">
+        <div class="artboard" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.114583%;--y:4.935185%;--w:36.770833%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">不断成长与学习的 Agent</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:11.364583%;--y:27.092593%;--w:78.119792%;--h:61.962963%;z-index:2;" type="button" data-lightbox="SQL-Agent-assets/slide19_pic01.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide19_pic01.png" alt="图片 9" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:5.041667%;--y:18.685185%;--w:31.552083%;--h:5.370370%;z-index:3;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">目的：提高稳定性与学习新知识</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:35.468750%;--y:14.842593%;--w:6.052083%;--h:5.370370%;z-index:5;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">手段</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:46.213542%;--y:18.685185%;--w:10.916667%;--h:5.370370%;z-index:6;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">引入 RAG</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-20" data-label="P20">
+      <div class="slide-content">
+        <div class="artboard" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.116117%;--y:4.937125%;--w:20.957349%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">知识库设计</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:15.411458%;--y:29.777778%;--w:31.812500%;--h:40.453704%;z-index:2;" type="button" data-lightbox="SQL-Agent-assets/slide20_pic01.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide20_pic01.png" alt="图片 8" loading="lazy" />
+          </button>
+
+          <button class="ppt-item ppt-img" style="--x:65.703125%;--y:23.046296%;--w:24.958333%;--h:52.287037%;z-index:3;" type="button" data-lightbox="SQL-Agent-assets/slide20_pic02.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide20_pic02.png" alt="图片 9" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:6.979167%;--y:19.305556%;--w:11.203125%;--h:5.370370%;z-index:4;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">初版知识库</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-21" data-label="P21">
+      <div class="slide-content">
+        <div class="artboard" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.116117%;--y:4.937125%;--w:20.957349%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">知识库设计</div>
+          </div>
+<div class="ppt-item ppt-shape" style="--x:8.927083%;--y:26.444444%;--w:6.239583%;--h:5.370370%;z-index:2;--bg:#ffc000;--bw:1.00px;" aria-hidden="true"></div>
+
+          <div class="ppt-item ppt-text" style="--x:19.260417%;--y:27.046296%;--w:25.000000%;--h:5.370370%;z-index:3;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">无用信息过多，模型负担大</div>
+          </div>
+<div class="ppt-item ppt-shape" style="--x:8.927083%;--y:40.416667%;--w:6.239583%;--h:5.370370%;z-index:4;--bg:#ffc000;--bw:1.00px;" aria-hidden="true"></div>
+
+          <div class="ppt-item ppt-text" style="--x:19.260417%;--y:41.018519%;--w:25.000000%;--h:5.370370%;z-index:5;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">用户表述有黑话（行业术语）</div>
+          </div>
+<div class="ppt-item ppt-shape" style="--x:8.927083%;--y:54.879630%;--w:6.239583%;--h:5.370370%;z-index:6;--bg:#ffc000;--bw:1.00px;" aria-hidden="true"></div>
+
+          <div class="ppt-item ppt-text" style="--x:19.260417%;--y:55.481481%;--w:25.000000%;--h:5.370370%;z-index:7;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">表的默认条件缺少</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:69.031250%;--y:38.601852%;--w:5.901042%;--h:5.370370%;z-index:8;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">瘦身</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:65.619792%;--y:64.129630%;--w:13.239583%;--h:5.370370%;z-index:9;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">补充知识库</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:70.083333%;--y:50.185185%;--w:3.796875%;--h:6.750000%;z-index:10;" type="button" data-lightbox="SQL-Agent-assets/slide21_pic01.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide21_pic01.png" alt="图片 24" loading="lazy" />
+          </button>
+<div class="ppt-item ppt-shape" style="--x:8.927083%;--y:68.490741%;--w:6.239583%;--h:5.370370%;z-index:12;--bg:#ffc000;--bw:1.00px;" aria-hidden="true"></div>
+
+          <div class="ppt-item ppt-text" style="--x:19.260417%;--y:69.092593%;--w:25.000000%;--h:5.370370%;z-index:13;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">其他知识缺失</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-22" data-label="P22">
+      <div class="slide-content">
+        <div class="artboard" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.035474%;--y:5.149548%;--w:15.221440%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">知识库设计</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:38.240945%;--y:65.659186%;--w:11.410146%;--h:6.239166%;z-index:5;--fs:20.067px;--pad:0;--bw:1.00px;--tc:#ffffff;">
+            <div class="ppt-text-inner" style="font-weight:700;">术语库</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:37.660737%;--y:73.589880%;--w:12.572310%;--h:12.040507%;z-index:7;--fs:17.600px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:500;">记录行业黑话，<br/>专有术语</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:24.219439%;--y:58.720210%;--w:11.410146%;--h:6.239166%;z-index:8;--fs:20.067px;--pad:0;--bw:1.00px;--tc:#ffffff;">
+            <div class="ppt-text-inner" style="font-weight:700;">表结构信息</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:23.637295%;--y:66.920822%;--w:12.574442%;--h:14.084952%;z-index:10;--fs:17.600px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:500;">记录表中的字段信息</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:13.064337%;--y:38.080679%;--w:11.410146%;--h:6.239166%;z-index:11;--fs:20.067px;--pad:0;--bw:1.00px;--tc:#ffffff;">
+            <div class="ppt-text-inner" style="font-weight:700;">字段语义</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:12.471104%;--y:45.936308%;--w:12.574442%;--h:14.084952%;z-index:13;--fs:17.600px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:500;">记录业务语义相关的知识</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:52.733694%;--y:65.659186%;--w:11.410146%;--h:6.239166%;z-index:14;--fs:20.067px;--pad:0;--bw:1.00px;--tc:#ffffff;">
+            <div class="ppt-text-inner" style="font-weight:700;">模板库</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:52.152895%;--y:73.589880%;--w:12.572310%;--h:12.206416%;z-index:16;--fs:17.600px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:500;">SQL模板，供模型参考学习</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:66.965887%;--y:58.720210%;--w:11.410146%;--h:6.239166%;z-index:17;--fs:20.067px;--pad:0;--bw:1.00px;--tc:#ffffff;">
+            <div class="ppt-text-inner" style="font-weight:700;">表限制条件</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:66.383735%;--y:66.920822%;--w:12.574450%;--h:14.084952%;z-index:19;--fs:17.600px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:500;">记录表的个性化默认限制条件</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:78.481365%;--y:38.080679%;--w:11.410146%;--h:6.239166%;z-index:20;--fs:20.067px;--pad:0;--bw:1.00px;--tc:#ffffff;">
+            <div class="ppt-text-inner" style="font-weight:700;">表关联知识</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:78.065535%;--y:45.936308%;--w:12.574442%;--h:14.084952%;z-index:22;--fs:17.600px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:500;">记录多表之间如何关联</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:44.494890%;--y:19.491324%;--w:13.428264%;--h:23.872470%;z-index:25;--fs:22.600px;--pad:0;--bw:1.00px;--tc:#ffffff;">
+            <div class="ppt-text-inner" style="font-weight:700;">知识库</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:7.140625%;--y:16.666667%;--w:11.203125%;--h:5.370370%;z-index:26;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">终版知识库</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-23" data-label="P23">
+      <div class="slide-content">
+        <div class="artboard" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.182292%;--y:5.074074%;--w:29.906250%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">迭代方案与运营机制</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:13.994792%;--y:11.907407%;--w:72.010417%;--h:80.768519%;z-index:2;" type="button" data-lightbox="SQL-Agent-assets/slide23_pic01.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide23_pic01.png" alt="图片 2" loading="lazy" />
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-24" data-label="P24">
+      <div class="slide-content">
+        <div class="artboard" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.182292%;--y:5.074074%;--w:29.906250%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">Prompt设计</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:5.101706%;--y:47.370210%;--w:13.660105%;--h:4.052173%;z-index:2;--fs:23.600px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:700;">注意事项</div>
+          </div>
+<div class="ppt-item ppt-line" style="--x:5.076173%;--y:52.370181%;--w:1.921801%;--h:0.000000%;z-index:3;--bd:#ffffff;--bw:4.00px;" aria-hidden="true"></div>
+<div class="ppt-item ppt-line" style="--x:5.756143%;--y:52.364494%;--w:16.121432%;--h:0.000000%;z-index:4;--bd:#ffffff;--bw:1.00px;" aria-hidden="true"></div>
+
+          <div class="ppt-item ppt-text" style="--x:5.102904%;--y:34.789122%;--w:18.030118%;--h:4.051502%;z-index:5;--fs:23.600px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:700;">示例、历史样本</div>
+          </div>
+<div class="ppt-item ppt-line" style="--x:5.076173%;--y:39.793686%;--w:1.921801%;--h:0.000000%;z-index:6;--bd:#ffffff;--bw:4.00px;" aria-hidden="true"></div>
+
+          <div class="ppt-item ppt-text" style="--x:5.101706%;--y:60.048863%;--w:13.660105%;--h:4.052173%;z-index:7;--fs:23.600px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:700;">输出格式</div>
+          </div>
+<div class="ppt-item ppt-line" style="--x:5.076173%;--y:65.048804%;--w:1.921801%;--h:0.000000%;z-index:8;--bd:#ffffff;--bw:4.00px;" aria-hidden="true"></div>
+<div class="ppt-item ppt-line" style="--x:5.756143%;--y:65.043132%;--w:20.105495%;--h:0.000000%;z-index:9;--bd:#ffffff;--bw:1.00px;" aria-hidden="true"></div>
+
+          <div class="ppt-item ppt-text" style="--x:38.075607%;--y:47.489399%;--w:13.660105%;--h:4.052173%;z-index:10;--fs:23.600px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:700;">上下文信息</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:38.136270%;--y:60.122645%;--w:13.660105%;--h:4.035141%;z-index:11;--fs:23.600px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:700;">职责/目标</div>
+          </div>
+<div class="ppt-item ppt-line" style="--x:30.196859%;--y:65.043132%;--w:20.178921%;--h:0.000000%;z-index:12;--bd:#ffffff;--bw:1.00px;" aria-hidden="true"></div>
+<div class="ppt-item ppt-line" style="--x:34.254347%;--y:52.364494%;--w:16.121432%;--h:0.000000%;z-index:13;--bd:#ffffff;--bw:1.00px;" aria-hidden="true"></div>
+
+          <div class="ppt-item ppt-text" style="--x:38.075607%;--y:34.975357%;--w:13.660105%;--h:4.052173%;z-index:14;--fs:23.600px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:700;">角色</div>
+          </div>
+<div class="ppt-item ppt-line" style="--x:49.826690%;--y:39.867469%;--w:1.918602%;--h:0.000000%;z-index:15;--bd:#ffffff;--bw:4.00px;" aria-hidden="true"></div>
+<div class="ppt-item ppt-line" style="--x:29.583932%;--y:39.850437%;--w:20.791855%;--h:0.000000%;z-index:16;--bd:#ffffff;--bw:1.00px;" aria-hidden="true"></div>
+
+          <button class="ppt-item ppt-img" style="--x:25.341281%;--y:41.700583%;--w:1.449327%;--h:2.576582%;z-index:21;" type="button" data-lightbox="SQL-Agent-assets/slide24_pic01.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide24_pic01.png" alt="图片 5" loading="lazy" />
+          </button>
+<div class="ppt-item ppt-line" style="--x:49.826690%;--y:52.375853%;--w:1.918602%;--h:0.000000%;z-index:24;--bd:#ffffff;--bw:4.00px;" aria-hidden="true"></div>
+<div class="ppt-item ppt-line" style="--x:49.775607%;--y:65.043132%;--w:1.918602%;--h:0.000000%;z-index:25;--bd:#ffffff;--bw:4.00px;" aria-hidden="true"></div>
+<div class="ppt-item ppt-line" style="--x:5.756143%;--y:39.844765%;--w:19.406365%;--h:0.056751%;z-index:26;--bd:#ffffff;--bw:1.00px;" aria-hidden="true"></div>
+
+          <button class="ppt-item ppt-img" style="--x:31.425919%;--y:43.244269%;--w:1.449327%;--h:2.576582%;z-index:27;" type="button" data-lightbox="SQL-Agent-assets/slide24_pic02.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide24_pic02.png" alt="图片 15" loading="lazy" />
+          </button>
+
+          <button class="ppt-item ppt-img" style="--x:22.008456%;--y:50.349767%;--w:1.449327%;--h:2.576582%;z-index:28;" type="button" data-lightbox="SQL-Agent-assets/slide24_pic03.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide24_pic03.png" alt="图片 14" loading="lazy" />
+          </button>
+
+          <button class="ppt-item ppt-img" style="--x:24.022835%;--y:59.651589%;--w:1.628100%;--h:2.894401%;z-index:29;" type="button" data-lightbox="SQL-Agent-assets/slide24_pic04.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide24_pic04.png" alt="图片 5" loading="lazy" />
+          </button>
+
+          <button class="ppt-item ppt-img" style="--x:33.377781%;--y:51.424162%;--w:1.449327%;--h:2.576582%;z-index:30;" type="button" data-lightbox="SQL-Agent-assets/slide24_pic05.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide24_pic05.png" alt="图片 19" loading="lazy" />
+          </button>
+
+          <button class="ppt-item ppt-img" style="--x:30.274967%;--y:60.709653%;--w:1.449327%;--h:2.576582%;z-index:31;" type="button" data-lightbox="SQL-Agent-assets/slide24_pic06.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide24_pic06.png" alt="图片 12" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:76.903109%;--y:64.051473%;--w:18.650205%;--h:3.101939%;z-index:32;--fs:21.400px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:700;">个性化提示词（业务自行维护）</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:76.946900%;--y:39.177180%;--w:18.650205%;--h:3.101939%;z-index:33;--fs:21.400px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:700;">通用信息</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:81.188566%;--y:48.684850%;--w:9.559219%;--h:5.082677%;z-index:34;--fs:21.400px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:700;">业务知识</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:75.927256%;--y:49.944182%;--w:1.825533%;--h:3.245392%;z-index:36;--fs:16.667px;--pad:0;--bw:1.00px;--tc:#ffffff;">
+            <div class="ppt-text-inner" style="font-weight:700;">02</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:74.239075%;--y:42.174905%;--w:1.825533%;--h:3.245392%;z-index:37;--fs:16.667px;--pad:0;--bw:1.00px;--tc:#ffffff;">
+            <div class="ppt-text-inner" style="font-weight:700;">01</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:74.239075%;--y:57.710076%;--w:1.825533%;--h:3.245392%;z-index:38;--fs:16.667px;--pad:0;--bw:1.00px;--tc:#ffffff;">
+            <div class="ppt-text-inner" style="font-weight:700;">03</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:67.373761%;--y:45.759434%;--w:6.516224%;--h:11.584398%;z-index:39;--fs:16.000px;--pad:0;--bw:1.00px;--tc:#ffffff;">
+            <div class="ppt-text-inner" style="font-weight:700;">上下文信息</div>
+          </div>
+<div class="ppt-item ppt-line" style="--x:58.807292%;--y:42.074074%;--w:8.567708%;--h:7.037037%;z-index:40;--bd:#ffffff;--bw:1.00px;" aria-hidden="true"></div>
+<div class="ppt-item ppt-line" style="--x:58.807292%;--y:52.296296%;--w:8.567708%;--h:8.805556%;z-index:41;--bd:#ffffff;--bw:1.00px;" aria-hidden="true"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-25" data-label="P25">
+      <div class="slide-content">
+        <div class="artboard" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.182292%;--y:5.074074%;--w:26.494792%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">整体架构一览</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:0.000000%;--y:29.518519%;--w:100.000000%;--h:40.962963%;z-index:2;" type="button" data-lightbox="SQL-Agent-assets/slide25_pic01.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide25_pic01.png" alt="图片 4" loading="lazy" />
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-26" data-label="P26">
+      <div class="slide-content">
+        <div class="artboard" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <button class="ppt-item ppt-img" style="--x:11.032406%;--y:26.190216%;--w:77.935179%;--h:54.024030%;z-index:1;" type="button" data-lightbox="SQL-Agent-assets/slide26_pic01.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide26_pic01.png" alt="图片 4" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:24.975041%;--y:41.568635%;--w:57.843750%;--h:14.796296%;z-index:2;--fs:80.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">落地效果与经验总结</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-27" data-label="P27">
+      <div class="slide-content">
+        <div class="artboard" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.181463%;--y:5.071522%;--w:15.221440%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">落地效果</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:2.161458%;--y:13.342593%;--w:95.677083%;--h:78.037037%;z-index:2;" type="button" data-lightbox="SQL-Agent-assets/slide27_pic01.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide27_pic01.png" alt="图片 1" loading="lazy" />
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-28" data-label="P28">
+      <div class="slide-content">
+        <div class="artboard" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.181463%;--y:5.071522%;--w:15.221440%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">落地效果</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:5.953125%;--y:32.212963%;--w:9.544275%;--h:21.435185%;z-index:2;" type="button" data-lightbox="SQL-Agent-assets/slide28_pic01.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide28_pic01.png" alt="组合 8" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:4.208333%;--y:61.324074%;--w:13.036458%;--h:4.564815%;z-index:3;--pad:0;--bw:1.00px;--tc:#471e5c;">
+            <div class="ppt-text-inner" style="font-weight:500;">准确率</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:7.651042%;--y:37.527778%;--w:7.848958%;--h:5.370370%;z-index:4;--pad:0;--tc:#471e5c;">
+            <div class="ppt-text-inner" style="font-weight:700;">85%+</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:24.781250%;--y:32.212963%;--w:9.544275%;--h:21.435185%;z-index:5;" type="button" data-lightbox="SQL-Agent-assets/slide28_pic02.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide28_pic02.png" alt="组合 8" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:23.036458%;--y:61.324074%;--w:13.036458%;--h:4.564815%;z-index:6;--pad:0;--bw:1.00px;--tc:#471e5c;">
+            <div class="ppt-text-inner" style="font-weight:500;">年化提效</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:24.239583%;--y:37.527778%;--w:13.041667%;--h:5.370370%;z-index:7;--pad:0;--tc:#471e5c;">
+            <div class="ppt-text-inner" style="font-weight:700;">1.8pd/需求</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:42.052083%;--y:32.212963%;--w:9.544275%;--h:21.435185%;z-index:8;" type="button" data-lightbox="SQL-Agent-assets/slide28_pic03.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide28_pic03.png" alt="组合 8" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:40.307292%;--y:61.324074%;--w:13.036458%;--h:4.564815%;z-index:9;--pad:0;--bw:1.00px;--tc:#471e5c;">
+            <div class="ppt-text-inner" style="font-weight:500;">排期等待</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:40.869792%;--y:35.666667%;--w:10.937500%;--h:13.444444%;z-index:10;--pad:0;--tc:#471e5c;">
+            <div class="ppt-text-inner" style="font-weight:700;">降低<br/>1.44pd/需求</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:60.786458%;--y:32.212963%;--w:9.544275%;--h:21.435185%;z-index:11;" type="button" data-lightbox="SQL-Agent-assets/slide28_pic04.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide28_pic04.png" alt="组合 8" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:59.041667%;--y:61.324074%;--w:13.036458%;--h:4.564815%;z-index:12;--pad:0;--bw:1.00px;--tc:#471e5c;">
+            <div class="ppt-text-inner" style="font-weight:500;">周吞吐</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:59.223958%;--y:36.722222%;--w:13.041667%;--h:9.407407%;z-index:13;--pad:0;--tc:#471e5c;">
+            <div class="ppt-text-inner" style="font-weight:700;">提升<br/>300%+</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:79.713542%;--y:32.212963%;--w:9.544275%;--h:21.435185%;z-index:14;" type="button" data-lightbox="SQL-Agent-assets/slide28_pic05.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide28_pic05.png" alt="组合 8" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:77.968750%;--y:61.324074%;--w:13.036458%;--h:4.564815%;z-index:15;--pad:0;--bw:1.00px;--tc:#471e5c;">
+            <div class="ppt-text-inner" style="font-weight:500;">取数需求</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:78.151042%;--y:36.722222%;--w:13.041667%;--h:9.407407%;z-index:16;--pad:0;--tc:#471e5c;">
+            <div class="ppt-text-inner" style="font-weight:700;">降低<br/>20%+</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-29" data-label="P29">
+      <div class="slide-content">
+        <div class="artboard" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.181463%;--y:5.071522%;--w:15.221440%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">经验总结</div>
+          </div>
+
+          <button class="ppt-item ppt-img" style="--x:46.351394%;--y:56.702173%;--w:5.352370%;--h:9.515325%;z-index:5;" type="button" data-lightbox="SQL-Agent-assets/slide29_pic01.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide29_pic01.png" alt="图形 19" loading="lazy" />
+          </button>
+<div class="ppt-item ppt-line" style="--x:48.798450%;--y:48.917789%;--w:0.000008%;--h:3.124132%;z-index:15;--bd:#ffffff;--bw:1.00px;" aria-hidden="true"></div>
+
+          <div class="ppt-item ppt-text" style="--x:34.958366%;--y:67.063955%;--w:27.773114%;--h:4.320516%;z-index:16;--fs:22.600px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:700;">经验总结</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:13.236598%;--y:31.665529%;--w:10.031234%;--h:13.594721%;z-index:17;--fs:15.800px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:500;">优先准备，可以从历史数据捞取</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:13.236598%;--y:26.406416%;--w:10.031234%;--h:4.320516%;z-index:18;--fs:18.067px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:700;">验证数据</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:74.412869%;--y:31.665529%;--w:10.031234%;--h:13.594721%;z-index:19;--fs:15.800px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:500;">不能选择单一模型，根据场景选择不同的模型，要对比。</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:74.412869%;--y:26.406416%;--w:10.031234%;--h:4.320516%;z-index:20;--fs:18.067px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:700;">模型选择</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:27.343750%;--y:31.777778%;--w:12.395833%;--h:14.009259%;z-index:21;--fs:15.800px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:500;">迭代，拆分。不要一开始就拆分出很多的Agent。平衡时间，成本，维护复杂度</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:28.530676%;--y:26.406416%;--w:10.031234%;--h:4.320516%;z-index:22;--fs:18.067px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:700;">Single Agent or Multi Agent</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:43.824729%;--y:31.665529%;--w:10.031234%;--h:13.594721%;z-index:23;--fs:15.800px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:500;">多展示过程，而不是一个单一结果。</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:43.824729%;--y:26.406416%;--w:10.031234%;--h:4.320516%;z-index:24;--fs:18.067px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:700;">体验</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:59.118807%;--y:31.665529%;--w:10.031234%;--h:13.594721%;z-index:25;--fs:15.800px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:500;">需求明确，但AI项目某个问题不上线就不会暴露。</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:59.118807%;--y:26.406416%;--w:10.031234%;--h:4.320516%;z-index:26;--fs:18.067px;--pad:0;--bw:1.00px;">
+            <div class="ppt-text-inner" style="font-weight:700;">AI需求避免闭门造车</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-30" data-label="P30">
+      <div class="slide-content">
+        <div class="artboard" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <button class="ppt-item ppt-img" style="--x:11.032406%;--y:26.190216%;--w:77.935179%;--h:54.024030%;z-index:1;" type="button" data-lightbox="SQL-Agent-assets/slide30_pic01.png" aria-label="Open image">
+            <img src="SQL-Agent-assets/slide30_pic01.png" alt="图片 4" loading="lazy" />
+          </button>
+
+          <div class="ppt-item ppt-text" style="--x:33.350041%;--y:41.568635%;--w:26.541667%;--h:14.796296%;z-index:2;--fs:80.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">未来展望</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-31" data-label="P31">
+      <div class="slide-content">
+        <div class="artboard" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:11.181463%;--y:5.071522%;--w:15.221440%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">未来展望</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:15.688804%;--y:64.759259%;--w:11.500000%;--h:8.509259%;z-index:19;--fs:21.333px;--pad:0;--tc:#92d050;">
+            <div class="ppt-text-inner" style="font-weight:500;">更多的场景，<br/>更多的难题</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:69.765633%;--y:38.583333%;--w:13.166667%;--h:4.916667%;z-index:20;--fs:21.333px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">更快的响应速度</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:67.687508%;--y:67.467600%;--w:13.166667%;--h:4.916667%;z-index:21;--fs:21.333px;--pad:0;--tc:#7e7e7d;">
+            <div class="ppt-text-inner" style="font-weight:500;">知识的运维成本</div>
+          </div>
+
+          <div class="ppt-item ppt-text" style="--x:16.385417%;--y:35.504637%;--w:8.166667%;--h:8.509259%;z-index:22;--fs:21.333px;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:500;">分析决策<br/>是终态</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="slide-32" data-label="P32">
+      <div class="slide-content">
+        <div class="artboard" data-base-h="720.000" style="--ratio:1.777778;">
+
+          <div class="ppt-item ppt-text" style="--x:7.794455%;--y:63.504783%;--w:20.186015%;--h:11.336498%;z-index:2;--pad:0;">
+            <div class="ppt-text-inner" style="font-weight:700;">扫码关注公众号<br/>获取 PPT 下载链接</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <div class="lightbox-card" role="dialog" aria-modal="true" aria-label="Image viewer">
+      <div class="lightbox-bar">
+        <div class="title" id="lightboxTitle">image</div>
+        <div class="lightbox-actions">
+          <a id="lightboxOpen" href="#" target="_blank" rel="noreferrer">Open</a>
+          <button type="button" id="lightboxClose">Close (Esc)</button>
+        </div>
+      </div>
+      <div class="lightbox-stage">
+        <img id="lightboxImg" alt="Full-size preview" />
+      </div>
+    </div>
+  </div>
+
+  <script>
+    class SlidePresentation {
+      constructor() {
+        this.slides = Array.from(document.querySelectorAll(".slide"));
+        this.navDots = document.getElementById("navDots");
+        this.progressFill = document.getElementById("progressFill");
+        this.counter = document.getElementById("counter");
+        this.reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        this.activeIndex = 0;
+        this._wheelLock = false;
+        this._buildDots();
+        this._bind();
+        this._syncActiveFromScroll();
+        this._installArtboardScaling();
+      }
+
+      _installArtboardScaling() {
+        const boards = Array.from(document.querySelectorAll(".artboard"));
+        const updateOne = (b) => {
+          const baseH = parseFloat(b.getAttribute("data-base-h") || "0");
+          if (!baseH) return;
+          const scale = b.clientHeight / baseH;
+          b.style.setProperty("--s", String(scale));
+        };
+        const updateAll = () => boards.forEach(updateOne);
+        updateAll();
+        window.addEventListener("resize", () => updateAll(), { passive: true });
+      }
+
+      _buildDots() {
+        this.navDots.innerHTML = "";
+        this.slides.forEach((slide, index) => {
+          const label = slide.getAttribute("data-label") || `Slide ${index + 1}`;
+          const button = document.createElement("button");
+          button.type = "button";
+          button.setAttribute("aria-label", `Go to ${label}`);
+          button.addEventListener("click", () => this.goTo(index));
+          this.navDots.appendChild(button);
+        });
+      }
+
+      _bind() {
+        window.addEventListener("keydown", (e) => {
+          const key = e.key;
+          const isNavKey = ["ArrowDown","ArrowRight","PageDown"," ","Enter","ArrowUp","ArrowLeft","PageUp","Home","End"].includes(key);
+          if (!isNavKey) return;
+          e.preventDefault();
+          if (key === "Home") return this.goTo(0);
+          if (key === "End") return this.goTo(this.slides.length - 1);
+          if (key === "ArrowUp" || key === "ArrowLeft" || key === "PageUp") return this.prev();
+          return this.next();
+        }, { passive: false } );
+
+        window.addEventListener("wheel", (e) => {
+          if (this._wheelLock) return;
+          const dy = e.deltaY || 0;
+          if (Math.abs(dy) < 14) return;
+          this._wheelLock = true;
+          if (dy > 0) this.next(); else this.prev();
+          window.setTimeout(() => { this._wheelLock = false; }, 360);
+        }, { passive: true });
+
+        window.addEventListener("scroll", () => this._syncActiveFromScroll(), { passive: true });
+      }
+
+      _syncActiveFromScroll() {
+        const viewportMid = window.scrollY + window.innerHeight / 2;
+        let bestIndex = 0;
+        let bestDist = Infinity;
+        for (let i = 0; i < this.slides.length; i++) {
+          const rect = this.slides[i].getBoundingClientRect();
+          const slideMid = window.scrollY + rect.top + rect.height / 2;
+          const dist = Math.abs(slideMid - viewportMid);
+          if (dist < bestDist) { bestDist = dist; bestIndex = i; }
+        }
+        this.activeIndex = bestIndex;
+        this._renderUI();
+      }
+
+      _renderUI() {
+        const total = this.slides.length;
+        const current = this.activeIndex + 1;
+        const pad2 = (n) => String(n).padStart(2, "0");
+        this.counter.textContent = `${pad2(current)} / ${pad2(total)}`;
+        const percent = (this.activeIndex / Math.max(1, total - 1)) * 100;
+        this.progressFill.style.width = `${percent}%`;
+        const dots = Array.from(this.navDots.querySelectorAll("button"));
+        dots.forEach((b, i) => b.setAttribute("aria-current", i === this.activeIndex ? "true" : "false"));
+      }
+
+      goTo(index) {
+        const slide = this.slides[index];
+        if (!slide) return;
+        slide.scrollIntoView({ behavior: this.reduceMotion ? "auto" : "smooth", block: "start" });
+        this.activeIndex = Math.max(0, Math.min(index, this.slides.length - 1));
+        this._renderUI();
+      }
+
+      next() { this.goTo(this.activeIndex + 1); }
+      prev() { this.goTo(this.activeIndex - 1); }
+    }
+
+    class Lightbox {
+      constructor() {
+        this.el = document.getElementById("lightbox");
+        this.img = document.getElementById("lightboxImg");
+        this.title = document.getElementById("lightboxTitle");
+        this.openLink = document.getElementById("lightboxOpen");
+        this.closeBtn = document.getElementById("lightboxClose");
+
+        this.closeBtn.addEventListener("click", () => this.close());
+        this.el.addEventListener("click", (e) => {
+          if (e.target === this.el) this.close();
+        });
+        window.addEventListener("keydown", (e) => {
+          if (e.key === "Escape") this.close();
+        });
+        document.body.addEventListener("click", (e) => {
+          const btn = e.target && e.target.closest && e.target.closest("[data-lightbox]");
+          if (!btn) return;
+          const src = btn.getAttribute("data-lightbox");
+          if (!src) return;
+          this.open(src);
+        });
+      }
+
+      open(src) {
+        this.img.src = src;
+        this.title.textContent = src.split("/").pop() || "image";
+        this.openLink.href = src;
+        this.el.classList.add("open");
+        this.el.setAttribute("aria-hidden", "false");
+      }
+
+      close() {
+        if (!this.el.classList.contains("open")) return;
+        this.el.classList.remove("open");
+        this.el.setAttribute("aria-hidden", "true");
+        this.img.src = "";
+      }
+    }
+
+    new SlidePresentation();
+    new Lightbox();
+  </script>
+</body>
+</html>
