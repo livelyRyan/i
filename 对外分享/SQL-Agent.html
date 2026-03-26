@@ -23,24 +23,26 @@
     :root {
       --bg-0: #f6f7fb;
       --bg-1: #eef1f6;
-      --glass: rgba(0, 0, 0, 0.06);
-      --glass-2: rgba(0, 0, 0, 0.03);
-      --line: rgba(0, 0, 0, 0.12);
-      --text-0: rgba(15, 18, 25, 0.92);
+      --glass: rgba(255, 255, 255, 0.98);
+      --glass-2: rgba(255, 255, 255, 0.96);
+      --line: rgba(16, 24, 40, 0.12);
+      --text-0: rgba(18, 23, 36, 0.92);
+      --ui-bg: rgba(255, 255, 255, 0.82);
+      --ui-border: rgba(16, 24, 40, 0.16);
+      --ui-ink: rgba(16, 24, 40, 0.72);
+      --ui-ink-strong: rgba(16, 24, 40, 0.92);
       --font-body: "Satoshi", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
       --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
       --slide-padding: clamp(0.75rem, 3.4vw, 3rem);
       --ui-size: clamp(0.68rem, 1vw, 0.92rem);
-      --artboard-bg: #ffffff;
-      --artboard-border: rgba(0, 0, 0, 0.12);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: var(--font-body);
-      background: radial-gradient(1200px 900px at 15% 10%, rgba(90, 120, 255, 0.08), transparent 60%),
-                  radial-gradient(900px 700px at 80% 20%, rgba(0, 180, 160, 0.06), transparent 55%),
-                  radial-gradient(900px 700px at 65% 88%, rgba(255, 140, 80, 0.08), transparent 55%),
+      background: radial-gradient(1000px 700px at 12% 10%, rgba(59, 130, 246, 0.08), transparent 65%),
+                  radial-gradient(900px 700px at 85% 20%, rgba(16, 185, 129, 0.08), transparent 60%),
+                  radial-gradient(900px 700px at 65% 88%, rgba(244, 114, 182, 0.08), transparent 60%),
                   linear-gradient(180deg, var(--bg-0), var(--bg-1));
       color: var(--text-0);
       height: 100%;
@@ -64,18 +66,21 @@
       display: grid;
       place-items: center;
       max-height: 100%;
-      overflow: hidden;
+      overflow: visible;
     }
 
     .artboard {
       position: relative;
-      width: min(96vw, calc(92vh * var(--ratio)));
+      width: auto;
+      height: auto;
+      max-width: 96vw;
+      max-height: calc(100vh - (2 * var(--slide-padding)));
       aspect-ratio: var(--ratio);
-      background: var(--artboard-bg);
-      border: 1px solid var(--artboard-border);
+      background: #ffffff;
+      border: 1px solid var(--line);
       border-radius: 18px;
-      box-shadow: 0 30px 120px rgba(0, 0, 0, 0.25);
-      overflow: hidden;
+      box-shadow: 0 30px 140px rgba(0, 0, 0, 0.55);
+      overflow: visible;
       transform: translateZ(0);
     }
 
@@ -91,7 +96,7 @@
 
     .ppt-text {
       display: block;
-      color: var(--tc, rgba(15,18,25,0.92));
+      color: var(--tc, rgba(255,255,255,0.92));
       background: var(--bg, transparent);
       border: var(--bw, 0px) solid var(--bd, transparent);
       border-radius: 12px;
@@ -112,14 +117,14 @@
 
     .ppt-shape {
       background: var(--bg, transparent);
-      border: var(--bw, 1px) solid var(--bd, rgba(0,0,0,0.12));
+      border: var(--bw, 1px) solid var(--bd, rgba(255,255,255,0.15));
       border-radius: 12px;
-      opacity: 0.95;
+      opacity: 0.9;
     }
 
     .ppt-line {
       background: transparent;
-      border-top: var(--bw, 2px) solid var(--bd, rgba(0,0,0,0.55));
+      border-top: var(--bw, 2px) solid var(--bd, rgba(255,255,255,0.55));
       height: 0;
       width: var(--w);
     }
@@ -137,8 +142,9 @@
       display: block;
       border-radius: 10px;
       background: transparent;
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.18);
       transition: transform 180ms ease;
+      padding: 0;
     }
     .ppt-img:hover img { transform: scale(1.01); }
 
@@ -149,15 +155,15 @@
       height: 3px;
       width: 100vw;
       z-index: 50;
-      background: rgba(0,0,0,0.08);
+      background: rgba(16, 24, 40, 0.12);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
     }
     .progress > div {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, #3aa3ff, #ff7a6a, #63d29f);
-      box-shadow: 0 0 22px rgba(61, 163, 255, 0.24);
+      background: linear-gradient(90deg, #2563eb, #ec4899, #14b8a6);
+      box-shadow: 0 0 22px rgba(37, 99, 235, 0.24);
       transition: width 220ms ease;
     }
 
@@ -172,8 +178,8 @@
       gap: 9px;
       padding: 10px 8px;
       border-radius: 999px;
-      background: rgba(255,255,255,0.85);
-      border: 1px solid rgba(0,0,0,0.10);
+      background: var(--ui-bg);
+      border: 1px solid var(--ui-border);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
     }
@@ -181,16 +187,16 @@
       width: 10px;
       height: 10px;
       border-radius: 999px;
-      border: 1px solid rgba(0,0,0,0.20);
-      background: rgba(0,0,0,0.08);
+      border: 1px solid rgba(16, 24, 40, 0.18);
+      background: rgba(16, 24, 40, 0.10);
       cursor: pointer;
       transition: transform 220ms ease, background 220ms ease, border-color 220ms ease;
     }
     .nav-dots button[aria-current="true"] {
-      background: linear-gradient(135deg, #3aa3ff, #ff7a6a);
-      border-color: rgba(58,163,255,0.55);
+      background: linear-gradient(135deg, #2563eb, #ec4899);
+      border-color: rgba(37, 99, 235, 0.6);
       transform: scale(1.25);
-      box-shadow: 0 0 18px rgba(58,163,255,0.22);
+      box-shadow: 0 0 18px rgba(37, 99, 235, 0.22);
     }
 
     .counter {
@@ -200,9 +206,9 @@
       z-index: 50;
       font-family: var(--font-mono);
       font-size: var(--ui-size);
-      color: rgba(0,0,0,0.66);
-      background: rgba(255,255,255,0.85);
-      border: 1px solid rgba(0,0,0,0.10);
+      color: var(--ui-ink);
+      background: var(--ui-bg);
+      border: 1px solid var(--ui-border);
       border-radius: 999px;
       padding: 0.5em 0.75em;
       backdrop-filter: blur(10px);
@@ -215,21 +221,21 @@
       z-index: 200;
       display: none;
       place-items: center;
-      background: rgba(0,0,0,0.64);
+      background: rgba(9, 12, 20, 0.68);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       padding: clamp(0.8rem, 2.5vw, 2rem);
     }
     .lightbox.open { display: grid; }
     .lightbox-card {
-      width: var(--lb-width, min(96vw, 1400px));
+      width: fit-content;
+      height: fit-content;
       max-width: 96vw;
       max-height: 92vh;
       border-radius: 16px;
-      height: var(--lb-height, auto);
-      border: 1px solid rgba(0,0,0,0.12);
-      background: #ffffff;
-      box-shadow: 0 40px 200px rgba(0,0,0,0.35);
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(12, 14, 22, 0.72);
+      box-shadow: 0 40px 200px rgba(0,0,0,0.6);
       overflow: hidden;
       display: grid;
       grid-template-rows: auto 1fr;
@@ -240,12 +246,12 @@
       justify-content: space-between;
       gap: 12px;
       padding: 10px 12px;
-      border-bottom: 1px solid rgba(0,0,0,0.08);
+      border-bottom: 1px solid rgba(255,255,255,0.10);
     }
     .lightbox-bar .title {
       font-family: var(--font-mono);
       font-size: var(--ui-size);
-      color: rgba(15,18,25,0.70);
+      color: rgba(255,255,255,0.78);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -260,29 +266,29 @@
     .lightbox-actions button {
       font-family: var(--font-mono);
       font-size: var(--ui-size);
-      color: rgba(15,18,25,0.82);
-      background: rgba(0,0,0,0.05);
-      border: 1px solid rgba(0,0,0,0.12);
+      color: rgba(255,255,255,0.82);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
       border-radius: 999px;
       padding: 0.45em 0.75em;
       cursor: pointer;
       text-decoration: none;
     }
     .lightbox-stage {
-      width: var(--lb-stage-width, auto);
-      height: var(--lb-stage-height, auto);
-      max-height: calc(92vh - 64px);
       display: grid;
       place-items: center;
       padding: 12px;
-      overflow: hidden;
+      overflow: auto;
     }
     .lightbox-stage img {
-      width: 100%;
-      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
       object-fit: contain;
       background: #ffffff;
       border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.3);
     }
 
     /* ===========================================
@@ -298,7 +304,7 @@
       .progress { display: none; }
     }
     @media (max-width: 900px) {
-      .artboard { width: min(96vw, calc(88vh * var(--ratio))); }
+      .artboard { max-width: 96vw; }
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
@@ -519,7 +525,6 @@
           <button class="ppt-item ppt-img" style="--x:73.364583%;--y:20.537037%;--w:11.859375%;--h:20.268519%;z-index:5;" type="button" data-lightbox="SQL-Agent-assets/slide06_pic03.png" aria-label="Open image">
             <img src="SQL-Agent-assets/slide06_pic03.png" alt="图片 3" loading="lazy" />
           </button>
-<div class="ppt-item ppt-shape" style="--x:30.026042%;--y:27.129630%;--w:39.942708%;--h:7.222222%;z-index:6;--bg:#70ad47;--bw:1.00px;" aria-hidden="true"></div>
 
           <div class="ppt-item ppt-text" style="--x:15.942708%;--y:42.694444%;--w:7.760417%;--h:5.370370%;z-index:7;--pad:0;--tc:#ff0000;">
             <div class="ppt-text-inner" style="font-weight:500;">低效率</div>
@@ -647,7 +652,7 @@
             <img src="SQL-Agent-assets/slide11_pic03.png" alt="图片 11" loading="lazy" />
           </button>
 
-          <div class="ppt-item ppt-text" style="--x:69.531250%;--y:65.833333%;--w:26.708333%;--h:25.731481%;z-index:12;--pad:0.32em;--bg:#70ad47;--bw:1.00px;">
+          <div class="ppt-item ppt-text" style="--x:69.531250%;--y:65.833333%;--w:26.708333%;--h:25.731481%;z-index:12;--pad:0;--bw:1.00px;">
             <div class="ppt-text-inner" style="font-weight:500;">Agent拆分 + 术语库</div>
           </div>
         </div>
@@ -662,17 +667,15 @@
             <div class="ppt-text-inner" style="font-weight:700;">首次拆分-优化Agent</div>
           </div>
 
-          <div class="ppt-item ppt-text" style="--x:28.963542%;--y:16.185185%;--w:16.526042%;--h:7.324074%;z-index:2;--pad:0.32em;--bg:#70ad47;--bw:1.00px;">
+          <div class="ppt-item ppt-text" style="--x:28.963542%;--y:16.185185%;--w:16.526042%;--h:7.324074%;z-index:2;--pad:0;--bw:1.00px;">
             <div class="ppt-text-inner" style="font-weight:500;">生成 Agent</div>
           </div>
-<div class="ppt-item ppt-shape" style="--x:19.458333%;--y:17.620370%;--w:8.791667%;--h:4.296296%;z-index:3;--bg:#70ad47;--bw:1.00px;" aria-hidden="true"></div>
-<div class="ppt-item ppt-shape" style="--x:46.942708%;--y:16.342593%;--w:4.203125%;--h:7.166667%;z-index:4;--bg:#70ad47;--bw:1.00px;" aria-hidden="true"></div>
 
-          <div class="ppt-item ppt-text" style="--x:2.213542%;--y:16.027778%;--w:16.526042%;--h:7.324074%;z-index:5;--pad:0.32em;--bg:#4472c4;--bw:1.00px;">
+          <div class="ppt-item ppt-text" style="--x:2.213542%;--y:16.027778%;--w:16.526042%;--h:7.324074%;z-index:5;--pad:0;--bw:1.00px;">
             <div class="ppt-text-inner" style="font-weight:500;">单 Agent</div>
           </div>
 
-          <div class="ppt-item ppt-text" style="--x:52.598958%;--y:16.027778%;--w:16.526042%;--h:7.324074%;z-index:6;--pad:0.32em;--bg:#70ad47;--bw:1.00px;">
+          <div class="ppt-item ppt-text" style="--x:52.598958%;--y:16.027778%;--w:16.526042%;--h:7.324074%;z-index:6;--pad:0;--bw:1.00px;">
             <div class="ppt-text-inner" style="font-weight:500;">优化 Agent</div>
           </div>
 
@@ -781,17 +784,15 @@
             <div class="ppt-text-inner" style="font-weight:500;">规则映射-引入问题细化Agent</div>
           </div>
 
-          <div class="ppt-item ppt-text" style="--x:31.927083%;--y:14.740741%;--w:16.526042%;--h:7.324074%;z-index:2;--pad:0.32em;--bg:#70ad47;--bw:1.00px;">
+          <div class="ppt-item ppt-text" style="--x:31.927083%;--y:14.740741%;--w:16.526042%;--h:7.324074%;z-index:2;--pad:0;--bw:1.00px;">
             <div class="ppt-text-inner" style="font-weight:500;">细化 Agent</div>
           </div>
-<div class="ppt-item ppt-shape" style="--x:22.421875%;--y:16.175926%;--w:8.791667%;--h:4.296296%;z-index:3;--bg:#70ad47;--bw:1.00px;" aria-hidden="true"></div>
-<div class="ppt-item ppt-shape" style="--x:49.906250%;--y:14.898148%;--w:4.203125%;--h:7.166667%;z-index:4;--bg:#70ad47;--bw:1.00px;" aria-hidden="true"></div>
 
-          <div class="ppt-item ppt-text" style="--x:5.177083%;--y:14.583333%;--w:16.526042%;--h:7.324074%;z-index:5;--pad:0.32em;--bg:#ed7d31;--bw:1.00px;">
+          <div class="ppt-item ppt-text" style="--x:5.177083%;--y:14.583333%;--w:16.526042%;--h:7.324074%;z-index:5;--pad:0;--bw:1.00px;">
             <div class="ppt-text-inner" style="font-weight:500;">生成 Agent</div>
           </div>
 
-          <div class="ppt-item ppt-text" style="--x:55.562500%;--y:14.583333%;--w:15.635417%;--h:7.324074%;z-index:6;--pad:0.32em;--bg:#70ad47;--bw:1.00px;">
+          <div class="ppt-item ppt-text" style="--x:55.562500%;--y:14.583333%;--w:15.635417%;--h:7.324074%;z-index:6;--pad:0;--bw:1.00px;">
             <div class="ppt-text-inner" style="font-weight:500;">生成 Agent</div>
           </div>
 
@@ -821,7 +822,6 @@
           <button class="ppt-item ppt-img" style="--x:5.723958%;--y:58.046296%;--w:29.296875%;--h:21.527778%;z-index:3;" type="button" data-lightbox="SQL-Agent-assets/slide17_pic01.png" aria-label="Open image">
             <img src="SQL-Agent-assets/slide17_pic01.png" alt="图片 8" loading="lazy" />
           </button>
-<div class="ppt-item ppt-shape" style="--x:16.447917%;--y:35.611111%;--w:3.984375%;--h:14.277778%;z-index:4;--bg:#a5a5a5;--bw:1.00px;" aria-hidden="true"></div>
 
           <div class="ppt-item ppt-text" style="--x:20.432292%;--y:39.324074%;--w:5.687500%;--h:5.370370%;z-index:5;--pad:0;">
             <div class="ppt-text-inner" style="font-weight:500;">现象</div>
@@ -897,7 +897,6 @@
           <div class="ppt-item ppt-text" style="--x:5.041667%;--y:18.685185%;--w:31.552083%;--h:5.370370%;z-index:3;--pad:0;">
             <div class="ppt-text-inner" style="font-weight:500;">目的：提高稳定性与学习新知识</div>
           </div>
-<div class="ppt-item ppt-shape" style="--x:34.718750%;--y:18.851852%;--w:8.968750%;--h:5.203704%;z-index:4;--bg:#70ad47;--bw:1.00px;" aria-hidden="true"></div>
 
           <div class="ppt-item ppt-text" style="--x:35.468750%;--y:14.842593%;--w:6.052083%;--h:5.370370%;z-index:5;--pad:0;">
             <div class="ppt-text-inner" style="font-weight:500;">手段</div>
@@ -967,7 +966,6 @@
           <button class="ppt-item ppt-img" style="--x:70.083333%;--y:50.185185%;--w:3.796875%;--h:6.750000%;z-index:10;" type="button" data-lightbox="SQL-Agent-assets/slide21_pic01.png" aria-label="Open image">
             <img src="SQL-Agent-assets/slide21_pic01.png" alt="图片 24" loading="lazy" />
           </button>
-<div class="ppt-item ppt-shape" style="--x:47.651042%;--y:49.666667%;--w:15.734375%;--h:4.296296%;z-index:11;--bg:#70ad47;--bw:1.00px;" aria-hidden="true"></div>
 <div class="ppt-item ppt-shape" style="--x:8.927083%;--y:68.490741%;--w:6.239583%;--h:5.370370%;z-index:12;--bg:#ffc000;--bw:1.00px;" aria-hidden="true"></div>
 
           <div class="ppt-item ppt-text" style="--x:19.260417%;--y:69.092593%;--w:25.000000%;--h:5.370370%;z-index:13;--pad:0;">
@@ -984,65 +982,56 @@
           <div class="ppt-item ppt-text" style="--x:11.035474%;--y:5.149548%;--w:15.221440%;--h:6.712963%;z-index:1;--fs:32.000px;--pad:0;">
             <div class="ppt-text-inner" style="font-weight:500;">知识库设计</div>
           </div>
-<div class="ppt-item ppt-shape" style="--x:23.044062%;--y:29.091557%;--w:56.318865%;--h:34.675197%;z-index:2;--bg:linear-gradient(270.000deg, #ffffff 0.0%, #5b9bd5 52.0%);--bw:1.00px;" aria-hidden="true"></div>
-<div class="ppt-item ppt-shape" style="--x:26.431619%;--y:29.091557%;--w:49.549286%;--h:29.707509%;z-index:3;--bg:linear-gradient(270.000deg, #ffffff 0.0%, #5b9bd5 81.0%);--bw:1.00px;" aria-hidden="true"></div>
-<div class="ppt-item ppt-shape" style="--x:31.576706%;--y:29.091557%;--w:39.259096%;--h:23.359930%;z-index:4;--bg:linear-gradient(270.000deg, #ffffff 0.0%, #5b9bd5 77.0%);--bw:1.00px;" aria-hidden="true"></div>
 
-          <div class="ppt-item ppt-text" style="--x:38.240945%;--y:65.659186%;--w:11.410146%;--h:6.239166%;z-index:5;--fs:20.067px;--pad:0.32em;--bg:linear-gradient(270.000deg, #5b9bd5 0.0%, #5b9bd5 48.0%);--bw:1.00px;--tc:#ffffff;">
+          <div class="ppt-item ppt-text" style="--x:38.240945%;--y:65.659186%;--w:11.410146%;--h:6.239166%;z-index:5;--fs:20.067px;--pad:0;--bw:1.00px;--tc:#ffffff;">
             <div class="ppt-text-inner" style="font-weight:700;">术语库</div>
           </div>
-<div class="ppt-item ppt-shape" style="--x:43.530192%;--y:57.527574%;--w:0.837188%;--h:1.488335%;z-index:6;--bg:linear-gradient(315.000deg, #5b9bd5 4.0%, #5b9bd5 54.0%, #5b9bd5 100.0%);--bw:1.00px;" aria-hidden="true"></div>
 
           <div class="ppt-item ppt-text" style="--x:37.660737%;--y:73.589880%;--w:12.572310%;--h:12.040507%;z-index:7;--fs:17.600px;--pad:0;--bw:1.00px;">
             <div class="ppt-text-inner" style="font-weight:500;">记录行业黑话，<br/>专有术语</div>
           </div>
 
-          <div class="ppt-item ppt-text" style="--x:24.219439%;--y:58.720210%;--w:11.410146%;--h:6.239166%;z-index:8;--fs:20.067px;--pad:0.32em;--bg:linear-gradient(270.000deg, #ed7d31 0.0%, #ed7d31 48.0%);--bw:1.00px;--tc:#ffffff;">
+          <div class="ppt-item ppt-text" style="--x:24.219439%;--y:58.720210%;--w:11.410146%;--h:6.239166%;z-index:8;--fs:20.067px;--pad:0;--bw:1.00px;--tc:#ffffff;">
             <div class="ppt-text-inner" style="font-weight:700;">表结构信息</div>
           </div>
-<div class="ppt-item ppt-shape" style="--x:29.508702%;--y:50.903995%;--w:0.837188%;--h:1.488335%;z-index:9;--bg:linear-gradient(315.000deg, #ed7d31 4.0%, #ed7d31 54.0%, #ed7d31 100.0%);--bw:2.00px;" aria-hidden="true"></div>
 
           <div class="ppt-item ppt-text" style="--x:23.637295%;--y:66.920822%;--w:12.574442%;--h:14.084952%;z-index:10;--fs:17.600px;--pad:0;--bw:1.00px;">
             <div class="ppt-text-inner" style="font-weight:500;">记录表中的字段信息</div>
           </div>
 
-          <div class="ppt-item ppt-text" style="--x:13.064337%;--y:38.080679%;--w:11.410146%;--h:6.239166%;z-index:11;--fs:20.067px;--pad:0.32em;--bg:linear-gradient(270.000deg, #5b9bd5 0.0%, #5b9bd5 48.0%);--bw:1.00px;--tc:#ffffff;">
+          <div class="ppt-item ppt-text" style="--x:13.064337%;--y:38.080679%;--w:11.410146%;--h:6.239166%;z-index:11;--fs:20.067px;--pad:0;--bw:1.00px;--tc:#ffffff;">
             <div class="ppt-text-inner" style="font-weight:700;">字段语义</div>
           </div>
-<div class="ppt-item ppt-shape" style="--x:26.459334%;--y:40.456110%;--w:0.837188%;--h:1.488335%;z-index:12;--bg:linear-gradient(315.000deg, #5b9bd5 4.0%, #5b9bd5 54.0%);--bw:2.00px;" aria-hidden="true"></div>
 
           <div class="ppt-item ppt-text" style="--x:12.471104%;--y:45.936308%;--w:12.574442%;--h:14.084952%;z-index:13;--fs:17.600px;--pad:0;--bw:1.00px;">
             <div class="ppt-text-inner" style="font-weight:500;">记录业务语义相关的知识</div>
           </div>
 
-          <div class="ppt-item ppt-text" style="--x:52.733694%;--y:65.659186%;--w:11.410146%;--h:6.239166%;z-index:14;--fs:20.067px;--pad:0.32em;--bg:linear-gradient(270.000deg, #ed7d31 0.0%, #ed7d31 48.0%);--bw:1.00px;--tc:#ffffff;">
+          <div class="ppt-item ppt-text" style="--x:52.733694%;--y:65.659186%;--w:11.410146%;--h:6.239166%;z-index:14;--fs:20.067px;--pad:0;--bw:1.00px;--tc:#ffffff;">
             <div class="ppt-text-inner" style="font-weight:700;">模板库</div>
           </div>
-<div class="ppt-item ppt-shape" style="--x:58.022958%;--y:57.527574%;--w:0.837188%;--h:1.488335%;z-index:15;--bg:linear-gradient(315.000deg, #ed7d31 4.0%, #ed7d31 54.0%);--bw:2.00px;" aria-hidden="true"></div>
 
           <div class="ppt-item ppt-text" style="--x:52.152895%;--y:73.589880%;--w:12.572310%;--h:12.206416%;z-index:16;--fs:17.600px;--pad:0;--bw:1.00px;">
             <div class="ppt-text-inner" style="font-weight:500;">SQL模板，供模型参考学习</div>
           </div>
 
-          <div class="ppt-item ppt-text" style="--x:66.965887%;--y:58.720210%;--w:11.410146%;--h:6.239166%;z-index:17;--fs:20.067px;--pad:0.32em;--bg:linear-gradient(270.000deg, #5b9bd5 0.0%, #5b9bd5 48.0%);--bw:1.00px;--tc:#ffffff;">
+          <div class="ppt-item ppt-text" style="--x:66.965887%;--y:58.720210%;--w:11.410146%;--h:6.239166%;z-index:17;--fs:20.067px;--pad:0;--bw:1.00px;--tc:#ffffff;">
             <div class="ppt-text-inner" style="font-weight:700;">表限制条件</div>
           </div>
-<div class="ppt-item ppt-shape" style="--x:72.255135%;--y:50.825168%;--w:0.837188%;--h:1.488335%;z-index:18;--bg:linear-gradient(315.000deg, #5b9bd5 4.0%, #5b9bd5 54.0%, #5b9bd5 100.0%);--bw:2.00px;" aria-hidden="true"></div>
 
           <div class="ppt-item ppt-text" style="--x:66.383735%;--y:66.920822%;--w:12.574450%;--h:14.084952%;z-index:19;--fs:17.600px;--pad:0;--bw:1.00px;">
             <div class="ppt-text-inner" style="font-weight:500;">记录表的个性化默认限制条件</div>
           </div>
 
-          <div class="ppt-item ppt-text" style="--x:78.481365%;--y:38.080679%;--w:11.410146%;--h:6.239166%;z-index:20;--fs:20.067px;--pad:0.32em;--bg:linear-gradient(270.000deg, #ed7d31 0.0%, #ed7d31 48.0%);--bw:1.00px;--tc:#ffffff;">
+          <div class="ppt-item ppt-text" style="--x:78.481365%;--y:38.080679%;--w:11.410146%;--h:6.239166%;z-index:20;--fs:20.067px;--pad:0;--bw:1.00px;--tc:#ffffff;">
             <div class="ppt-text-inner" style="font-weight:700;">表关联知识</div>
           </div>
-<div class="ppt-item ppt-shape" style="--x:75.088271%;--y:40.456110%;--w:0.837188%;--h:1.488335%;z-index:21;--bg:linear-gradient(315.000deg, #ed7d31 4.0%, #ed7d31 54.0%, #ed7d31 100.0%);--bw:1.00px;" aria-hidden="true"></div>
 
           <div class="ppt-item ppt-text" style="--x:78.065535%;--y:45.936308%;--w:12.574442%;--h:14.084952%;z-index:22;--fs:17.600px;--pad:0;--bw:1.00px;">
             <div class="ppt-text-inner" style="font-weight:500;">记录多表之间如何关联</div>
           </div>
 
-          <div class="ppt-item ppt-text" style="--x:44.494890%;--y:19.491324%;--w:13.428264%;--h:23.872470%;z-index:25;--fs:22.600px;--pad:0.32em;--bg:linear-gradient(180.000deg, #5b9bd5 0.0%, #5b9bd5 34.0%, #5b9bd5 62.0%, #5b9bd5 100.0%);--bw:1.00px;--tc:#ffffff;">
+          <div class="ppt-item ppt-text" style="--x:44.494890%;--y:19.491324%;--w:13.428264%;--h:23.872470%;z-index:25;--fs:22.600px;--pad:0;--bw:1.00px;--tc:#ffffff;">
             <div class="ppt-text-inner" style="font-weight:700;">知识库</div>
           </div>
 
@@ -1148,19 +1137,19 @@
             <div class="ppt-text-inner" style="font-weight:700;">业务知识</div>
           </div>
 
-          <div class="ppt-item ppt-text" style="--x:75.927256%;--y:49.944182%;--w:1.825533%;--h:3.245392%;z-index:36;--fs:16.667px;--pad:0.32em;--bg:#ed7d31;--bw:1.00px;--tc:#ffffff;">
+          <div class="ppt-item ppt-text" style="--x:75.927256%;--y:49.944182%;--w:1.825533%;--h:3.245392%;z-index:36;--fs:16.667px;--pad:0;--bw:1.00px;--tc:#ffffff;">
             <div class="ppt-text-inner" style="font-weight:700;">02</div>
           </div>
 
-          <div class="ppt-item ppt-text" style="--x:74.239075%;--y:42.174905%;--w:1.825533%;--h:3.245392%;z-index:37;--fs:16.667px;--pad:0.32em;--bg:#5b9bd5;--bw:1.00px;--tc:#ffffff;">
+          <div class="ppt-item ppt-text" style="--x:74.239075%;--y:42.174905%;--w:1.825533%;--h:3.245392%;z-index:37;--fs:16.667px;--pad:0;--bw:1.00px;--tc:#ffffff;">
             <div class="ppt-text-inner" style="font-weight:700;">01</div>
           </div>
 
-          <div class="ppt-item ppt-text" style="--x:74.239075%;--y:57.710076%;--w:1.825533%;--h:3.245392%;z-index:38;--fs:16.667px;--pad:0.32em;--bg:#5b9bd5;--bw:1.00px;--tc:#ffffff;">
+          <div class="ppt-item ppt-text" style="--x:74.239075%;--y:57.710076%;--w:1.825533%;--h:3.245392%;z-index:38;--fs:16.667px;--pad:0;--bw:1.00px;--tc:#ffffff;">
             <div class="ppt-text-inner" style="font-weight:700;">03</div>
           </div>
 
-          <div class="ppt-item ppt-text" style="--x:67.373761%;--y:45.759434%;--w:6.516224%;--h:11.584398%;z-index:39;--fs:16.000px;--pad:0.32em;--bg:#5b9bd5;--bw:1.00px;--tc:#ffffff;">
+          <div class="ppt-item ppt-text" style="--x:67.373761%;--y:45.759434%;--w:6.516224%;--h:11.584398%;z-index:39;--fs:16.000px;--pad:0;--bw:1.00px;--tc:#ffffff;">
             <div class="ppt-text-inner" style="font-weight:700;">上下文信息</div>
           </div>
 <div class="ppt-item ppt-line" style="--x:58.807292%;--y:42.074074%;--w:8.567708%;--h:7.037037%;z-index:40;--bd:#ffffff;--bw:1.00px;" aria-hidden="true"></div>
@@ -1226,7 +1215,7 @@
             <img src="SQL-Agent-assets/slide28_pic01.png" alt="组合 8" loading="lazy" />
           </button>
 
-          <div class="ppt-item ppt-text" style="--x:4.208333%;--y:61.324074%;--w:13.036458%;--h:4.564815%;z-index:3;--pad:0.32em;--bg:#70ad47;--bw:1.00px;--tc:#471e5c;">
+          <div class="ppt-item ppt-text" style="--x:4.208333%;--y:61.324074%;--w:13.036458%;--h:4.564815%;z-index:3;--pad:0;--bw:1.00px;--tc:#471e5c;">
             <div class="ppt-text-inner" style="font-weight:500;">准确率</div>
           </div>
 
@@ -1238,7 +1227,7 @@
             <img src="SQL-Agent-assets/slide28_pic02.png" alt="组合 8" loading="lazy" />
           </button>
 
-          <div class="ppt-item ppt-text" style="--x:23.036458%;--y:61.324074%;--w:13.036458%;--h:4.564815%;z-index:6;--pad:0.32em;--bg:#70ad47;--bw:1.00px;--tc:#471e5c;">
+          <div class="ppt-item ppt-text" style="--x:23.036458%;--y:61.324074%;--w:13.036458%;--h:4.564815%;z-index:6;--pad:0;--bw:1.00px;--tc:#471e5c;">
             <div class="ppt-text-inner" style="font-weight:500;">年化提效</div>
           </div>
 
@@ -1250,7 +1239,7 @@
             <img src="SQL-Agent-assets/slide28_pic03.png" alt="组合 8" loading="lazy" />
           </button>
 
-          <div class="ppt-item ppt-text" style="--x:40.307292%;--y:61.324074%;--w:13.036458%;--h:4.564815%;z-index:9;--pad:0.32em;--bg:#70ad47;--bw:1.00px;--tc:#471e5c;">
+          <div class="ppt-item ppt-text" style="--x:40.307292%;--y:61.324074%;--w:13.036458%;--h:4.564815%;z-index:9;--pad:0;--bw:1.00px;--tc:#471e5c;">
             <div class="ppt-text-inner" style="font-weight:500;">排期等待</div>
           </div>
 
@@ -1262,7 +1251,7 @@
             <img src="SQL-Agent-assets/slide28_pic04.png" alt="组合 8" loading="lazy" />
           </button>
 
-          <div class="ppt-item ppt-text" style="--x:59.041667%;--y:61.324074%;--w:13.036458%;--h:4.564815%;z-index:12;--pad:0.32em;--bg:#70ad47;--bw:1.00px;--tc:#471e5c;">
+          <div class="ppt-item ppt-text" style="--x:59.041667%;--y:61.324074%;--w:13.036458%;--h:4.564815%;z-index:12;--pad:0;--bw:1.00px;--tc:#471e5c;">
             <div class="ppt-text-inner" style="font-weight:500;">周吞吐</div>
           </div>
 
@@ -1274,7 +1263,7 @@
             <img src="SQL-Agent-assets/slide28_pic05.png" alt="组合 8" loading="lazy" />
           </button>
 
-          <div class="ppt-item ppt-text" style="--x:77.968750%;--y:61.324074%;--w:13.036458%;--h:4.564815%;z-index:15;--pad:0.32em;--bg:#70ad47;--bw:1.00px;--tc:#471e5c;">
+          <div class="ppt-item ppt-text" style="--x:77.968750%;--y:61.324074%;--w:13.036458%;--h:4.564815%;z-index:15;--pad:0;--bw:1.00px;--tc:#471e5c;">
             <div class="ppt-text-inner" style="font-weight:500;">取数需求</div>
           </div>
 
@@ -1296,11 +1285,6 @@
           <button class="ppt-item ppt-img" style="--x:46.351394%;--y:56.702173%;--w:5.352370%;--h:9.515325%;z-index:5;" type="button" data-lightbox="SQL-Agent-assets/slide29_pic01.png" aria-label="Open image">
             <img src="SQL-Agent-assets/slide29_pic01.png" alt="图形 19" loading="lazy" />
           </button>
-<div class="ppt-item ppt-shape" style="--x:17.757784%;--y:47.666331%;--w:0.705947%;--h:1.255016%;z-index:10;--bg:#5b9bd5;--bw:1.00px;" aria-hidden="true"></div>
-<div class="ppt-item ppt-shape" style="--x:33.068611%;--y:47.666331%;--w:0.705947%;--h:1.255016%;z-index:11;--bg:#ed7d31;--bw:1.00px;" aria-hidden="true"></div>
-<div class="ppt-item ppt-shape" style="--x:63.954240%;--y:47.666331%;--w:0.705947%;--h:1.255016%;z-index:12;--bg:#ed7d31;--bw:1.00px;" aria-hidden="true"></div>
-<div class="ppt-item ppt-shape" style="--x:79.260876%;--y:47.666331%;--w:0.705947%;--h:1.255016%;z-index:13;--bg:#5b9bd5;--bw:1.00px;" aria-hidden="true"></div>
-<div class="ppt-item ppt-shape" style="--x:48.446481%;--y:47.666331%;--w:0.705947%;--h:1.255016%;z-index:14;--bg:#5b9bd5;--bw:1.00px;" aria-hidden="true"></div>
 <div class="ppt-item ppt-line" style="--x:48.798450%;--y:48.917789%;--w:0.000008%;--h:3.124132%;z-index:15;--bd:#ffffff;--bw:1.00px;" aria-hidden="true"></div>
 
           <div class="ppt-item ppt-text" style="--x:34.958366%;--y:67.063955%;--w:27.773114%;--h:4.320516%;z-index:16;--fs:22.600px;--pad:0;--bw:1.00px;">
@@ -1523,9 +1507,6 @@
     class Lightbox {
       constructor() {
         this.el = document.getElementById("lightbox");
-        this.card = this.el.querySelector(".lightbox-card");
-        this.stage = this.el.querySelector(".lightbox-stage");
-        this.bar = this.el.querySelector(".lightbox-bar");
         this.img = document.getElementById("lightboxImg");
         this.title = document.getElementById("lightboxTitle");
         this.openLink = document.getElementById("lightboxOpen");
@@ -1538,11 +1519,6 @@
         window.addEventListener("keydown", (e) => {
           if (e.key === "Escape") this.close();
         });
-        this._onResize = () => {
-          if (this.el.classList.contains("open")) this._applySize();
-        };
-        this.img.addEventListener("load", () => this._applySize());
-        window.addEventListener("resize", this._onResize, { passive: true });
         document.body.addEventListener("click", (e) => {
           const btn = e.target && e.target.closest && e.target.closest("[data-lightbox]");
           if (!btn) return;
@@ -1558,47 +1534,13 @@
         this.openLink.href = src;
         this.el.classList.add("open");
         this.el.setAttribute("aria-hidden", "false");
-        this._applySize();
       }
 
       close() {
         if (!this.el.classList.contains("open")) return;
         this.el.classList.remove("open");
         this.el.setAttribute("aria-hidden", "true");
-        this._resetSize();
         this.img.src = "";
-      }
-
-      _applySize() {
-        if (!this.stage || !this.card) return;
-        const pad = 12;
-        const natW = this.img.naturalWidth || 0;
-        const natH = this.img.naturalHeight || 0;
-        if (!natW || !natH) return;
-        const barH = this.bar ? this.bar.getBoundingClientRect().height : 48;
-        const maxW = Math.min(window.innerWidth * 0.96, 1600) - pad * 2;
-        const maxH = Math.min(window.innerHeight * 0.92 - barH, window.innerHeight - 120) - pad * 2;
-        const scale = Math.min(maxW / natW, maxH / natH, 1);
-        const stageW = Math.max(160, Math.floor(natW * scale));
-        const stageH = Math.max(120, Math.floor(natH * scale));
-        const stageWTotal = stageW + pad * 2;
-        const stageHTotal = stageH + pad * 2;
-        const cardH = stageHTotal + barH;
-        this.card.style.setProperty("--lb-width", `${stageWTotal}px`);
-        this.card.style.setProperty("--lb-height", `${cardH}px`);
-        this.stage.style.setProperty("--lb-stage-width", `${stageWTotal}px`);
-        this.stage.style.setProperty("--lb-stage-height", `${stageHTotal}px`);
-      }
-
-      _resetSize() {
-        if (this.card) {
-          this.card.style.removeProperty("--lb-width");
-          this.card.style.removeProperty("--lb-height");
-        }
-        if (this.stage) {
-          this.stage.style.removeProperty("--lb-stage-width");
-          this.stage.style.removeProperty("--lb-stage-height");
-        }
       }
     }
 
