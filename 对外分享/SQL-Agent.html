@@ -71,7 +71,7 @@
 
     .artboard {
       position: relative;
-      width: auto;
+      width: min(96vw, calc((100vh - (2 * var(--slide-padding))) * var(--ratio)));
       height: auto;
       max-width: 96vw;
       max-height: calc(100vh - (2 * var(--slide-padding)));
