@@ -345,16 +345,22 @@
       }
     }
 
+    .stack {
+      padding-top: clamp(0.2rem, 2vh, 1.2rem);
+      gap: clamp(0.4rem, 1.4vw, 1.1rem);
+    }
+
     .stack .two-col {
       grid-template-columns: 1fr;
     }
 
     .stack .grid {
       grid-template-columns: 1fr;
+      gap: clamp(0.5rem, 1.6vw, 1rem);
     }
 
     .stack .image-frame {
-      max-height: min(62vh, 640px);
+      max-height: min(54vh, 520px);
     }
 
     @media (prefers-reduced-motion: reduce) {
