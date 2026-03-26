@@ -1095,9 +1095,31 @@
       }
 
       _bind() {
+        const getPct = (el, name) => {
+          const val = el.style.getPropertyValue(name);
+          if (!val) return null;
+          const num = parseFloat(val);
+          return Number.isFinite(num) ? num : null;
+        };
         this.slides.forEach((slide) => {
-          const title = slide.querySelector(".ppt-text");
-          if (title) title.classList.add("ppt-title");
+          const texts = Array.from(slide.querySelectorAll(".ppt-text"));
+          if (!texts.length) return;
+          let best = texts[0];
+          let bestY = getPct(best, "--y") ?? 9999;
+          let bestX = getPct(best, "--x") ?? 9999;
+          for (const t of texts) {
+            const y = getPct(t, "--y") ?? 9999;
+            const x = getPct(t, "--x") ?? 9999;
+            if (y < bestY || (y === bestY && x < bestX)) {
+              best = t;
+              bestY = y;
+              bestX = x;
+            }
+          }
+          best.classList.add("ppt-title");
+          if (bestX !== null) {
+            best.style.setProperty("--x", `${bestX / 2}%`);
+          }
         });
 
         window.addEventListener("keydown", (e) => {
