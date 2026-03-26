@@ -1101,19 +1101,38 @@
           const num = parseFloat(val);
           return Number.isFinite(num) ? num : null;
         };
+        const getFs = (el) => {
+          const val = el.style.getPropertyValue("--fs");
+          if (!val) return 0;
+          const num = parseFloat(val);
+          return Number.isFinite(num) ? num : 0;
+        };
         this.slides.forEach((slide) => {
           const texts = Array.from(slide.querySelectorAll(".ppt-text"));
           if (!texts.length) return;
-          let best = texts[0];
-          let bestY = getPct(best, "--y") ?? 9999;
+          let maxFs = 0;
+          texts.forEach((t) => { maxFs = Math.max(maxFs, getFs(t)); });
+          const fsCandidates = texts.filter((t) => getFs(t) >= maxFs - 0.1);
+          let minY = 9999;
+          fsCandidates.forEach((t) => {
+            const y = getPct(t, "--y") ?? 9999;
+            if (y < minY) minY = y;
+          });
+          const yTolerance = 0.8;
+          const topBand = fsCandidates.filter((t) => {
+            const y = getPct(t, "--y") ?? 9999;
+            return y <= minY + yTolerance;
+          });
+          let best = topBand[0] || fsCandidates[0] || texts[0];
           let bestX = getPct(best, "--x") ?? 9999;
-          for (const t of texts) {
+          let bestY = getPct(best, "--y") ?? 9999;
+          for (const t of topBand) {
             const y = getPct(t, "--y") ?? 9999;
             const x = getPct(t, "--x") ?? 9999;
-            if (y < bestY || (y === bestY && x < bestX)) {
+            if (x < bestX || (x === bestX && y < bestY)) {
               best = t;
-              bestY = y;
               bestX = x;
+              bestY = y;
             }
           }
           best.classList.add("ppt-title");
