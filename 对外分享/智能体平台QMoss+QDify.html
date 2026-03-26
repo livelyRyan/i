@@ -1120,6 +1120,8 @@
         }, { passive: false } );
 
         window.addEventListener("wheel", (e) => {
+          const lightbox = document.getElementById("lightbox");
+          if (lightbox && lightbox.classList.contains("open")) return;
           if (this._wheelLock) return;
           const dy = e.deltaY || 0;
           if (Math.abs(dy) < 14) return;
@@ -1175,11 +1177,15 @@
         this.title = document.getElementById("lightboxTitle");
         this.openLink = document.getElementById("lightboxOpen");
         this.closeBtn = document.getElementById("lightboxClose");
+        this.stage = document.getElementById("lightboxStage");
 
         this.closeBtn.addEventListener("click", () => this.close());
         this.el.addEventListener("click", (e) => {
           if (e.target === this.el) this.close();
         });
+        this.el.addEventListener("wheel", (e) => {
+          e.stopPropagation();
+        }, { passive: true });
         window.addEventListener("keydown", (e) => {
           if (e.key === "Escape") this.close();
         });
