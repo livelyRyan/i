@@ -41,10 +41,10 @@
       --body-size: clamp(0.98rem, 1.6vw, 1.2rem);
       --small-size: clamp(0.78rem, 1.05vw, 0.98rem);
 
-      --slide-padding: clamp(1.4rem, 4.2vw, 4rem);
-      --content-gap: clamp(0.6rem, 1.9vw, 1.6rem);
-      --element-gap: clamp(0.35rem, 0.95vw, 0.85rem);
-      --content-max: min(1200px, 100%);
+      --slide-padding: clamp(1.2rem, 3.8vw, 3.6rem);
+      --content-gap: clamp(0.55rem, 1.6vw, 1.35rem);
+      --element-gap: clamp(0.3rem, 0.85vw, 0.75rem);
+      --content-max: min(1320px, 100%);
 
       --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
       --duration-normal: 0.6s;
@@ -107,15 +107,16 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
+      justify-content: center;
       gap: var(--content-gap);
       max-height: 100%;
       overflow: hidden;
       position: relative;
       z-index: 1;
-      padding-top: clamp(0.6rem, 3vh, 2.5rem);
+      padding-top: clamp(0.2rem, 1.6vh, 1.2rem);
       max-width: var(--content-max);
       margin: 0 auto;
+      width: 100%;
     }
 
     .title-slide .slide-content {
@@ -206,7 +207,7 @@
 
     .image-frame {
       width: 100%;
-      max-height: min(70vh, 620px);
+      max-height: min(74vh, 680px);
       border-radius: 16px;
       overflow: hidden;
       border: 1px solid rgba(86, 180, 255, 0.18);
@@ -223,9 +224,16 @@
 
     .two-col {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1.08fr));
       gap: clamp(1rem, 2.2vw, 1.8rem);
-      align-items: center;
+      align-items: stretch;
+    }
+
+    .two-col > div {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: var(--element-gap);
     }
 
     .vstack {
@@ -235,11 +243,11 @@
     }
 
     .vstack .image-frame {
-      height: min(28vh, 320px);
+      height: min(32vh, 360px);
     }
 
     .vstack.compact .image-frame {
-      height: min(22vh, 260px);
+      height: min(26vh, 300px);
     }
 
     .vstack.bottom {
@@ -402,23 +410,23 @@
     }
 
     .stack .image-frame {
-      height: min(28vh, 320px);
-      max-height: min(28vh, 320px);
+      height: min(32vh, 360px);
+      max-height: min(32vh, 360px);
     }
 
     .stack .card .image-frame {
-      height: min(20vh, 240px);
-      max-height: min(20vh, 240px);
-    }
-
-    .stack.compact .image-frame {
       height: min(22vh, 260px);
       max-height: min(22vh, 260px);
     }
 
+    .stack.compact .image-frame {
+      height: min(26vh, 300px);
+      max-height: min(26vh, 300px);
+    }
+
     .stack.compact .card .image-frame {
-      height: min(12vh, 160px);
-      max-height: min(12vh, 160px);
+      height: min(16vh, 200px);
+      max-height: min(16vh, 200px);
     }
 
     .stack .card {
