@@ -301,6 +301,33 @@
       display: inline-block;
     }
 
+    .section-header {
+      display: flex;
+      align-items: flex-start;
+      gap: clamp(0.7rem, 1.8vw, 1.4rem);
+      padding: clamp(0.4rem, 1.2vh, 0.9rem) 0;
+    }
+
+    .section-rail {
+      width: clamp(0.28rem, 0.6vw, 0.45rem);
+      height: clamp(3.4rem, 9vh, 6rem);
+      border-radius: 999px;
+      background: linear-gradient(180deg, var(--accent-2), var(--accent-3));
+      box-shadow: 0 0 18px rgba(139, 231, 255, 0.35);
+      flex: 0 0 auto;
+    }
+
+    .section-header .section-badge {
+      letter-spacing: 0.22em;
+      font-size: clamp(0.82rem, 1.2vw, 1.05rem);
+      padding: 0.35em 0.9em;
+      border-color: rgba(139, 231, 255, 0.32);
+    }
+
+    .section-header h2 {
+      font-size: clamp(2rem, 4.8vw, 3.6rem);
+    }
+
     .progress-bar {
       position: fixed;
       top: 0;
@@ -387,6 +414,7 @@
       }
       .nav-dots { display: none; }
       .counter { display: none; }
+      .section-rail { display: none; }
     }
 
     @media (max-width: 700px) {
@@ -601,8 +629,13 @@
     <!-- Section 1 -->
     <section class="slide">
       <div class="slide-content">
-        <div class="section-badge reveal">一、目标与策略</div>
-        <h2 class="reveal">系统瘦身目标 & 挑战</h2>
+        <div class="section-header">
+          <div class="section-rail"></div>
+          <div>
+            <div class="section-badge reveal">一、目标与策略</div>
+            <h2 class="reveal">系统瘦身目标 & 挑战</h2>
+          </div>
+        </div>
         <ul class="bullet-list reveal">
           <li>目标：代码与服务数量均削减 50%，代码精简是主指标</li>
           <li>挑战：目标高、范围广，覆盖所有业务线</li>
@@ -656,8 +689,13 @@
     <!-- Section 2 -->
     <section class="slide">
       <div class="slide-content">
-        <div class="section-badge reveal">二、服务精简</div>
-        <h2 class="reveal">自动化且低风险的服务收缩</h2>
+        <div class="section-header">
+          <div class="section-rail"></div>
+          <div>
+            <div class="section-badge reveal">二、服务精简</div>
+            <h2 class="reveal">自动化且低风险的服务收缩</h2>
+          </div>
+        </div>
         <ul class="bullet-list reveal">
           <li>识别可精简服务：低价值、无流量、长期不迭代</li>
           <li>度量特征：南北流量、东西流量、服务内部流量</li>
@@ -719,8 +757,13 @@
     <!-- Section 3 -->
     <section class="slide">
       <div class="slide-content">
-        <div class="section-badge reveal">三、代码精简</div>
-        <h2 class="reveal">精准找到线上无流量方法</h2>
+        <div class="section-header">
+          <div class="section-rail"></div>
+          <div>
+            <div class="section-badge reveal">三、代码精简</div>
+            <h2 class="reveal">精准找到线上无流量方法</h2>
+          </div>
+        </div>
         <ul class="bullet-list reveal">
           <li>策略：可精简代码特征分析 + 运行态度量</li>
           <li>技术选型：AOP / Agent / SA 三方案对比</li>
@@ -870,8 +913,13 @@
     <!-- Results -->
     <section class="slide">
       <div class="slide-content">
-        <div class="section-badge reveal">四、最终效果</div>
-        <h2 class="reveal">目标达成与稳定性提升</h2>
+        <div class="section-header">
+          <div class="section-rail"></div>
+          <div>
+            <div class="section-badge reveal">四、落地效果</div>
+            <h2 class="reveal">落地效果</h2>
+          </div>
+        </div>
         <div class="two-col reveal">
           <div>
             <ul class="bullet-list">
@@ -892,9 +940,13 @@
     <!-- Summary -->
     <section class="slide">
       <div class="slide-content">
-        <div class="section-badge reveal">五、总结展望</div>
-        <h2 class="reveal">“给我一个 API，我就能减少一半代码”</h2>
-        <p class="reveal">底层技术虽不显眼，却能显著提升服务质量、用户体验与整体效率。</p>
+        <div class="section-header">
+          <div class="section-rail"></div>
+          <div>
+            <div class="section-badge reveal">五、总结展望</div>
+            <h2 class="reveal">“一个 API，精简一半代码”</h2>
+          </div>
+        </div>
         <div class="image-frame reveal">
           <img src="assets/35c0c899a9d192f2592858c53bdfa6f7d227c5f7.png" alt="总结图">
         </div>
