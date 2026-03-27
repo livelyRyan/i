@@ -201,6 +201,7 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
+      cursor: zoom-in;
     }
 
     .two-col {
@@ -208,6 +209,24 @@
       grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
       gap: clamp(1rem, 2.2vw, 1.8rem);
       align-items: center;
+    }
+
+    .vstack {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(0.5rem, 1.6vw, 1rem);
+    }
+
+    .vstack .image-frame {
+      height: min(28vh, 320px);
+    }
+
+    .vstack.compact .image-frame {
+      height: min(22vh, 260px);
+    }
+
+    .vstack.bottom {
+      justify-content: flex-end;
     }
 
     .metrics {
@@ -392,6 +411,69 @@
       padding: clamp(0.35rem, 0.9vw, 0.7rem);
     }
 
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: none;
+      place-items: center;
+      background: rgba(4, 8, 18, 0.8);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: clamp(0.8rem, 2.5vw, 2rem);
+    }
+
+    .lightbox.open {
+      display: grid;
+    }
+
+    .lightbox-card {
+      width: min(92vw, 1200px);
+      max-height: 90vh;
+      background: rgba(10, 14, 24, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 18px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .lightbox-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.65rem 1rem;
+      font-size: var(--small-size);
+      color: var(--text-secondary);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(12, 18, 32, 0.9);
+    }
+
+    .lightbox-bar button {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--text-primary);
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: var(--small-size);
+    }
+
+    .lightbox-stage {
+      flex: 1;
+      display: grid;
+      place-items: center;
+      padding: clamp(0.6rem, 2vw, 1.4rem);
+      background: rgba(7, 11, 20, 0.9);
+    }
+
+    .lightbox-stage img {
+      max-width: 100%;
+      max-height: 80vh;
+      object-fit: contain;
+    }
+
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
         animation-duration: 0.01ms !important;
@@ -500,15 +582,19 @@
 
     <!-- Planning -->
     <section class="slide">
-      <div class="slide-content stack compact">
-        <h2 class="reveal">整体规划</h2>
-        <ul class="bullet-list reveal">
-          <li>时间规划：前 2 个月服务精简，后续代码精简</li>
-          <li>组织规划：建立公共支持团队，提供工具与技术支撑</li>
-        </ul>
-        <div class="grid reveal">
-          <div class="image-frame"><img src="assets/4385887eb2934d60b450e8d417ee318808452026.png" alt="时间规划"></div>
-          <div class="image-frame"><img src="assets/b56122142e1423c2a18e055ad2e3875ab5802488.png" alt="组织架构规划"></div>
+      <div class="slide-content">
+        <div class="two-col reveal">
+          <div>
+            <h2>整体规划</h2>
+            <ul class="bullet-list">
+              <li>时间规划：前 2 个月服务精简，后续代码精简</li>
+              <li>组织规划：建立公共支持团队，提供工具与技术支撑</li>
+            </ul>
+          </div>
+          <div class="vstack">
+            <div class="image-frame"><img src="assets/4385887eb2934d60b450e8d417ee318808452026.png" alt="时间规划"></div>
+            <div class="image-frame"><img src="assets/b56122142e1423c2a18e055ad2e3875ab5802488.png" alt="组织架构规划"></div>
+          </div>
         </div>
       </div>
     </section>
@@ -551,16 +637,20 @@
 
     <!-- Service identification -->
     <section class="slide">
-      <div class="slide-content stack compact">
-        <h2 class="reveal">识别 + 度量</h2>
-        <ul class="bullet-list reveal">
-          <li>低价值服务：无流量 + 无迭代</li>
-          <li>度量三类流量：网关、调用链、内部调用</li>
-          <li>结合日志与历史数据形成候选集</li>
-        </ul>
-        <div class="grid reveal">
-          <div class="image-frame"><img src="assets/0ae6f9001c22b8555c01d886570e2fac2ab52e15.png" alt="服务识别"></div>
-          <div class="image-frame"><img src="assets/63f96cb82d7288dd87a3b5334a45a06e4da9c6db.png" alt="度量特征"></div>
+      <div class="slide-content">
+        <div class="two-col reveal">
+          <div>
+            <h2>识别 + 度量</h2>
+            <ul class="bullet-list">
+              <li>低价值服务：无流量 + 无迭代</li>
+              <li>度量三类流量：网关、调用链、内部调用</li>
+              <li>结合日志与历史数据形成候选集</li>
+            </ul>
+          </div>
+          <div class="vstack">
+            <div class="image-frame"><img src="assets/0ae6f9001c22b8555c01d886570e2fac2ab52e15.png" alt="服务识别"></div>
+            <div class="image-frame"><img src="assets/63f96cb82d7288dd87a3b5334a45a06e4da9c6db.png" alt="度量特征"></div>
+          </div>
         </div>
       </div>
     </section>
@@ -578,11 +668,19 @@
 
     <!-- Service delete flow -->
     <section class="slide">
-      <div class="slide-content stack">
-        <h2 class="reveal">服务删除流程</h2>
-        <div class="grid reveal">
-          <div class="image-frame"><img src="assets/8c76de4fe55dcd62b999fc18350297914a226c87.png" alt="服务删除流程"></div>
-          <div class="image-frame"><img src="assets/8ea3dd48e477e0f8fc43c752b62a9de60c9cd705.png" alt="删除流程阶段"></div>
+      <div class="slide-content">
+        <div class="two-col reveal">
+          <div>
+            <h2>服务删除流程</h2>
+            <ul class="bullet-list">
+              <li>确认期 → 预收回期 → 观察期 → 回收期</li>
+              <li>观察期稳定两周后再执行最终回收</li>
+            </ul>
+          </div>
+          <div class="vstack compact">
+            <div class="image-frame"><img src="assets/8c76de4fe55dcd62b999fc18350297914a226c87.png" alt="服务删除流程"></div>
+            <div class="image-frame"><img src="assets/8ea3dd48e477e0f8fc43c752b62a9de60c9cd705.png" alt="删除流程阶段"></div>
+          </div>
         </div>
       </div>
     </section>
@@ -682,11 +780,19 @@
 
     <!-- Method set + flow -->
     <section class="slide">
-      <div class="slide-content stack">
-        <h2 class="reveal">计算可精简方法集</h2>
-        <div class="grid reveal">
-          <div class="image-frame"><img src="assets/0e6aacc833d4dba39e4916f82216c7b454e87cb8.png" alt="可精简方法集"></div>
-          <div class="image-frame"><img src="assets/c797dd07b66dc8415ea0284b72ab603171aac107.png" alt="业务流程图"></div>
+      <div class="slide-content">
+        <div class="two-col reveal">
+          <div>
+            <h2>计算可精简方法集</h2>
+            <ul class="bullet-list">
+              <li>多轮跑数取并集，得到有流量方法集</li>
+              <li>方法全集 - 有流量方法集 = 可精简方法集</li>
+            </ul>
+          </div>
+          <div class="vstack bottom compact">
+            <div class="image-frame"><img src="assets/0e6aacc833d4dba39e4916f82216c7b454e87cb8.png" alt="可精简方法集"></div>
+            <div class="image-frame"><img src="assets/c797dd07b66dc8415ea0284b72ab603171aac107.png" alt="业务流程图"></div>
+          </div>
         </div>
       </div>
     </section>
@@ -764,18 +870,20 @@
       </div>
     </section>
 
-    <!-- Closing -->
-    <section class="slide">
-      <div class="slide-content">
-        <div class="section-badge reveal">Thanks</div>
-        <h2 class="reveal">欢迎交流</h2>
-        <p class="reveal">更深入的细节与平台化实践，欢迎线下探讨。</p>
-        <div class="image-frame reveal" style="max-height: min(45vh, 380px);">
-          <img src="assets/90156b4468071307b7a31a701c65d2ec8a742f12.jpeg" alt="交流">
-        </div>
-      </div>
-    </section>
+    
   </main>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <div class="lightbox-card" role="dialog" aria-modal="true" aria-label="Image viewer">
+      <div class="lightbox-bar">
+        <div id="lightboxTitle">image</div>
+        <button type="button" id="lightboxClose">Close (Esc)</button>
+      </div>
+      <div class="lightbox-stage">
+        <img id="lightboxImg" alt="Full-size preview" />
+      </div>
+    </div>
+  </div>
 
   <script>
     class SlidePresentation {
@@ -784,11 +892,16 @@
         this.progress = document.getElementById('progress');
         this.navDots = document.getElementById('navDots');
         this.counter = document.getElementById('counter');
+        this.lightbox = document.getElementById('lightbox');
+        this.lightboxImg = document.getElementById('lightboxImg');
+        this.lightboxTitle = document.getElementById('lightboxTitle');
+        this.lightboxClose = document.getElementById('lightboxClose');
         this.currentIndex = 0;
         this.createNavDots();
         this.bindEvents();
         this.observeSlides();
         this.updateProgress();
+        this.bindLightbox();
       }
 
       createNavDots() {
@@ -803,6 +916,12 @@
 
       bindEvents() {
         window.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && this.lightbox?.classList.contains('open')) {
+            e.preventDefault();
+            this.closeLightbox();
+            return;
+          }
+          if (this.lightbox?.classList.contains('open')) return;
           if (['ArrowDown', 'ArrowRight', 'PageDown', ' '].includes(e.key)) {
             e.preventDefault();
             this.nextSlide();
@@ -815,10 +934,12 @@
 
         let touchStartY = 0;
         window.addEventListener('touchstart', (e) => {
+          if (this.lightbox?.classList.contains('open')) return;
           touchStartY = e.touches[0].clientY;
         }, { passive: true });
 
         window.addEventListener('touchend', (e) => {
+          if (this.lightbox?.classList.contains('open')) return;
           const touchEndY = e.changedTouches[0].clientY;
           const delta = touchStartY - touchEndY;
           if (Math.abs(delta) > 60) {
@@ -828,6 +949,7 @@
 
         let wheelLock = false;
         window.addEventListener('wheel', (e) => {
+          if (this.lightbox?.classList.contains('open')) return;
           if (wheelLock) return;
           if (Math.abs(e.deltaY) < 20) return;
           e.preventDefault();
@@ -839,6 +961,33 @@
         }, { passive: false });
 
         window.addEventListener('scroll', () => this.updateProgress());
+      }
+
+      bindLightbox() {
+        if (!this.lightbox || !this.lightboxImg) return;
+        const images = Array.from(document.querySelectorAll('.image-frame img'));
+        images.forEach((img) => {
+          img.addEventListener('click', () => this.openLightbox(img));
+        });
+
+        this.lightbox.addEventListener('click', (e) => {
+          if (e.target === this.lightbox) this.closeLightbox();
+        });
+
+        this.lightboxClose?.addEventListener('click', () => this.closeLightbox());
+      }
+
+      openLightbox(img) {
+        this.lightboxImg.src = img.getAttribute('src') || '';
+        this.lightboxTitle.textContent = img.getAttribute('alt') || 'image';
+        this.lightbox.classList.add('open');
+        this.lightbox.setAttribute('aria-hidden', 'false');
+      }
+
+      closeLightbox() {
+        this.lightbox.classList.remove('open');
+        this.lightbox.setAttribute('aria-hidden', 'true');
+        this.lightboxImg.src = '';
       }
 
       observeSlides() {
