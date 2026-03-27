@@ -1,0 +1,45 @@
+name: Render Resume Pages
+
+on:
+  push:
+    branches: ["master"]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Render Resume
+        run: |
+          python3 scripts/render_resume.py --in resume.md --variant all --out /tmp/resume.all.md
+          mkdir -p docs
+          {
+            echo "---"
+            echo "title: \"Resume\""
+            echo "---"
+            echo
+            cat /tmp/resume.all.md
+          } > docs/index.md
+
+      - name: Commit Pages
+        run: |
+          if git diff --quiet -- docs/index.md docs/_config.yml; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git add docs/index.md docs/_config.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "docs: AI update resume pages"
+          git push
