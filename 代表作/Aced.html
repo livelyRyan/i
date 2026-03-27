@@ -254,6 +254,16 @@
       height: min(22vh, 240px);
     }
 
+    /* 落地效果（计数约 21/22）：右侧双图限制高度，避免第二张被 slide 裁切 */
+    .slide-results .two-col > .grid {
+      gap: clamp(0.4rem, 1.1vw, 0.7rem);
+    }
+
+    .slide-results .two-col > .grid .image-frame {
+      height: min(27vh, 300px);
+      max-height: min(27vh, 300px);
+    }
+
     .vstack.bottom {
       justify-content: flex-end;
     }
@@ -572,7 +582,7 @@
     </section>
 
     <!-- Agenda -->
-    <section class="slide p21">
+    <section class="slide">
       <div class="slide-content">
         <div class="section-badge reveal">Outline</div>
         <h2 class="reveal">分享主线</h2>
@@ -634,7 +644,7 @@
       <div class="slide-content">
         <h2 class="reveal">背景数据与现状</h2>
         <div class="image-frame reveal">
-          <img src="assets/78b6927ab15d7ceae4c5170d18cdba2eb1b89e26.png" alt="背景数据">
+          <img src="Aced-assets/78b6927ab15d7ceae4c5170d18cdba2eb1b89e26.png" alt="背景数据">
         </div>
       </div>
     </section>
@@ -669,8 +679,8 @@
             </ul>
           </div>
           <div class="vstack">
-            <div class="image-frame"><img src="assets/4385887eb2934d60b450e8d417ee318808452026.png" alt="时间规划"></div>
-            <div class="image-frame"><img src="assets/b56122142e1423c2a18e055ad2e3875ab5802488.png" alt="组织架构规划"></div>
+            <div class="image-frame"><img src="Aced-assets/4385887eb2934d60b450e8d417ee318808452026.png" alt="时间规划"></div>
+            <div class="image-frame"><img src="Aced-assets/b56122142e1423c2a18e055ad2e3875ab5802488.png" alt="组织架构规划"></div>
           </div>
         </div>
       </div>
@@ -685,14 +695,14 @@
             <h3>两阶段法</h3>
             <p>先“找得到”，再“删得好”。先定位可精简对象，再执行清理与优化。</p>
             <div class="image-frame" style="margin-top: 0.8rem;">
-              <img src="assets/d1e5b208681dac37735ebf03eeb3991050123ae4.png" alt="两阶段法">
+              <img src="Aced-assets/d1e5b208681dac37735ebf03eeb3991050123ae4.png" alt="两阶段法">
             </div>
           </div>
           <div class="card">
             <h3>四步筛选模型</h3>
             <p>挖掘特征 → 度量特征 → 收集数据 → 匹配特征，关键步骤自动化。</p>
             <div class="image-frame" style="margin-top: 0.8rem;">
-              <img src="assets/c65638bc1c7f8fbe468e36fc2dd772a4611851b7.png" alt="四步筛选模型">
+              <img src="Aced-assets/c65638bc1c7f8fbe468e36fc2dd772a4611851b7.png" alt="四步筛选模型">
             </div>
           </div>
         </div>
@@ -730,8 +740,8 @@
             </ul>
           </div>
           <div class="vstack">
-            <div class="image-frame"><img src="assets/0ae6f9001c22b8555c01d886570e2fac2ab52e15.png" alt="服务识别"></div>
-            <div class="image-frame"><img src="assets/63f96cb82d7288dd87a3b5334a45a06e4da9c6db.png" alt="度量特征"></div>
+            <div class="image-frame"><img src="Aced-assets/0ae6f9001c22b8555c01d886570e2fac2ab52e15.png" alt="服务识别"></div>
+            <div class="image-frame"><img src="Aced-assets/63f96cb82d7288dd87a3b5334a45a06e4da9c6db.png" alt="度量特征"></div>
           </div>
         </div>
       </div>
@@ -743,7 +753,7 @@
         <h2 class="reveal">建立服务精简平台</h2>
         <p class="reveal">流程标准化后平台化，支持自动化下线。</p>
         <div class="image-frame reveal">
-          <img src="assets/efedd31fb5ebc26140fbb3eb8f78bd3f650635fb.png" alt="服务精简平台">
+          <img src="Aced-assets/efedd31fb5ebc26140fbb3eb8f78bd3f650635fb.png" alt="服务精简平台">
         </div>
       </div>
     </section>
@@ -760,8 +770,8 @@
             </ul>
           </div>
           <div class="vstack compact">
-            <div class="image-frame"><img src="assets/8c76de4fe55dcd62b999fc18350297914a226c87.png" alt="服务删除流程"></div>
-            <div class="image-frame"><img src="assets/8ea3dd48e477e0f8fc43c752b62a9de60c9cd705.png" alt="删除流程阶段"></div>
+            <div class="image-frame"><img src="Aced-assets/8c76de4fe55dcd62b999fc18350297914a226c87.png" alt="服务删除流程"></div>
+            <div class="image-frame"><img src="Aced-assets/8ea3dd48e477e0f8fc43c752b62a9de60c9cd705.png" alt="删除流程阶段"></div>
           </div>
         </div>
       </div>
@@ -798,7 +808,7 @@
             </ul>
           </div>
           <div class="image-frame">
-            <img src="assets/f142ea6759014fd7409caafb71e9bd1f2a8f823c.png" alt="可精简代码特征">
+            <img src="Aced-assets/f142ea6759014fd7409caafb71e9bd1f2a8f823c.png" alt="可精简代码特征">
           </div>
         </div>
       </div>
@@ -813,21 +823,21 @@
             <h3>AOP</h3>
             <p>方法前置切面记录日志，再分析无流量方法。</p>
             <div class="image-frame" style="margin-top: 0.7rem;">
-              <img src="assets/0e3bd414e78c4b203eb24b3f6878ab75ca403d08.png" alt="AOP 方案">
+              <img src="Aced-assets/0e3bd414e78c4b203eb24b3f6878ab75ca403d08.png" alt="AOP 方案">
             </div>
           </div>
           <div class="card">
             <h3>Agent 插桩</h3>
             <p>JVM 启动时字节码插桩，记录方法执行情况。</p>
             <div class="image-frame" style="margin-top: 0.7rem;">
-              <img src="assets/95eaa7f8e18afd16a1ea1e04c209fafa3fb8f208.png" alt="Agent 方案">
+              <img src="Aced-assets/95eaa7f8e18afd16a1ea1e04c209fafa3fb8f208.png" alt="Agent 方案">
             </div>
           </div>
           <div class="card">
             <h3>SA 工具</h3>
             <p>读取 JVM 内部方法执行次数，性能损耗低。</p>
             <div class="image-frame" style="margin-top: 0.7rem;">
-              <img src="assets/dae6e2b5090a8c9a205d91712f400aab2a09b762.png" alt="SA 方案">
+              <img src="Aced-assets/dae6e2b5090a8c9a205d91712f400aab2a09b762.png" alt="SA 方案">
             </div>
           </div>
         </div>
@@ -840,7 +850,7 @@
         <h2 class="reveal">方案对比与选择</h2>
         <p class="reveal">综合性能损耗、故障风险与实现复杂度，最终选择 SA 方案。</p>
         <div class="image-frame reveal">
-          <img src="assets/18225bedb4fe43d91585a78d5ea128d915126849.png" alt="三方案对比">
+          <img src="Aced-assets/18225bedb4fe43d91585a78d5ea128d915126849.png" alt="三方案对比">
         </div>
       </div>
     </section>
@@ -858,15 +868,15 @@
             </ul>
           </div>
           <div class="grid">
-            <div class="image-frame"><img src="assets/a8d8636cda7ccdd6778078903b99dc8ecfcfe028.png" alt="定时跑数"></div>
-            <div class="image-frame"><img src="assets/70a7a901714760ca2a46341ca37877048be742ef.png" alt="SA 跑数"></div>
+            <div class="image-frame"><img src="Aced-assets/a8d8636cda7ccdd6778078903b99dc8ecfcfe028.png" alt="定时跑数"></div>
+            <div class="image-frame"><img src="Aced-assets/70a7a901714760ca2a46341ca37877048be742ef.png" alt="SA 跑数"></div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Method set + flow -->
-    <section class="slide">
+    <section class="slide p21">
       <div class="slide-content">
         <div class="two-col reveal">
           <div>
@@ -877,8 +887,8 @@
             </ul>
           </div>
           <div class="vstack bottom compact">
-            <div class="image-frame"><img src="assets/0e6aacc833d4dba39e4916f82216c7b454e87cb8.png" alt="可精简方法集"></div>
-            <div class="image-frame"><img src="assets/c797dd07b66dc8415ea0284b72ab603171aac107.png" alt="业务流程图"></div>
+            <div class="image-frame"><img src="Aced-assets/0e6aacc833d4dba39e4916f82216c7b454e87cb8.png" alt="可精简方法集"></div>
+            <div class="image-frame"><img src="Aced-assets/c797dd07b66dc8415ea0284b72ab603171aac107.png" alt="业务流程图"></div>
           </div>
         </div>
       </div>
@@ -892,14 +902,14 @@
           <h3>全自动化</h3>
           <p>克隆代码 → 自动删除 → 推送分支 → CR → 发布。</p>
           <div class="image-frame" style="margin-top: 0.7rem;">
-            <img src="assets/604c97d89d273d8d5459a035223916a4a95aab9e.png" alt="全自动化策略">
+            <img src="Aced-assets/604c97d89d273d8d5459a035223916a4a95aab9e.png" alt="全自动化策略">
           </div>
         </div>
         <div class="card reveal">
           <h3>半自动化</h3>
           <p>IDEA 插件辅助人工删除，提升可控性与信任度。</p>
           <div class="image-frame" style="margin-top: 0.7rem;">
-            <img src="assets/58e0f94737fc751ed3a373e57bc8c743bcbab505.png" alt="半自动化策略">
+            <img src="Aced-assets/58e0f94737fc751ed3a373e57bc8c743bcbab505.png" alt="半自动化策略">
           </div>
         </div>
       </div>
@@ -917,14 +927,14 @@
           </ul>
         </div>
         <div class="grid reveal">
-          <div class="image-frame"><img src="assets/b986335c6c1a9668938b7ee74f09ce1a0af01037.png" alt="最佳实践"></div>
-          <div class="image-frame"><img src="assets/3e4955ddede2b113cd1e3a17819bb8595abdc32c.png" alt="实践经验"></div>
+          <div class="image-frame"><img src="Aced-assets/b986335c6c1a9668938b7ee74f09ce1a0af01037.png" alt="最佳实践"></div>
+          <div class="image-frame"><img src="Aced-assets/3e4955ddede2b113cd1e3a17819bb8595abdc32c.png" alt="实践经验"></div>
         </div>
       </div>
     </section>
 
     <!-- Results -->
-    <section class="slide section-slide">
+    <section class="slide section-slide slide-results">
       <div class="slide-content">
         <div class="section-header">
           <div class="section-rail"></div>
@@ -943,8 +953,8 @@
             </ul>
           </div>
           <div class="grid">
-            <div class="image-frame"><img src="assets/a151bdd07083ea82785604618fc306b2e20c528a.png" alt="效果 1"></div>
-            <div class="image-frame"><img src="assets/5bece2a8d844b34768c39f8d3c0eb98b613a26f8.png" alt="效果 2"></div>
+            <div class="image-frame"><img src="Aced-assets/a151bdd07083ea82785604618fc306b2e20c528a.png" alt="效果 1"></div>
+            <div class="image-frame"><img src="Aced-assets/5bece2a8d844b34768c39f8d3c0eb98b613a26f8.png" alt="效果 2"></div>
           </div>
         </div>
       </div>
@@ -961,7 +971,7 @@
           </div>
         </div>
         <div class="image-frame reveal">
-          <img src="assets/35c0c899a9d192f2592858c53bdfa6f7d227c5f7.png" alt="总结图">
+          <img src="Aced-assets/35c0c899a9d192f2592858c53bdfa6f7d227c5f7.png" alt="总结图">
         </div>
       </div>
     </section>
