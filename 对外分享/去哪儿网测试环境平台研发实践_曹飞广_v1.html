@@ -404,9 +404,6 @@
             <div class="ppt-text-inner" style="font-weight:500;">去哪儿网测试环境管理平台实践</div>
           </div>
 
-          <div class="ppt-item ppt-text" style="--x:75.177071%;--y:4.564815%;--w:0.807308%;--h:6.148163%;z-index:2;--pad:0;">
-            <div class="ppt-text-inner" style="font-weight:500;">3</div>
-          </div>
 <div class="ppt-item ppt-shape" style="--x:55.066923%;--y:19.860630%;--w:31.975146%;--h:8.399022%;z-index:3;--bg:linear-gradient(180.000deg, #1f4e79 0.0%, #0070c0 100.0%);--bw:1.33px;" aria-hidden="true"></div>
 
           <div class="ppt-item ppt-text" style="--x:59.236774%;--y:20.337885%;--w:23.635436%;--h:7.444497%;z-index:4;--pad:0;">
@@ -1177,6 +1174,11 @@
 
     window.__pptTheme = ThemeEngine;
     ThemeEngine.applyTheme();
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => {
+        if (window.__pptTheme) window.__pptTheme.refresh();
+      }).catch(() => {});
+    }
 
     class SlidePresentation {
       constructor() {
