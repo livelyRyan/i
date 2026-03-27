@@ -177,6 +177,16 @@
       justify-content: center;
       text-align: center;
     }
+    .ppt-text-inner .ppt-line {
+      display: block;
+    }
+    .ppt-text-inner .ppt-line.level-1 {
+      padding-left: 1.6em;
+    }
+    .ppt-text-inner .ppt-gap {
+      display: block;
+      height: 0.7em;
+    }
 
     .ppt-shape {
       background: var(--bg, transparent);
@@ -934,7 +944,15 @@
           </div>
 
           <div class="ppt-item ppt-text" style="--x:6.875000%;--y:26.445057%;--w:88.622507%;--h:68.230869%;z-index:2;--pad:0;">
-            <div class="ppt-text-inner" style="font-weight:500;">测试环境（开发自测、自动化测试、QA验证）作为变更最频繁的环境，本身既要灵活多变，又要稳定可靠。其维护管理始终处于这个矛盾中，需要根据使用场景因地制宜治理。<br/>针对DEV使用的部分，放松变更管控，严控环境生命周期<br/>针对QA负责的部分，严格管理变更，长期持续进行检查与保障<br/><br/>问题解决过程中，有两点成功因素：<br/>其一是“Noah环境平台实现了环境视角的测试环境统一管理，为长时间的测试环境治理提供了切入点”。<br/>其二是“用户、领域专家与技术专家团队协作，提供了更有效的解决方案”。</div>
+            <div class="ppt-text-inner" style="font-weight:500;">
+              <div class="ppt-line level-0">测试环境（开发自测、自动化测试、QA验证）作为变更最频繁的环境，本身既要灵活多变，又要稳定可靠。其维护管理始终处于这个矛盾中，需要根据使用场景因地制宜治理。</div>
+              <div class="ppt-line level-1">针对DEV使用的部分，放松变更管控，严控环境生命周期</div>
+              <div class="ppt-line level-1">针对QA负责的部分，严格管理变更，长期持续进行检查与保障</div>
+              <div class="ppt-gap"></div>
+              <div class="ppt-line level-0">问题解决过程中，有两点成功因素：</div>
+              <div class="ppt-line level-1">其一是“Noah环境平台实现了环境视角的测试环境统一管理，为长时间的测试环境治理提供了切入点”。</div>
+              <div class="ppt-line level-1">其二是“用户、领域专家与技术专家团队协作，提供了更有效的解决方案”。</div>
+            </div>
           </div>
 <div class="ppt-item ppt-shape" style="--x:34.012434%;--y:1.631700%;--w:31.975131%;--h:8.398979%;z-index:3;--bg:linear-gradient(180.000deg, #1f4e79 0.0%, #0070c0 100.0%);--bw:1.33px;" aria-hidden="true"></div>
 
@@ -954,7 +972,14 @@
           </div>
 
           <div class="ppt-item ppt-text" style="--x:6.875000%;--y:26.445057%;--w:88.622507%;--h:68.230869%;z-index:2;--pad:0;">
-            <div class="ppt-text-inner" style="font-weight:500;">横向扩展，覆盖生产环境的管理，提供全环境视角的统一操作平台。<br/>线上全链路灰度环境<br/>生产环境下权限控制更严格、业务操作更难自动化、技术方案与测试环境下可能完全不同<br/><br/>纵向扩展，与OKR和PMO深度联动，打造需求、开发、测试、上线的价值交付工作流。<br/>将非技术研发阶段和人员的工作纳入，实现bizdevops</div>
+            <div class="ppt-text-inner" style="font-weight:500;">
+              <div class="ppt-line level-0">横向扩展，覆盖生产环境的管理，提供全环境视角的统一操作平台。</div>
+              <div class="ppt-line level-1">线上全链路灰度环境</div>
+              <div class="ppt-line level-1">生产环境下权限控制更严格、业务操作更难自动化、技术方案与测试环境下可能完全不同</div>
+              <div class="ppt-gap"></div>
+              <div class="ppt-line level-0">纵向扩展，与OKR和PMO深度联动，打造需求、开发、测试、上线的价值交付工作流。</div>
+              <div class="ppt-line level-1">将非技术研发阶段和人员的工作纳入，实现bizdevops</div>
+            </div>
           </div>
 <div class="ppt-item ppt-shape" style="--x:34.012434%;--y:1.631700%;--w:31.975131%;--h:8.398979%;z-index:3;--bg:linear-gradient(180.000deg, #1f4e79 0.0%, #0070c0 100.0%);--bw:1.33px;" aria-hidden="true"></div>
 
