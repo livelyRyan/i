@@ -12,8 +12,7 @@ title: "Resume"
 - 方向：AI 应用与 AI 基建、研发效能、稳定性体系；擅长从 0→1 平台化、规模化落地与跨团队推进。
 - AI 基建/智能体平台：覆盖全司 44 个三级 BU；累计支撑 1000+ 落地流程；保守口径节约 4715.9 PD（年化 5483.7 PD）；2025 年至今可用性 100%（QMoss）/ 99.98%（QDify）。
 - 稳定性与质量：建立基建稳定性数字化运营体系（故障数 2024 年 8 个 → 2025 年 0 个）；活动稳定性治理将大型活动技术投入 480 PD（2024）→ 360 PD（2025）。
-- 意向岗位：Agent 应用开发工程师（LLM/Agent/Workflow）；意向城市：上海/可远程。
-- 意向岗位：Platform Engineering Lead（基础平台负责人）；意向城市：上海/可远程。
+- 意向岗位：Agent 应用开发工程师（LLM/Agent/Workflow）/ Platform Engineering Lead（基础平台负责人）；意向城市：上海/可远程。
 <!-- LLM:END summary -->
 
 ## Skills
@@ -23,18 +22,14 @@ title: "Resume"
 - AI Coding: Claude Code, Codex CLI, Cursor
 - Frameworks: Spring, Spring Boot, MyBatis, Spring Cloud（Eureka/Config/OpenFeign/Ribbon/Hystrix）
 - Infrastructure: MySQL, Redis, ZooKeeper, Docker, Kubernetes, Jenkins
-- Infrastructure: MySQL, Redis, ZooKeeper, Docker, Kubernetes, Jenkins
-- Frameworks: Spring, Spring Boot, MyBatis, Spring Cloud（Eureka/Config/OpenFeign/Ribbon/Hystrix）
-- AI/LLM: LLM, Agent, Workflow, Prompt Engineering, ReAct; Dify, LangChain4j; Langfuse; MCP (Model Context Protocol), Skills, OpenClaw
-- AI Coding: Claude Code, Codex CLI, Cursor
 - Other: 分布式理论（CAP/BASE/AKF/NPC）、高并发高可用（CDN/LVS/Nginx）、RESTful API 设计与实践、JVM/JMM/GC 调优；共识算法（ZAB/Paxos/Raft）理解
 <!-- LLM:END skills -->
 
 ## Experience
 **技术总监｜基础平台开发、公共框架 QA 团队负责人**, 去哪儿旅行 — 上海  (2021-08 — Present)
 <!-- LLM:BEGIN exp_qunar -->
-- 负责企业级智能体平台（QMoss/QDify）核心能力建设与落地，支撑 ToB/ToC 业务流程规模化上线与运营。
 - 管理基础平台研发与公共 QA 团队（12 人），负责 AI 应用/AI 基建/研发效能工具平台建设与稳定性保障。
+- 负责企业级智能体平台（QMoss/QDify）核心能力建设与落地，支撑 ToB/ToC 业务流程规模化上线与运营。
 - AI 基建/智能体平台（QMoss/QDify）：覆盖全司 44 个三级 BU；累计支撑 1000+ 流程落地；保守口径节约 4715.9 PD（年化 5483.7 PD）；2025 年至今可用性 100%（QMoss）/ 99.98%（QDify）。
 - 搭建 Agent/Workflow 交付与迭代机制（Prompt/Skills/Tools），支撑数据分析/归因/助手等典型场景快速上线与复用。
 - 2025 年主导基建稳定性数字化运营体系建设：基建故障数 2024 年 8 个 → 2025 年 0 个；与 Ctrip/OPS 联合立项推动 P1/P2 基建系统接入率 100%，故障率 YOY -26%（绝对值少 6 个）。
@@ -79,13 +74,12 @@ title: "Resume"
 - 依赖治理与演练：强弱依赖梳理与演练工具建设，覆盖率目标 ≥ 96%，非对等强依赖与循环依赖数量降至 0（以平台统计口径）。
 <!-- LLM:END proj_infra_stability -->
 
-**代码瘦身平台（ACED）** — 链接（待补）
+**公司代码瘦身项目（ACED）** — 链接（待补）
 <!-- LLM:BEGIN proj_aced -->
-- 推动公司级“代码精简目标”达成：全司 AppCode 减少 50%，以工具平台化 + 最佳实践指南 + 进度落后团队专项推进的方式落地。
-- 研发与交付提效：开发估时平均降低 10.9%（3.02 → 2.69 PD/需求，月均 2224 需求），年节省成本 8785 PD；发布效率提升 9.5%（270s → 244s/次，月均 60000 次），年节省成本 641 PD。
-- 代表性性能优化：酒店 hspa 接口响应 128ms → 96ms（+25%）；报价 D 页接口 878ms → 579ms（+34%）。
+- 技术负责人｜2022.05–2022.12｜公司级技术债清理与系统瘦身专项。
+- 目标/结果：在稳定性前提下识别并清理无流量代码与低价值服务；代码量 -50%，服务 -26%，发布效率 +9.5%，需求平均耗时 -10.9%，故障率 <0.3%。
+- 关键动作/技术：两阶段法+四步筛选模型；服务流量度量与标准化下线流程平台化；SA 运行态度量方法执行次数，多轮跑数取并集得“可精简方法集”，配合自动/半自动清理落地。
 <!-- LLM:END proj_aced -->
-
 
 
 **技术中台门户（统一管理与监控门户）**
