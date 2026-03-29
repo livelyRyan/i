@@ -15,9 +15,9 @@
 
 ## Experience
 **技术总监｜基础平台开发、公共 QA 团队负责人**, 去哪儿旅行 — 北京  (2024-01 — 至今)
-- 战略管理：每半年制定团队战略规划，以稳定性为基础，AI 应用与 AI 基建为核心，推动团队与多业务线目标对齐，联合立项并跟进落地
-- 组织建设：负责基础平台研发与公共 QA 团队建设，主导岗位招聘与人才梯队建设，并建立与改进协作机制
-- 技术架构：负责核心项目推进，主导关键技术方案设计与评审，解决复杂系统演进与跨团队协作中的核心技术问题
+- 战略管理：每半年制定团队战略规划，25 年以稳定性为基础，AI 应用与 AI 基建为核心，推动团队与多业务线目标对齐，联合立项并跟进落地
+- 组织建设：负责基础平台研发与公共 QA 团队建设，主导岗位招聘与人才梯队建设，建立并改进组织协作机制
+- 技术架构：设计项目流程与技术规范，主导关键技术方案设计与评审，解决复杂系统演进与跨团队协作中的核心技术问题，沉淀为 skills 方便复用
 - 保稳定性：持续完善公司稳定性治理体系，制定系统分级、SLO、变更、容量、预案、演练、常态化治理标准，跟踪新增风险并沉淀到标准中，推动多部门落地
 - 技术布局：跟踪前沿技术发展趋势，推动 AI Agent 与研发效能相关基础设施的前置建设，为业务创新提供技术基础能力，为团队创新提供方向
 - 公司活动：参与公司级技术活动的评审与落地，包括 CR 大赛、Hackathon、AI 茶话会、AI 大咖说、应届生培训课程及 ITCP 联盟大会等
@@ -31,30 +31,26 @@
 
 ## Skills
 <!-- LLM:BEGIN skills -->
-- Languages: Java, Golang
+- Languages: Java, Golang 等
 - LLM: Agent, Workflow, Prompt, RAG, ReAct, Reflection, Harness Engineering; Dify, LangChain4j, Langfuse, OpenClaw; MCP, Skill
 - AI Coding: Claude Code, Codex CLI, Cursor
 - Java Frameworks: Spring, Spring Boot, MyBatis, Spring Cloud
 - Infrastructure: MySQL, Redis, ZooKeeper, ES, Kafka, Docker, Kubernetes
-- Infrastructure: MySQL, Redis, ZooKeeper, ES, Kafka, Docker, Kubernetes
-- Java Frameworks: Spring, Spring Boot, MyBatis, Spring Cloud（Eureka/Config/OpenFeign/Ribbon/Hystrix）
-- LLM: Agent, Workflow, Prompt, RAG, ReAct, Reflection, Harness Engineering; Dify, LangChain4j, Langfuse, OpenClaw; MCP, Skills
-- AI Coding: Claude Code, Codex CLI, Cursor
 - Other: 分布式理论（CAP/BASE/AKF）、高并发高可用（CDN/LVS/Nginx）、RESTful API、JVM/JMM
 <!-- LLM:END skills -->
 
 ## Projects
-**企业级智能体平台（QMoss+Dify）** | 项目负责人 | 2024.02~2025.11
+**企业级智能体平台（QMoss+Dify）** | 项目负责人 | 2024.02~2025.11 | [项目链接](代表作/企业级智能体平台.html)
 - 目标：搭建智能体平台，形成至少 3 个代表落地场景，年化提效 1000 PD
 - 结果：
-  - 提效：25 年新增流程数 3500+，提升 AI 应用搭建效率 6000+PD。以平台作为核心基建，其上搭建了多个高价值项目，总计全年节约 PD 超 4.4W。
+  - 提效：25 年新增流程数 3500+，提升 AI 应用搭建效率 6000+PD。以平台作为核心基建，其上搭建了多个高价值项目，总计全年节约 PD 超 4.4W
   - 覆盖：平台在公司各个部门大面积落地，包括 30+ 非技术部门，是公司历史上覆盖部门数最多的内部平台
   - 稳定性：QMoss 全年系统可用性 100%，0 中断 0 故障；Dify 全年可用性 99.98%
   - 创新：自研+开源 双平台协同体系。自研 QMoss 平台聚焦高稳定性，提供与内部系统深度集成场景。Dify 负责提供前沿能力和社区插件生态；
   - 先进性：探索并规模化落地了 “智能体平台 + 多维表格” 的新型研发模式，使 AI 应用的搭建和迭代周期，从天降低到分钟级，门槛降低到任何角色均可完成，已成为最佳实践。这套模式的落地广度和深度处于业界领先
 - 关键词：金项奖最佳、公司级战略项目、Dify、智能体平台、运营提效、高可用、稳定性、Java、Python、Workflow、Agent、Prompt、知识库、MCP 网关、Langfuse、Code Interpreter、版本控制、分布式架构、企业级能力、平台运营
 
-**九章 AI（自然语言取数）** | 项目负责人 | 2025.03~至今
+**九章 AI（自然语言取数）** | 项目负责人 | 2025.03~至今 | [项目链接](代表作/SQL-Agent.html)
 - 目标：打造自然语言取数 Agent，提升取数效率 50%
 - 结果：
   - 提效：开发自然语言取数 Agent，取数周期缩短 98.4%，从平均 1.9 PD 降低到 15 min。取数流程由原来的 7 步降低到 1 步
@@ -64,7 +60,7 @@
   - 创新：公司最早、最深地集成飞书的 AI Agent，整合了 飞书消息卡片、多维表格、菜单、话题、流式消息 等多个能力，使取数工作，从需要登录内网的电脑办公模式，变成手机上随时可取的日常操作。飞书作为入口，成为后续内部 Agent 的标配。26 年现象级产品 OpenClaw 核心能力之一 channel 再次印证了价值
 - 关键词：NL2SQL、智能问数、Data Agent、Agent 调优、Agent Chain 架构、RAG、Human-in-the-Loop Learning、数据安全、飞书机器人
 
-**公司系统瘦身项目（ACED）** | 技术负责人｜2022.05–2022.12
+**公司系统瘦身项目（ACED）** | 技术负责人｜2022.05–2022.12 | [项目链接](代表作/公司系统瘦身项目.html)
 - 目标：全司总代码量精简 50%，项目导致故障数 1 个
 - 结果：
   - 提效：全司总代码量 -50.21%（减少 2500W+），服务数 -26%，发布效率 +9.5%，需求平均耗时 -10.9%，因项目产生故障数 0。
@@ -79,7 +75,7 @@
   - 动态可观测线程池组件，具备参数热配、完善的可观测性及配套报警能力，覆盖 100+ AppCode，已成为全司默认使用的线程池
 - 关键词：分布式锁、可观测线程池、压缩、Java、IDEA 插件、组件开发
 
-**测试环境管理平台 Noah V3.0** | 多个模块负责人 | 2021.08~2022.06
+**测试环境管理平台 Noah V3.0** | 多个模块负责人 | 2021.08~2022.06 | [项目链接](代表作/测试环境管理平台.html)
 - 目标：为了提升环境构建稳定性和成功率，重构 Noah 核心编排系统，落地自愈体系
 - 结果：
   - 环境构建成功率绝对提升 35.2%（均值 87.8%），构建平均时长降低 37%；Noah 问题占比下降 60%（降低到 2.94%），环境导致的需求 Delay 率下降 90%（降低到 0.06%）；

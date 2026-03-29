@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resume</title>
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&f[]=jet-brains-mono@400,600&display=swap" />
+  <style>
+    :root {
+      --bg-0: #070911;
+      --bg-1: #0b1020;
+      --glass: rgba(255, 255, 255, 0.06);
+      --glass-2: rgba(255, 255, 255, 0.03);
+      --line: rgba(255, 255, 255, 0.12);
+      --text-0: rgba(255, 255, 255, 0.92);
+      --text-1: rgba(255, 255, 255, 0.70);
+      --accent: #3dffcf;
+      --accent-2: #7c5cff;
+      --accent-3: #ff4fd8;
+
+      --font-body: "Satoshi", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+
+      --page-pad: clamp(1rem, 3vw, 2.6rem);
+      --card-pad: clamp(0.9rem, 2.2vw, 1.6rem);
+      --gap: clamp(0.8rem, 2vw, 1.4rem);
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-body);
+      background: radial-gradient(1100px 900px at 15% 10%, rgba(124, 92, 255, 0.18), transparent 60%),
+                  radial-gradient(900px 700px at 80% 20%, rgba(61, 255, 207, 0.12), transparent 55%),
+                  radial-gradient(900px 700px at 65% 88%, rgba(255, 79, 216, 0.10), transparent 55%),
+                  linear-gradient(180deg, var(--bg-0), var(--bg-1));
+      color: var(--text-0);
+      min-height: 100vh;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: var(--page-pad);
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap);
+    }
+
+    .card {
+      background: linear-gradient(180deg, var(--glass), var(--glass-2));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: var(--card-pad);
+      box-shadow: 0 30px 120px rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .hero {
+      display: grid;
+      gap: 0.6rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero h1 {
+      font-size: clamp(1.6rem, 4vw, 2.6rem);
+      letter-spacing: 0.4px;
+    }
+
+    .hero .meta {
+      color: var(--text-1);
+      font-size: clamp(0.85rem, 1.4vw, 1rem);
+    }
+
+    .hero .roles {
+      font-size: clamp(0.9rem, 1.6vw, 1.05rem);
+      color: var(--text-0);
+      font-weight: 500;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -80px;
+      top: -80px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(61, 255, 207, 0.35), transparent 65%);
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.9fr;
+      gap: var(--gap);
+    }
+
+    .span-2 { grid-column: span 2; }
+
+    h2 {
+      font-size: clamp(1.05rem, 2vw, 1.4rem);
+      margin-bottom: 0.6rem;
+      color: var(--accent);
+      letter-spacing: 0.3px;
+    }
+
+    h3 {
+      font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+      margin-top: 0.7rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .block-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .block-title .chip {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid rgba(61, 255, 207, 0.5);
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    ul {
+      list-style: none;
+      display: grid;
+      gap: 0.4rem;
+      color: var(--text-1);
+      font-size: clamp(0.85rem, 1.4vw, 0.98rem);
+      line-height: 1.55;
+    }
+
+    ul li::before {
+      content: "•";
+      color: var(--accent-3);
+      margin-right: 0.5rem;
+    }
+
+    .section p {
+      color: var(--text-1);
+      font-size: clamp(0.85rem, 1.4vw, 0.98rem);
+      line-height: 1.6;
+    }
+
+    .exp-item, .proj-item {
+      margin-bottom: 0.9rem;
+    }
+
+    .exp-item strong, .proj-item strong {
+      color: var(--text-0);
+      font-weight: 600;
+    }
+
+    .proj-meta {
+      color: var(--text-1);
+      font-size: 0.85rem;
+    }
+
+    .mono {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--accent-2);
+    }
+
+    @media (max-width: 960px) {
+      .grid { grid-template-columns: 1fr; }
+      .span-2 { grid-column: span 1; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="card hero">
+      <h1>马阳阳</h1>
+      <div class="meta">29 岁 · 现居北京 · 176-1024-5400 · 1135038815@qq.com · GitHub/LinkedIn（待补） · 个人网站（待补）</div>
+      <div class="roles">意向岗位：Agent 应用开发工程师；高级技术经理/技术负责人（Agent/研发效能方向）；意向城市：上海</div>
+    </header>
+
+    <section class="card section">
+      <div class="block-title">
+        <h2>Summary</h2>
+        <span class="chip">overview</span>
+      </div>
+      <ul>
+        <li>8 年研发经验，3 年技术管理经验，负责基础平台研发与公共 QA 团队（10+ 人规模），支撑多条业务线研发</li>
+        <li>长期负责公司内部平台建设，在 AI Agent、AI 基建、研发效能、稳定性体系建设方面有丰富落地经验</li>
+        <li>主导多个 0 到 1 平台建设，通过明确平台生态位与产品边界，完成平台在全司规模化落地</li>
+        <li>具备体系化管理与战略规划能力，熟练运用 战略地图、OKR、DMAIC 推动组织与技术持续改进</li>
+        <li>长期高绩效，连续晋升，多次获得公司级奖项</li>
+      </ul>
+    </section>
+
+    <div class="grid">
+      <section class="card section span-2">
+        <div class="block-title">
+          <h2>Experience</h2>
+          <span class="chip">impact</span>
+        </div>
+        <div class="exp-item">
+          <strong>技术总监｜基础平台开发、公共 QA 团队负责人</strong>, 去哪儿旅行 — 北京  (2024-01 — 至今)
+          <ul>
+            <li>战略管理：每半年制定团队战略规划，以稳定性为基础，AI 应用与 AI 基建为核心，推动团队与多业务线目标对齐，联合立项并跟进落地</li>
+            <li>组织建设：负责基础平台研发与公共 QA 团队建设，主导岗位招聘与人才梯队建设，并建立与改进协作机制</li>
+            <li>技术架构：负责核心项目推进，主导关键技术方案设计与评审，解决复杂系统演进与跨团队协作中的核心技术问题</li>
+            <li>保稳定性：持续完善公司稳定性治理体系，制定系统分级、SLO、变更、容量、预案、演练、常态化治理标准，跟踪新增风险并沉淀到标准中，推动多部门落地</li>
+            <li>技术布局：跟踪前沿技术发展趋势，推动 AI Agent 与研发效能相关基础设施的前置建设，为业务创新提供技术基础能力，为团队创新提供方向</li>
+            <li>公司活动：参与公司级技术活动的评审与落地，包括 CR 大赛、Hackathon、AI 茶话会、AI 大咖说、应届生培训课程及 ITCP 联盟大会等</li>
+          </ul>
+        </div>
+        <div class="exp-item">
+          <strong>资深研发工程师｜基础平台团队核心开发</strong>, 去哪儿旅行 — 北京  (2021-08 — 2023-12)
+          <ul>
+            <li>战略项目落地：承接部门重点技术战略，推动跨团队联合立项与资源协调，负责核心技术调研、架构设计及关键模块开发，保障战略项目按期落地</li>
+            <li>稳定性保障：负责核心平台系统的版本迭代与日常稳定性保障，持续优化监控、告警、预案，定期压测与演练，提升平台可用性</li>
+            <li>技术沉淀与对外输出：总结团队技术实践与工程经验，在业界技术大会进行分享，提升公司在基础架构与工程效率领域的技术影响力</li>
+          </ul>
+        </div>
+        <div class="exp-item">
+          <strong>研发工程师|云计算团队核心开发</strong>, 北京宝兰德软件股份有限公司 — 北京  (2017-12 — 2021-08)
+        </div>
+      </section>
+
+      <section class="card section">
+        <div class="block-title">
+          <h2>Skills</h2>
+          <span class="chip">stack</span>
+        </div>
+        <ul>
+          <li>Languages: Java, Golang</li>
+          <li>LLM: Agent, Workflow, Prompt, RAG, ReAct, Reflection, Harness Engineering; Dify, LangChain4j, Langfuse, OpenClaw; MCP, Skill</li>
+          <li>AI Coding: Claude Code, Codex CLI, Cursor</li>
+          <li>Java Frameworks: Spring, Spring Boot, MyBatis, Spring Cloud</li>
+          <li>Infrastructure: MySQL, Redis, ZooKeeper, ES, Kafka, Docker, Kubernetes</li>
+          <li>Other: 分布式理论（CAP/BASE/AKF）、高并发高可用（CDN/LVS/Nginx）、RESTful API、JVM/JMM</li>
+        </ul>
+      </section>
+
+      <section class="card section">
+        <div class="block-title">
+          <h2>Education</h2>
+          <span class="chip">base</span>
+        </div>
+        <p>南京晓庄学院，统招本科，软件工程专业，绩点排名前 10</p>
+
+        <div class="block-title" style="margin-top:0.9rem;">
+          <h2>Certifications</h2>
+          <span class="chip">certs</span>
+        </div>
+        <ul>
+          <li>CET-4</li>
+          <li>OCJP（Oracle Certified Java Programmer）</li>
+        </ul>
+      </section>
+
+      <section class="card section span-2">
+        <div class="block-title">
+          <h2>Projects</h2>
+          <span class="chip">selected</span>
+        </div>
+        <div class="proj-item">
+          <strong>企业级智能体平台（QMoss+Dify）</strong> | 项目负责人 | 2024.02~2025.11 | <a href="代表作/企业级智能体平台.html">项目链接</a>
+          <ul>
+            <li>目标：搭建智能体平台，形成至少 3 个代表落地场景，年化提效 1000 PD</li>
+            <li>结果：</li>
+            <li>提效：25 年新增流程数 3500+，提升 AI 应用搭建效率 6000+PD。以平台作为核心基建，其上搭建了多个高价值项目，总计全年节约 PD 超 4.4W。</li>
+            <li>覆盖：平台在公司各个部门大面积落地，包括 30+ 非技术部门，是公司历史上覆盖部门数最多的内部平台</li>
+            <li>稳定性：QMoss 全年系统可用性 100%，0 中断 0 故障；Dify 全年可用性 99.98%</li>
+            <li>创新：自研+开源 双平台协同体系。自研 QMoss 平台聚焦高稳定性，提供与内部系统深度集成场景。Dify 负责提供前沿能力和社区插件生态；</li>
+            <li>先进性：探索并规模化落地了 “智能体平台 + 多维表格” 的新型研发模式，使 AI 应用的搭建和迭代周期，从天降低到分钟级，门槛降低到任何角色均可完成，已成为最佳实践。这套模式的落地广度和深度处于业界领先</li>
+            <li>关键词：金项奖最佳、公司级战略项目、Dify、智能体平台、运营提效、高可用、稳定性、Java、Python、Workflow、Agent、Prompt、知识库、MCP 网关、Langfuse、Code Interpreter、版本控制、分布式架构、企业级能力、平台运营</li>
+          </ul>
+        </div>
+        <div class="proj-item">
+          <strong>九章 AI（自然语言取数）</strong> | 项目负责人 | 2025.03~至今 | <a href="代表作/SQL-Agent.html">项目链接</a>
+          <ul>
+            <li>目标：打造自然语言取数 Agent，提升取数效率 50%</li>
+            <li>结果：</li>
+            <li>提效：开发自然语言取数 Agent，取数周期缩短 98.4%，从平均 1.9 PD 降低到 15 min。取数流程由原来的 7 步降低到 1 步</li>
+            <li>吞吐：取数需求交付量增长 70%，99.2% 取数类需求由九章承接</li>
+            <li>安全：之前数据的权限控制粒度为人、表，九章 AI 新增了 行、列控制，满足了数据安全诉求</li>
+            <li>效果：取数准确率从 52% 持续优化，提升到周均稳定 92%。设计了自学习能力，在无研发介入情况下，会越用越准确</li>
+            <li>创新：公司最早、最深地集成飞书的 AI Agent，整合了 飞书消息卡片、多维表格、菜单、话题、流式消息 等多个能力，使取数工作，从需要登录内网的电脑办公模式，变成手机上随时可取的日常操作。飞书作为入口，成为后续内部 Agent 的标配。26 年现象级产品 OpenClaw 核心能力之一 channel 再次印证了价值</li>
+            <li>关键词：NL2SQL、智能问数、Data Agent、Agent 调优、Agent Chain 架构、RAG、Human-in-the-Loop Learning、数据安全、飞书机器人</li>
+          </ul>
+        </div>
+        <div class="proj-item">
+          <strong>公司系统瘦身项目（ACED）</strong> | 技术负责人｜2022.05–2022.12 | <a href="代表作/公司系统瘦身项目.html">项目链接</a>
+          <ul>
+            <li>目标：全司总代码量精简 50%，项目导致故障数 1 个</li>
+            <li>结果：</li>
+            <li>提效：全司总代码量 -50.21%（减少 2500W+），服务数 -26%，发布效率 +9.5%，需求平均耗时 -10.9%，因项目产生故障数 0。</li>
+            <li>创新：业界首创 0 风险、0 性能损耗的函数级代码精简体系，在多个行业大会分享，多家公司参考落地</li>
+            <li>关键词：行业级创新、金项奖第一名、跨全司技术 BU 项目、Java、SA、IDEA 插件、Spoon</li>
+          </ul>
+        </div>
+        <div class="proj-item">
+          <strong>组件市场</strong> | 技术负责人 | 2023.02~2023.12
+          <ul>
+            <li>目标：打造组件市场，并在至少 3 个业务场景实际落地。成功孵化至少 5 个成熟组件；组件覆盖率，4级团队维度达 80%</li>
+            <li>结果：项目期间孵化 7 个成熟的公司级可复用组件，包括 分布式锁、动态可观测线程池、压缩套件、日志管理组件、分布式限流、序列化组件。</li>
+            <li>开发的分布式锁组件，将公司各种分布式锁实现完成统一，覆盖 100% 技术团队、100+ AppCode，至今相关故障 0 个</li>
+            <li>开发的压缩套件支撑了酒店业务 Redis 内存治理，数据大小平均减少 65%；带宽平均下降 66%</li>
+            <li>动态可观测线程池组件，具备参数热配、完善的可观测性及配套报警能力，覆盖 100+ AppCode，已成为全司默认使用的线程池</li>
+            <li>关键词：分布式锁、可观测线程池、压缩、Java、IDEA 插件、组件开发</li>
+          </ul>
+        </div>
+        <div class="proj-item">
+          <strong>测试环境管理平台 Noah V3.0</strong> | 多个模块负责人 | 2021.08~2022.06 | <a href="代表作/测试环境管理平台.html">项目链接</a>
+          <ul>
+            <li>目标：为了提升环境构建稳定性和成功率，重构 Noah 核心编排系统，落地自愈体系</li>
+            <li>结果：</li>
+            <li>环境构建成功率绝对提升 35.2%（均值 87.8%），构建平均时长降低 37%；Noah 问题占比下降 60%（降低到 2.94%），环境导致的需求 Delay 率下降 90%（降低到 0.06%）；</li>
+            <li>关键词：工作流编排调度、核心模块重构、稳定性提升、Java、Salt、测试环境管理</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="card section span-2">
+        <div class="block-title">
+          <h2>Awards</h2>
+          <span class="chip">honors</span>
+        </div>
+        <ul>
+          <li>热爱分享交流，有影响力：作为讲师参加 ArchSubmit、Top100、QECon、SECon、A2M、DBAPlus、ITCP 等行业大会，获得明星讲师称号；组织过多场跨公司闭门交流会</li>
+          <li>具备公司级横向组织、推进能力：26 年担任 AI Coding SIG 秘书长，推动 AI Coding 在全司科学、体系化落地；22、23 年分别担任技术 SIG 秘书长、负责人</li>
+          <li>乐于培养他人：带团队期间，个人晋升成功率 87.5%，远超平均水平（全司均值 < 50%）</li>
+          <li>有建团队、稳定性提升经验：25 年初组建基础架构 QA 团队，负责基础架构稳定、大客户端框架质量保证与发版。基础架构 BU 全年故障数 0 个，在全司 10+ 三级 BU 中排名第 1，相比 24 年故障数减少 9 个</li>
+          <li>长期高绩效：3 次 A（Top 10%）、4 次 B（Top 30%）；最近一次 2025H2 为 A</li>
+          <li>连续晋升：4 年 3 次高职级个人晋升，成功率 100%（全司均值 < 50%）</li>
+          <li>多次获奖：23 年带队包揽 CR 大赛冠军和 AI Hackathon 大赛第 1 名；23 年技术品牌突出贡献奖；4 年公司内训师；飞书效率先锋；公司飞书社群 KOL；大四校一等奖学金；大三校二等奖学金</li>
+        </ul>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
