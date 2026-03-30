@@ -436,20 +436,6 @@ def format_project_line(text: str) -> str:
             '<span class="prefix">关键词</span><span class="tag-list">' + "".join(spans) + "</span>"
         )
     m = re.match(r"^([^：]{1,32})：(.*)$", text)
-    if m and m.group(1) in (
-        "目标",
-        "结果",
-        "提效",
-        "覆盖",
-        "稳定性",
-        "创新",
-        "先进性",
-        "吞吐",
-        "安全",
-        "效果",
-    ):
-        label, body = m.group(1), m.group(2)
-        return f'<span class="prefix">{html.escape(label)}</span> {rich_line(body)}'
     if m:
         label, body = m.group(1), m.group(2)
         return f'<span class="prefix">{html.escape(label)}</span> {rich_line(body)}'
