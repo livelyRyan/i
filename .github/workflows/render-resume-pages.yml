@@ -26,6 +26,7 @@ jobs:
           python3 scripts/render_resume.py --in resume.md --variant all --out docs/index.html
           touch docs/.nojekyll
           rm -f docs/index.md
+          bash scripts/sync_portfolio_to_docs.sh
 
       - name: Commit pages
         run: |
