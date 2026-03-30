@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Render resume.md into repo-root index.html for GitHub Pages (static HTML)."""
+"""Render resume.md into static HTML for GitHub Pages (local path or CI `_site/`)."""
 
 from __future__ import annotations
 

@@ -5,12 +5,20 @@ on:
     branches: ["master"]
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 jobs:
-  build:
-    if: github.actor != 'github-actions[bot]'
+  deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -20,20 +28,22 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Render resume HTML
+      - name: Build site
         run: |
-          python3 scripts/render_resume.py --in resume.md --out index.html
-          touch .nojekyll
-          rm -f docs/index.md
+          mkdir -p _site
+          python3 scripts/render_resume.py --in resume.md --out _site/index.html
+          touch _site/.nojekyll
+          cp resume-profile.jpg _site/
+          cp -r 代表作 _site/
 
-      - name: Commit pages
-        run: |
-          git add index.html .nojekyll resume-profile.jpg
-          if git diff --cached --quiet; then
-            echo "No changes to commit."
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git commit -m "docs: AI update resume pages (HTML)"
-          git push
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
