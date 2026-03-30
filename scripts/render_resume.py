@@ -129,8 +129,6 @@ def parse_profile(md: str) -> Profile:
         website_display = ""
 
     location = loc_raw
-    if location and not location.startswith("暂"):
-        location = f"暂居{location}"
 
     return Profile(
         name=name,
@@ -315,11 +313,9 @@ def render_skills_groups(block: str) -> str:
         if not m:
             continue
         title, rest = m.group(1).strip(), m.group(2).strip()
-        _eph = "\x00SKILL_ELLIPSIS\x00"
-        rest_marked = re.sub(r",\s*\.\.\.", _eph, rest)
         tags = [
-            t.strip().replace(_eph, ", ...")
-            for t in re.split(r"[,，;；、]\s*", rest_marked)
+            t.strip()
+            for t in re.split(r"[,，;；、]\s*", rest)
             if t.strip()
         ]
         parts.append('          <div class="skill-block">')
