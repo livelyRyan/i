@@ -17,7 +17,7 @@ This repo keeps `resume.md` as the single source of truth for the resume.
 3. 本地生成并同步（与 CI 行为一致）：
 
    ```bash
-   python3 scripts/render_resume.py --in resume.md --variant all --out docs/index.html
+   python3 scripts/render_resume.py --in resume.md --out docs/index.html
    touch docs/.nojekyll
    bash scripts/sync_portfolio_to_docs.sh
    ```

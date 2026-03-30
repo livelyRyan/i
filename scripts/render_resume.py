@@ -411,20 +411,20 @@ def collect_bullet_entries(lines: List[str]) -> List[Tuple[int, str]]:
     return entries
 
 
-def render_bullet_tree(nodes: List[Tuple[str, List]], awards_prefix: bool = False) -> str:
+def render_bullet_tree(nodes: List[Tuple[str, List]]) -> str:
     parts = ["<ul>"]
     for text, children in nodes:
-        inner = format_project_line(text, awards_prefix=awards_prefix)
+        inner = format_project_line(text)
         li_cls = ' class="project-keywords"' if text.startswith("关键词：") else ""
         if children:
-            parts.append(f"<li{li_cls}>{inner}{render_bullet_tree(children, awards_prefix)}</li>")
+            parts.append(f"<li{li_cls}>{inner}{render_bullet_tree(children)}</li>")
         else:
             parts.append(f"<li{li_cls}>{inner}</li>")
     parts.append("</ul>")
     return "".join(parts)
 
 
-def format_project_line(text: str, awards_prefix: bool = False) -> str:
+def format_project_line(text: str) -> str:
     if text.startswith("关键词："):
         body = text[len("关键词：") :].strip()
         tags = re.split(r"[、,，]", body)
@@ -450,9 +450,6 @@ def format_project_line(text: str, awards_prefix: bool = False) -> str:
     ):
         label, body = m.group(1), m.group(2)
         return f'<span class="prefix">{html.escape(label)}</span> {rich_line(body)}'
-    if m and awards_prefix:
-        label, body = m.group(1), m.group(2)
-        return f'<span class="prefix awards-prefix">{html.escape(label)}</span> {rich_line(body)}'
     if m:
         label, body = m.group(1), m.group(2)
         return f'<span class="prefix">{html.escape(label)}</span> {rich_line(body)}'
@@ -623,11 +620,6 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="Render resume.md to static docs/index.html")
     ap.add_argument("--in", dest="in_path", default="resume.md", help="Input Markdown path")
     ap.add_argument("--out", dest="out_path", default="docs/index.html", help="Output HTML path")
-    ap.add_argument(
-        "--variant",
-        default="all",
-        help="Ignored; kept for compatibility with existing CI invocations",
-    )
     args = ap.parse_args()
     src = Path(args.in_path).read_text(encoding="utf-8")
     out = build_html(src)
