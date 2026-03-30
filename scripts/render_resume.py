@@ -161,10 +161,11 @@ def render_profile_hero(p: Profile, photo_rel: str = DEFAULT_PHOTO_RELPATH) -> s
             f'<a href="{esc(p.website_url, quote=True)}" rel="noopener noreferrer">'
             f"{esc(p.website_display)}</a>"
         )
-    roles_pills = "\n                  ".join(
-        f'<span class="intent-pill intent-pill-accent">{esc(t)}</span>'
-        for t in p.intent_roles
-    )
+    pill_lines = [
+        f'<span class="intent-pill intent-pill-accent">{esc(t)}</span>' for t in p.intent_roles
+    ]
+    roles_pills = "\n                  ".join(pill_lines)
+    roles_pills_nested = "\n                      ".join(pill_lines)
     lines = [
         '    <header class="hero">',
         '      <div class="hero-content">',
@@ -205,23 +206,38 @@ def render_profile_hero(p: Profile, photo_rel: str = DEFAULT_PHOTO_RELPATH) -> s
     lines += [
         "          </ul>",
         '          <ul class="hero-facts" aria-label="求职意向">',
-        '            <li class="hero-fact hero-fact-wide">',
-        '              <span class="hero-fact-label">意向岗位</span>',
-        '              <span class="hero-fact-value hero-fact-value--pills">',
-        '                <span class="hero-intent-pills">',
-        f"                  {roles_pills}",
-        "                </span>",
-        "              </span>",
-        "            </li>",
     ]
     if p.intent_city:
         lines += [
+            '            <li class="hero-facts-intent-wrap">',
+            '              <div class="hero-facts-intent-pair">',
+            '                <div class="hero-fact">',
+            '                  <span class="hero-fact-label">意向岗位</span>',
+            '                  <span class="hero-fact-value hero-fact-value--pills">',
+            '                    <span class="hero-intent-pills">',
+            f"                      {roles_pills_nested}",
+            "                    </span>",
+            "                  </span>",
+            "                </div>",
+            '                <div class="hero-fact">',
+            '                  <span class="hero-fact-label">意向城市</span>',
+            '                  <span class="hero-fact-value hero-fact-value--pills">',
+            '                    <span class="hero-intent-pills">',
+            f'                      <span class="intent-pill intent-pill-accent">'
+            f"{esc(p.intent_city)}</span>",
+            "                    </span>",
+            "                  </span>",
+            "                </div>",
+            "              </div>",
+            "            </li>",
+        ]
+    else:
+        lines += [
             '            <li class="hero-fact hero-fact-wide">',
-            '              <span class="hero-fact-label">意向城市</span>',
+            '              <span class="hero-fact-label">意向岗位</span>',
             '              <span class="hero-fact-value hero-fact-value--pills">',
             '                <span class="hero-intent-pills">',
-            f'                  <span class="intent-pill intent-pill-accent">'
-            f"{esc(p.intent_city)}</span>",
+            f"                  {roles_pills}",
             "                </span>",
             "              </span>",
             "            </li>",
