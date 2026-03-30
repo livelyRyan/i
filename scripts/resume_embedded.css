@@ -696,11 +696,15 @@
     .tag.purple { border-color: rgba(124, 92, 255, 0.45); color: var(--accent-2); }
     .tag.pink { border-color: rgba(255, 79, 216, 0.45); color: var(--accent-3); }
 
+    /* 行内流式：避免 flex 子项 min-width:auto 把整段 tag-list 挤到下一行 */
     .project-keywords {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: baseline;
-      gap: 0.35rem 0.5rem;
+      display: block;
+    }
+
+    .project-keywords .prefix {
+      display: inline-flex;
+      vertical-align: baseline;
+      margin-right: 0.4rem;
     }
 
     .project-keywords .tag-list {
@@ -708,6 +712,8 @@
       flex-wrap: wrap;
       gap: 0.35rem;
       margin: 0;
+      vertical-align: baseline;
+      max-width: 100%;
     }
 
     .awards-prefix {
