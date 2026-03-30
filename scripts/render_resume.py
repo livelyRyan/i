@@ -164,7 +164,8 @@ def render_profile_hero(p: Profile, photo_rel: str = DEFAULT_PHOTO_RELPATH) -> s
             f"{esc(p.website_display)}</a>"
         )
     roles_pills = "\n                  ".join(
-        f'<span class="intent-pill">{esc(t)}</span>' for t in p.intent_roles
+        f'<span class="intent-pill intent-pill-accent">{esc(t)}</span>'
+        for t in p.intent_roles
     )
     city_block = ""
     if p.intent_city:
