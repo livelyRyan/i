@@ -15,6 +15,12 @@ _SCRIPT_DIR = Path(__file__).resolve().parent
 
 DEFAULT_PHOTO_RELPATH = "resume-profile.jpg"
 
+# 「- 结果：」下的子 bullet 原为带 prefix 的小标题；改为整条按正文显示
+RESULT_DETAIL_LABELS = frozenset(
+    {"提效", "覆盖", "稳定性", "创新", "先进性", "吞吐", "安全", "效果"}
+)
+PROJECT_SECTION_LABELS = frozenset({"目标", "结果", "关键动作"})
+
 
 def _embedded_styles() -> str:
     p = _SCRIPT_DIR / "resume_embedded.css"
@@ -436,20 +442,25 @@ def collect_bullet_entries(lines: List[str]) -> List[Tuple[int, str]]:
     return entries
 
 
-def render_bullet_tree(nodes: List[Tuple[str, List]]) -> str:
+def render_bullet_tree(
+    nodes: List[Tuple[str, List]], *, under_result: bool = False
+) -> str:
     parts = ["<ul>"]
     for text, children in nodes:
-        inner = format_project_line(text)
+        inner = format_project_line(text, under_result=under_result)
         li_cls = ' class="project-keywords"' if text.startswith("关键词：") else ""
+        next_under_result = under_result or bool(re.match(r"^结果[：:]", text))
         if children:
-            parts.append(f"<li{li_cls}>{inner}{render_bullet_tree(children)}</li>")
+            parts.append(
+                f"<li{li_cls}>{inner}{render_bullet_tree(children, under_result=next_under_result)}</li>"
+            )
         else:
             parts.append(f"<li{li_cls}>{inner}</li>")
     parts.append("</ul>")
     return "".join(parts)
 
 
-def format_project_line(text: str) -> str:
+def format_project_line(text: str, *, under_result: bool = False) -> str:
     if text.startswith("关键词："):
         body = text[len("关键词：") :].strip()
         tags = re.split(r"[、,，]", body)
@@ -461,18 +472,9 @@ def format_project_line(text: str) -> str:
             '<span class="prefix">关键词</span><span class="tag-list">' + "".join(spans) + "</span>"
         )
     m = re.match(r"^([^：]{1,32})：(.*)$", text)
-    if m and m.group(1) in (
-        "目标",
-        "结果",
-        "提效",
-        "覆盖",
-        "稳定性",
-        "创新",
-        "先进性",
-        "吞吐",
-        "安全",
-        "效果",
-    ):
+    if under_result and m and m.group(1) in RESULT_DETAIL_LABELS:
+        return rich_line(text)
+    if m and m.group(1) in PROJECT_SECTION_LABELS:
         label, body = m.group(1), m.group(2)
         return f'<span class="prefix">{html.escape(label)}</span> {rich_line(body)}'
     if m:
