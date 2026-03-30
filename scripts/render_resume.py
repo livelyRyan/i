@@ -165,16 +165,6 @@ def render_profile_hero(p: Profile, photo_rel: str = DEFAULT_PHOTO_RELPATH) -> s
         f'<span class="intent-pill intent-pill-accent">{esc(t)}</span>'
         for t in p.intent_roles
     )
-    city_block = ""
-    if p.intent_city:
-        city_block = (
-            "                  <span class=\"hero-fact-value hero-fact-value--pills\">\n"
-            "                    <span class=\"hero-intent-pills\">\n"
-            f'                      <span class="intent-pill intent-pill-accent">'
-            f"{esc(p.intent_city)}</span>\n"
-            "                    </span>\n"
-            "                  </span>\n"
-        )
     lines = [
         '    <header class="hero">',
         '      <div class="hero-content">',
@@ -204,20 +194,15 @@ def render_profile_hero(p: Profile, photo_rel: str = DEFAULT_PHOTO_RELPATH) -> s
         f'              <span class="hero-fact-value"><a href="mailto:{esc(p.email)}">'
         f"{esc(p.email)}</a></span>",
         "            </li>",
-        '            <li class="hero-facts-dual-wrap" aria-label="网站与意向城市">',
-        '              <div class="hero-facts-dual">',
-        '                <div class="hero-fact">',
-        '                  <span class="hero-fact-label">网站</span>',
-        f'                  <span class="hero-fact-value">{site_link}</span>',
-        "                </div>",
-        '                <div class="hero-fact">',
-        '                  <span class="hero-fact-label">意向城市</span>',
-        city_block
-        if p.intent_city
-        else '                  <span class="hero-fact-value"></span>\n',
-        "                </div>",
-        "              </div>",
-        "            </li>",
+    ]
+    if p.website_url:
+        lines += [
+            '            <li class="hero-fact">',
+            '              <span class="hero-fact-label">网站</span>',
+            f'              <span class="hero-fact-value">{site_link}</span>',
+            "            </li>",
+        ]
+    lines += [
         "          </ul>",
         '          <ul class="hero-facts" aria-label="求职意向">',
         '            <li class="hero-fact hero-fact-wide">',
@@ -228,6 +213,20 @@ def render_profile_hero(p: Profile, photo_rel: str = DEFAULT_PHOTO_RELPATH) -> s
         "                </span>",
         "              </span>",
         "            </li>",
+    ]
+    if p.intent_city:
+        lines += [
+            '            <li class="hero-fact hero-fact-wide">',
+            '              <span class="hero-fact-label">意向城市</span>',
+            '              <span class="hero-fact-value hero-fact-value--pills">',
+            '                <span class="hero-intent-pills">',
+            f'                  <span class="intent-pill intent-pill-accent">'
+            f"{esc(p.intent_city)}</span>",
+            "                </span>",
+            "              </span>",
+            "            </li>",
+        ]
+    lines += [
         "          </ul>",
         "        </div>",
         '        <figure class="hero-photo-slot" aria-label="个人照片">',
