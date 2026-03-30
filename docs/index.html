@@ -25,52 +25,27 @@
       --card-pad: clamp(0.8rem, 1.9vw, 1.4rem);
       --gap: clamp(0.7rem, 1.6vw, 1.1rem);
       --radius: 16px;
-      --page-bg:
-        radial-gradient(1100px 900px at 15% 10%, rgba(124, 92, 255, 0.18), transparent 60%),
-        radial-gradient(900px 700px at 80% 20%, rgba(61, 255, 207, 0.12), transparent 55%),
-        radial-gradient(900px 700px at 65% 88%, rgba(255, 79, 216, 0.10), transparent 55%),
-        linear-gradient(180deg, var(--bg-0), var(--bg-1));
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    html {
-      -webkit-text-size-adjust: 100%;
-      text-size-adjust: 100%;
-      color-scheme: dark;
-      background-color: var(--bg-0);
-      background-image: var(--page-bg);
-      background-repeat: no-repeat;
-      background-size: 100% 100%;
-      min-height: 100%;
-      min-height: -webkit-fill-available;
-    }
-
     body {
-      margin: 0;
       font-family: var(--font-body);
+      background: radial-gradient(1100px 900px at 15% 10%, rgba(124, 92, 255, 0.18), transparent 60%),
+                  radial-gradient(900px 700px at 80% 20%, rgba(61, 255, 207, 0.12), transparent 55%),
+                  radial-gradient(900px 700px at 65% 88%, rgba(255, 79, 216, 0.10), transparent 55%),
+                  linear-gradient(180deg, var(--bg-0), var(--bg-1));
       color: var(--text-0);
-      background: transparent;
-      min-height: 100%;
       min-height: 100vh;
-      min-height: 100dvh;
-      min-height: -webkit-fill-available;
-      overflow-x: clip;
-      overscroll-behavior-x: none;
     }
 
     a { color: var(--accent); text-decoration: none; }
     a:hover { text-decoration: underline; }
 
     .page {
-      width: 100%;
       max-width: 1200px;
       margin: 0 auto;
-      min-width: 0;
-      padding-top: max(var(--page-pad), env(safe-area-inset-top, 0px));
-      padding-right: max(var(--page-pad), env(safe-area-inset-right, 0px));
-      padding-bottom: max(1.2rem, env(safe-area-inset-bottom, 0px));
-      padding-left: max(var(--page-pad), env(safe-area-inset-left, 0px));
+      padding: var(--page-pad) var(--page-pad) 1.2rem;
       display: grid;
       gap: calc(var(--gap) * 0.9);
     }
@@ -95,8 +70,6 @@
     .hero .meta {
       color: var(--text-1);
       font-size: clamp(0.8rem, 1.25vw, 0.98rem);
-      word-break: break-word;
-      overflow-wrap: anywhere;
     }
 
     .hero .roles {
@@ -125,14 +98,6 @@
       align-items: start;
     }
 
-    /* Summary + Education 同列堆叠，避免与 Skills 等高时在左侧出现大块空白 */
-    .column-stack {
-      display: flex;
-      flex-direction: column;
-      gap: var(--gap);
-      min-width: 0;
-    }
-
     .card {
       background: linear-gradient(180deg, var(--glass), var(--glass-2));
       border: 1px solid var(--line);
@@ -152,7 +117,6 @@
 
     .block-title {
       display: flex;
-      flex-wrap: wrap;
       align-items: center;
       gap: 0.5rem;
       margin-bottom: 0.5rem;
@@ -201,67 +165,11 @@
       color: var(--accent-2);
     }
 
-    /* Summary：整块字号比全局 section 列表大一号 */
-    .section-summary h2 {
-      font-size: clamp(1.05rem, 1.95vw, 1.4rem);
-    }
-
-    .section-summary .chip {
-      font-size: 0.74rem;
-    }
-
-    .section-summary ul {
-      font-size: clamp(0.88rem, 1.42vw, 1.02rem);
-    }
-
     .item-title {
       color: var(--text-0);
       font-weight: 600;
       font-size: clamp(0.9rem, 1.5vw, 1.02rem);
       margin-bottom: 0.35rem;
-    }
-
-    .project-headline {
-      margin: 0 0 0.4rem 0;
-      line-height: 1.45;
-    }
-
-    .project-headline .item-title {
-      display: inline;
-      margin-bottom: 0;
-      font-size: clamp(0.9rem, 1.5vw, 1.02rem);
-    }
-
-    .project-headline .link-pill {
-      display: inline-flex;
-      align-items: center;
-      vertical-align: middle;
-      margin-left: 0.5rem;
-      margin-top: 0;
-    }
-
-    .skills-groups {
-      display: flex;
-      flex-direction: column;
-      gap: 0.85rem;
-    }
-
-    h3.skill-subtitle {
-      margin: 0 0 0.4rem 0;
-      font-size: clamp(0.82rem, 1.25vw, 0.95rem);
-      font-weight: 700;
-      color: var(--accent);
-      letter-spacing: 0.04em;
-      font-family: var(--font-body);
-      line-height: 1.3;
-    }
-
-    .skill-tags {
-      margin-top: 0;
-    }
-
-    .skill-tags .tag {
-      font-size: clamp(0.78rem, 1.2vw, 0.92rem);
     }
 
     .metric {
@@ -275,19 +183,19 @@
       align-items: center;
       gap: 0.35rem;
       font-family: var(--font-mono);
-      font-size: clamp(0.88rem, 1.38vw, 1.02rem);
-      padding: 0.12rem 0.5rem;
+      font-size: 0.7rem;
+      padding: 0.08rem 0.45rem;
       border-radius: 999px;
       background: rgba(124, 92, 255, 0.12);
       border: 1px solid rgba(124, 92, 255, 0.4);
       color: var(--accent-2);
-      letter-spacing: 0.25px;
+      letter-spacing: 0.5px;
     }
 
     .link-pill {
       font-family: var(--font-mono);
-      font-size: clamp(0.82rem, 1.25vw, 0.95rem);
-      padding: 0.2rem 0.6rem;
+      font-size: 0.7rem;
+      padding: 0.18rem 0.55rem;
       border-radius: 999px;
       border: 1px solid rgba(61, 255, 207, 0.4);
       color: var(--accent);
@@ -363,31 +271,6 @@
       min-width: 0;
     }
 
-    .exp-first-line {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: baseline;
-      gap: 0.35rem 0.75rem;
-      margin-bottom: 0.35rem;
-    }
-
-    .exp-first-line .item-title {
-      margin-bottom: 0;
-    }
-
-    .exp-org {
-      display: inline-flex;
-      align-items: center;
-      flex-wrap: nowrap;
-      white-space: nowrap;
-      gap: 0;
-    }
-
-    .exp-org .exp-sep {
-      opacity: 0.7;
-      padding: 0 0.15rem;
-    }
-
     .meta-row {
       display: flex;
       flex-wrap: wrap;
@@ -407,8 +290,8 @@
 
     .tag {
       font-family: var(--font-mono);
-      font-size: clamp(0.78rem, 1.15vw, 0.92rem);
-      padding: 0.14rem 0.5rem;
+      font-size: 0.65rem;
+      padding: 0.12rem 0.5rem;
       border-radius: 999px;
       border: 1px solid rgba(255, 255, 255, 0.16);
       color: var(--text-0);
@@ -437,9 +320,9 @@
       max-width: 100%;
       white-space: normal;
       text-align: left;
-      line-height: 1.4;
-      font-size: clamp(0.86rem, 1.32vw, 0.98rem);
-      letter-spacing: 0.15px;
+      line-height: 1.35;
+      font-size: 0.65rem;
+      letter-spacing: 0.2px;
     }
 
     @media (max-width: 980px) {
@@ -458,28 +341,6 @@
       .timeline-date::before { left: -6px; right: auto; }
       .timeline-date::after { display: none; }
     }
-
-    @media (max-width: 480px) {
-      :root {
-        --page-pad: 0.75rem;
-        --card-pad: 0.7rem;
-        --gap: 0.65rem;
-      }
-      .card {
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-      }
-      .hero .roles { line-height: 1.45; }
-      .item-title { font-size: clamp(0.85rem, 3.8vw, 1rem); }
-      .project-headline .link-pill {
-        display: inline-flex;
-        align-items: center;
-        padding: 0.45rem 0.75rem;
-        min-height: 2.75rem;
-        line-height: 1.25;
-      }
-      a { touch-action: manipulation; }
-    }
   </style>
 </head>
 <body>
@@ -491,15 +352,25 @@
       <div class="roles">意向岗位：Agent 应用开发工程师；高级技术经理/技术负责人（Agent/研发效能方向）；意向城市：上海</div>
     </header>
     <div class="columns">
-      <div class="column-stack">
-      <section class="card section section-summary">
+      <section class="card section">
         <div class="block-title"><h2>Summary</h2><span class="chip">overview</span></div>
 <ul>
-<li>8 年研发经验，3 年技术管理经验，负责基础平台研发与公共 QA 团队（10+ 人规模），支撑多条业务线研发</li>
+<li>8 年研发经验，3 年技术管理经验，负责基础平台研发与公共 QA 团队（<span class="metric">10+</span> 人规模），支撑多条业务线研发</li>
 <li>长期负责公司内部平台建设，在 AI Agent、AI 基建、研发效能、稳定性体系建设方面有丰富落地经验</li>
 <li>带领团队完成多个 0 到 1 平台建设，通过明确平台生态位与产品边界，完成平台在全司规模化落地</li>
 <li>具备体系化管理与战略规划能力，熟练运用 战略地图、OKR、DMAIC 推动组织与技术持续改进</li>
 <li>长期高绩效，连续晋升，多次获得公司级奖项</li>
+</ul>
+      </section>
+      <section class="card section">
+        <div class="block-title"><h2>Skills</h2><span class="chip">stack</span></div>
+<ul>
+<li>Languages: Java, Golang, ...</li>
+<li>LLM: Agent, Workflow, Prompt, RAG, ReAct, Reflection, Harness Engineering; Dify, LangChain4j, Langfuse, OpenClaw; MCP, Skill</li>
+<li>AI Coding: Claude Code, Codex CLI, Cursor</li>
+<li>Java Frameworks: Spring, Spring Boot, MyBatis, Spring Cloud</li>
+<li>Infrastructure: MySQL, Redis, ZooKeeper, ES, Kafka, K8S, Docker</li>
+<li>Other: 分布式理论（CAP/BASE/AKF）、高并发高可用（CDN/LVS/Nginx）、RESTful API、JVM/JMM</li>
 </ul>
       </section>
       <section class="card section">
@@ -513,129 +384,36 @@
 <li>OCJP（Oracle Certified Java Programmer）</li>
 </ul>
       </section>
-      </div>
-      <section class="card section">
-        <div class="block-title"><h2>Skills</h2><span class="chip">stack</span></div>
-        <div class="skills-groups">
-          <div class="skill-block">
-            <h3 class="skill-subtitle">Languages</h3>
-            <div class="tag-list skill-tags">
-              <span class="tag">Java</span>
-              <span class="tag">Golang, ...</span>
-            </div>
-          </div>
-          <div class="skill-block">
-            <h3 class="skill-subtitle">LLM</h3>
-            <div class="tag-list skill-tags">
-              <span class="tag">Agent</span>
-              <span class="tag">Workflow</span>
-              <span class="tag">Prompt</span>
-              <span class="tag">RAG</span>
-              <span class="tag">ReAct</span>
-              <span class="tag">Reflection</span>
-              <span class="tag">Harness Engineering</span>
-              <span class="tag">Dify</span>
-              <span class="tag">LangChain4j</span>
-              <span class="tag">Langfuse</span>
-              <span class="tag">OpenClaw</span>
-              <span class="tag">MCP</span>
-              <span class="tag">Skill</span>
-            </div>
-          </div>
-          <div class="skill-block">
-            <h3 class="skill-subtitle">AI Coding</h3>
-            <div class="tag-list skill-tags">
-              <span class="tag">Claude Code</span>
-              <span class="tag">Codex CLI</span>
-              <span class="tag">Cursor</span>
-            </div>
-          </div>
-          <div class="skill-block">
-            <h3 class="skill-subtitle">Java Frameworks</h3>
-            <div class="tag-list skill-tags">
-              <span class="tag">Spring</span>
-              <span class="tag">Spring Boot</span>
-              <span class="tag">MyBatis</span>
-              <span class="tag">Spring Cloud</span>
-            </div>
-          </div>
-          <div class="skill-block">
-            <h3 class="skill-subtitle">Infrastructure</h3>
-            <div class="tag-list skill-tags">
-              <span class="tag">MySQL</span>
-              <span class="tag">Redis</span>
-              <span class="tag">ZooKeeper</span>
-              <span class="tag">ES</span>
-              <span class="tag">Kafka</span>
-              <span class="tag">Docker</span>
-              <span class="tag">Kubernetes</span>
-            </div>
-          </div>
-          <div class="skill-block">
-            <h3 class="skill-subtitle">Other</h3>
-            <div class="tag-list skill-tags">
-              <span class="tag">分布式理论（CAP/BASE/AKF）</span>
-              <span class="tag">高并发高可用（CDN/LVS/Nginx）</span>
-              <span class="tag">RESTful API</span>
-              <span class="tag">JVM/JMM</span>
-            </div>
-          </div>
-        </div>
-      </section>
       <section class="card section span-2">
         <div class="block-title"><h2>Experience</h2><span class="chip">impact</span></div>
 <div class="timeline">
-<div class="timeline-item">
-<div class="timeline-date">2024-01 — 至今</div>
-<div class="timeline-body">
-<div class="exp-first-line"><span class="item-title">技术总监 ｜ 基础平台开发、公共 QA 团队负责人</span><span class="exp-org"><span class="prefix">去哪儿旅行</span></span></div>
-<ul>
-<li>战略管理：每半年制定团队战略规划，25 年以稳定性为基础，AI 应用与 AI 基建为核心，推动团队与多业务线目标对齐，联合立项并跟进落地</li>
-<li>组织建设：负责基础平台研发与公共 QA 团队建设，主导岗位招聘与人才梯队建设，建立并改进组织协作机制</li>
-<li>技术架构：设计项目流程与技术规范，主导关键技术方案设计与评审，解决复杂系统演进与跨团队协作中的核心技术问题，沉淀为 skills 方便复用</li>
-<li>保稳定性：持续完善公司稳定性治理体系，制定系统分级、SLO、变更、容量、预案、演练、常态化治理标准，跟踪新增风险并沉淀到标准中，推动多部门落地</li>
-<li>技术布局：跟踪前沿技术发展趋势，推动 AI Agent 与研发效能相关基础设施的前置建设，为业务创新提供技术基础能力，为团队创新提供方向</li>
-<li>公司活动：参与公司级技术活动的评审与落地，包括 CR 大赛、Hackathon、AI 茶话会、AI 大咖说、应届生培训课程及 ITCP 联盟大会等</li>
-</ul>
-</div></div>
-<div class="timeline-item">
-<div class="timeline-date">2021-08 — 2023-12</div>
-<div class="timeline-body">
-<div class="exp-first-line"><span class="item-title">资深研发工程师 ｜ 基础平台团队核心开发</span><span class="exp-org"><span class="prefix">去哪儿旅行</span></span></div>
-<ul>
-<li>战略项目落地：承接部门重点技术战略，推动跨团队联合立项与资源协调，负责核心技术调研、架构设计及关键模块开发，保障战略项目按期落地</li>
-<li>稳定性保障：负责核心平台系统的版本迭代与日常稳定性保障，持续优化监控、告警、预案，定期压测与演练，提升平台可用性</li>
-<li>技术沉淀与对外输出：总结团队技术实践与工程经验，在业界技术大会进行分享，提升公司在基础架构与工程效率领域的技术影响力</li>
-</ul>
-</div></div>
-<div class="timeline-item">
-<div class="timeline-date">2017-12 — 2021-08</div>
-<div class="timeline-body">
-<div class="exp-first-line"><span class="item-title">研发工程师 | 云计算团队核心开发</span><span class="exp-org"><span class="prefix">北京宝兰德软件股份有限公司</span></span></div>
-</div></div>
 </div>
       </section>
       <section class="card section span-2">
         <div class="block-title"><h2>Projects</h2><span class="chip">selected</span></div>
 <div class="project-card">
-<div class="project-headline"><span class="item-title">企业级智能体平台（QMoss V3.0 + Dify V3.0） | 项目负责人 | 2024.02~2025.11</span> <a class="link-pill" href="代表作/企业级智能体平台.html">项目链接</a></div>
-<ul><li><span class="prefix">目标</span> 搭建智能体平台，形成至少 3 个代表落地场景，年化提效 <span class="metric">1000 PD</span></li><li><span class="prefix">结果</span> <ul><li><span class="prefix">提效</span> 25 年新增流程数 <span class="metric">3500+</span>，提升 AI 应用搭建效率 <span class="metric">6000+</span>PD。以平台作为核心基建，其上搭建了多个高价值项目，总计全年节约 PD 超 <span class="metric">4.4W</span></li><li><span class="prefix">覆盖</span> 平台在公司各个部门大面积落地，包括 <span class="metric">30+</span> 非技术部门，是公司历史上覆盖部门数最多的内部平台</li><li><span class="prefix">稳定性</span> QMoss 全年系统可用性 <span class="metric">100%</span>，0 中断 0 故障；Dify 全年可用性 <span class="metric">99.98%</span></li><li><span class="prefix">创新</span> 自研+开源 双平台协同体系。自研 QMoss 平台聚焦高稳定性，提供与内部系统深度集成场景。Dify 负责提供前沿能力和社区插件生态；</li><li><span class="prefix">先进性</span> 探索并规模化落地了 “智能体平台 + 多维表格” 的新型研发模式，使 AI 应用的搭建和迭代周期，从天降低到分钟级，门槛降低到任何角色均可完成，已成为最佳实践。这套模式的落地广度和深度处于业界领先</li></ul></li><li class="project-keywords"><span class="prefix">关键词</span><span class="tag-list"><span class="tag">金项奖最佳</span><span class="tag">公司级战略项目</span><span class="tag">Dify</span><span class="tag">智能体平台</span><span class="tag">运营提效</span><span class="tag">高可用</span><span class="tag">稳定性</span><span class="tag">Java</span><span class="tag">Python</span><span class="tag">Workflow</span><span class="tag">Agent</span><span class="tag">Prompt</span><span class="tag">知识库</span><span class="tag">MCP 网关</span><span class="tag">Langfuse</span><span class="tag">Code Interpreter</span><span class="tag">版本控制</span><span class="tag">分布式架构</span><span class="tag">企业级能力</span><span class="tag">平台运营</span></span></li></ul>
+<div class="item-title">企业级智能体平台（QMoss V3.0 + Dify V3.0） | 项目负责人 | 2024.02~2025.11</div>
+<a class="link-pill" href="代表作/企业级智能体平台.html">项目链接</a>
+<ul><li><span class="prefix">目标</span> 搭建智能体平台，形成至少 3 个代表落地场景，年化提效 <span class="metric">1000 PD</span></li><li><span class="prefix">结果</span> <ul><li><span class="prefix">提效</span> 25 年新增流程数 <span class="metric">3500+</span>，提升 AI 应用搭建效率 <span class="metric">6000+</span>PD。以平台作为核心基建，其上搭建了多个高价值项目，总计全年节约 PD 超 <span class="metric">4.4W</span></li><li><span class="prefix">覆盖</span> 平台在公司各个部门大面积落地，包括 <span class="metric">30+</span> 非技术部门，是公司历史上覆盖部门数最多的内部平台</li><li><span class="prefix">稳定性</span> QMoss 全年系统可用性 <span class="metric">100%</span>，0 中断 0 故障；Dify 全年可用性 <span class="metric">99.98%</span></li><li><span class="prefix">创新</span> 自研+开源 双平台协同体系。自研 QMoss 平台聚焦高稳定性，提供与内部系统深度集成场景。Dify 负责提供前沿能力和社区插件生态；</li><li><span class="prefix">先进性</span> 探索并规模化落地了 “智能体平台 + 多维表格” 的新型研发模式，使 AI 应用的搭建和迭代周期，从天降低到分钟级，门槛降低到任何角色均可完成，已成为最佳实践。这套模式的落地广度和深度处于业界领先</li></ul></li><li class="project-keywords"><span class="prefix">关键词</span><span class="tag-list"><span class="tag accent">金项奖最佳</span><span class="tag">公司级战略项目</span><span class="tag">Dify</span><span class="tag">智能体平台</span><span class="tag">运营提效</span><span class="tag">高可用</span><span class="tag">稳定性</span><span class="tag">Java</span><span class="tag">Python</span><span class="tag">Workflow</span><span class="tag">Agent</span><span class="tag">Prompt</span><span class="tag">知识库</span><span class="tag">MCP 网关</span><span class="tag">Langfuse</span><span class="tag">Code Interpreter</span><span class="tag">版本控制</span><span class="tag">分布式架构</span><span class="tag">企业级能力</span><span class="tag">平台运营</span></span></li></ul>
 </div>
 <div class="project-card">
-<div class="project-headline"><span class="item-title">九章 AI V2.0（自然语言取数） | 项目负责人 | 2025.03~至今</span> <a class="link-pill" href="代表作/SQL-Agent.html">项目链接</a></div>
-<ul><li><span class="prefix">目标</span> 打造自然语言取数 Agent，提升取数效率 <span class="metric">50%</span></li><li><span class="prefix">结果</span> <ul><li><span class="prefix">提效</span> 开发自然语言取数 Agent，取数周期缩短 <span class="metric">98.4%</span>，从平均 <span class="metric">1.9 PD</span> 降低到 <span class="metric">15 min</span>。取数流程由原来的 7 步降低到 1 步</li><li><span class="prefix">吞吐</span> 取数需求交付量增长 <span class="metric">70%</span>，<span class="metric">99.2%</span> 取数类需求由九章承接</li><li><span class="prefix">安全</span> 之前数据的权限控制粒度为人、表，九章 AI 新增了 行、列控制，满足了数据安全诉求</li><li><span class="prefix">效果</span> 取数准确率从 <span class="metric">52%</span> 持续优化，提升到周均稳定 <span class="metric">92%</span>。设计了自学习能力，在无研发介入情况下，会越用越准确</li><li><span class="prefix">创新</span> 公司最早、最深地集成飞书的 AI Agent，整合了 飞书消息卡片、多维表格、菜单、话题、流式消息 等多个能力，使取数工作，从需要登录内网的电脑办公模式，变成手机上随时可取的日常操作。飞书作为入口，成为后续内部 Agent 的标配。26 年现象级产品 OpenClaw 核心能力之一 channel 再次印证了价值</li></ul></li><li class="project-keywords"><span class="prefix">关键词</span><span class="tag-list"><span class="tag">NL2SQL</span><span class="tag">智能问数</span><span class="tag">Data Agent</span><span class="tag">Agent 调优</span><span class="tag">Agent Chain 架构</span><span class="tag">RAG</span><span class="tag">Human-in-the-Loop Learning</span><span class="tag">数据安全</span><span class="tag">飞书机器人</span></span></li></ul>
+<div class="item-title">九章 AI V2.0（自然语言取数） | 项目负责人 | 2025.03~至今</div>
+<a class="link-pill" href="代表作/SQL-Agent.html">项目链接</a>
+<ul><li><span class="prefix">目标</span> 打造自然语言取数 Agent，提升取数效率 <span class="metric">50%</span></li><li><span class="prefix">结果</span> <ul><li><span class="prefix">提效</span> 开发自然语言取数 Agent，取数周期缩短 <span class="metric">98.4%</span>，从平均 1.<span class="metric">9 PD</span> 降低到 <span class="metric">15 min</span>。取数流程由原来的 7 步降低到 <span class="metric">1 步</span></li><li><span class="prefix">吞吐</span> 取数需求交付量增长 <span class="metric">70%</span>，<span class="metric">99.2%</span> 取数类需求由九章承接</li><li><span class="prefix">安全</span> 之前数据的权限控制粒度为人、表，九章 AI 新增了 行、列控制，满足了数据安全诉求</li><li><span class="prefix">效果</span> 取数准确率从 <span class="metric">52%</span> 持续优化，提升到周均稳定 <span class="metric">92%</span>。设计了自学习能力，在无研发介入情况下，会越用越准确</li><li><span class="prefix">创新</span> 公司最早、最深地集成飞书的 AI Agent，整合了 飞书消息卡片、多维表格、菜单、话题、流式消息 等多个能力，使取数工作，从需要登录内网的电脑办公模式，变成手机上随时可取的日常操作。飞书作为入口，成为后续内部 Agent 的标配。26 年现象级产品 OpenClaw 核心能力之一 channel 再次印证了价值</li></ul></li><li class="project-keywords"><span class="prefix">关键词</span><span class="tag-list"><span class="tag accent">NL2SQL</span><span class="tag">智能问数</span><span class="tag">Data Agent</span><span class="tag">Agent 调优</span><span class="tag">Agent Chain 架构</span><span class="tag">RAG</span><span class="tag">Human-in-the-Loop Learning</span><span class="tag">数据安全</span><span class="tag">飞书机器人</span></span></li></ul>
 </div>
 <div class="project-card">
-<div class="project-headline"><span class="item-title">公司系统瘦身项目 V3.0（ACED） | 技术负责人｜2022.05–2022.12</span> <a class="link-pill" href="代表作/公司系统瘦身项目.html">项目链接</a></div>
-<ul><li><span class="prefix">目标</span> 全司总代码量精简 <span class="metric">50%</span>，项目导致故障数 <span class="metric">1 个</span></li><li><span class="prefix">结果</span> <ul><li><span class="prefix">提效</span> 全司总代码量 -<span class="metric">50.21%</span>（减少 <span class="metric">2500W+</span>），服务数 -<span class="metric">26%</span>，发布效率 +<span class="metric">9.5%</span>，需求平均耗时 -<span class="metric">10.9%</span>，因项目产生故障数 0。</li><li><span class="prefix">创新</span> 业界首创 0 风险、0 性能损耗的函数级代码精简体系，在多个行业大会分享，多家公司参考落地</li></ul></li><li class="project-keywords"><span class="prefix">关键词</span><span class="tag-list"><span class="tag">行业级创新</span><span class="tag">金项奖第一名</span><span class="tag">跨全司技术 BU 项目</span><span class="tag">Java</span><span class="tag">SA</span><span class="tag">IDEA 插件</span><span class="tag">Spoon</span></span></li></ul>
+<div class="item-title">公司系统瘦身项目 V3.0（ACED） | 技术负责人｜2022.05–2022.12</div>
+<a class="link-pill" href="代表作/公司系统瘦身项目.html">项目链接</a>
+<ul><li><span class="prefix">目标</span> 全司总代码量精简 <span class="metric">50%</span>，项目导致故障数 <span class="metric">1 个</span></li><li><span class="prefix">结果</span> <ul><li><span class="prefix">提效</span> 全司总代码量 -<span class="metric">50.21%</span>（减少 <span class="metric">2500W+</span>），服务数 -<span class="metric">26%</span>，发布效率 +<span class="metric">9.5%</span>，需求平均耗时 -<span class="metric">10.9%</span>，因项目产生故障数 0。</li><li><span class="prefix">创新</span> 业界首创 0 风险、0 性能损耗的函数级代码精简体系，在多个行业大会分享，多家公司参考落地</li></ul></li><li class="project-keywords"><span class="prefix">关键词</span><span class="tag-list"><span class="tag accent">行业级创新</span><span class="tag">金项奖第一名</span><span class="tag">跨全司技术 BU 项目</span><span class="tag">Java</span><span class="tag">SA</span><span class="tag">IDEA 插件</span><span class="tag">Spoon</span></span></li></ul>
 </div>
 <div class="project-card">
-<div class="project-headline"><span class="item-title">组件市场 | 技术负责人 | 2023.02~2023.12</span></div>
-<ul><li><span class="prefix">目标</span> 打造组件市场，并在至少 3 个业务场景实际落地。成功孵化至少 5 个成熟组件；组件覆盖率，4级团队维度达 <span class="metric">80%</span></li><li><span class="prefix">结果</span> 项目期间孵化 7 个成熟的公司级可复用组件，包括 分布式锁、动态可观测线程池、压缩套件、日志管理组件、分布式限流、序列化组件。<ul><li>开发的分布式锁组件，将公司各种分布式锁实现完成统一，覆盖 <span class="metric">100%</span> 技术团队、<span class="metric">100+</span> AppCode，至今相关故障 <span class="metric">0 个</span></li><li>开发的压缩套件支撑了酒店业务 Redis 内存治理，数据大小平均减少 <span class="metric">65%</span>；带宽平均下降 <span class="metric">66%</span></li><li>动态可观测线程池组件，具备参数热配、完善的可观测性及配套报警能力，覆盖 <span class="metric">100+</span> AppCode，已成为全司默认使用的线程池</li></ul></li><li class="project-keywords"><span class="prefix">关键词</span><span class="tag-list"><span class="tag">分布式锁</span><span class="tag">可观测线程池</span><span class="tag">压缩</span><span class="tag">Java</span><span class="tag">IDEA 插件</span><span class="tag">组件开发</span></span></li></ul>
+<div class="item-title">组件市场 | 技术负责人 | 2023.02~2023.12</div>
+<ul><li><span class="prefix">目标</span> 打造组件市场，并在至少 3 个业务场景实际落地。成功孵化至少 5 个成熟组件；组件覆盖率，4级团队维度达 <span class="metric">80%</span></li><li><span class="prefix">结果</span> 项目期间孵化 7 个成熟的公司级可复用组件，包括 分布式锁、动态可观测线程池、压缩套件、日志管理组件、分布式限流、序列化组件。<ul><li>开发的分布式锁组件，将公司各种分布式锁实现完成统一，覆盖 <span class="metric">100%</span> 技术团队、<span class="metric">100+</span> AppCode，至今相关故障 <span class="metric">0 个</span></li><li>开发的压缩套件支撑了酒店业务 Redis 内存治理，数据大小平均减少 <span class="metric">65%</span>；带宽平均下降 <span class="metric">66%</span></li><li>动态可观测线程池组件，具备参数热配、完善的可观测性及配套报警能力，覆盖 <span class="metric">100+</span> AppCode，已成为全司默认使用的线程池</li></ul></li><li class="project-keywords"><span class="prefix">关键词</span><span class="tag-list"><span class="tag accent">分布式锁</span><span class="tag">可观测线程池</span><span class="tag">压缩</span><span class="tag">Java</span><span class="tag">IDEA 插件</span><span class="tag">组件开发</span></span></li></ul>
 </div>
 <div class="project-card">
-<div class="project-headline"><span class="item-title">测试环境管理平台 Noah V3.0 | 多个模块负责人 | 2021.08~2022.06</span> <a class="link-pill" href="代表作/测试环境管理平台.html">项目链接</a></div>
-<ul><li><span class="prefix">目标</span> 为了提升环境构建稳定性和成功率，重构 Noah 核心编排系统，落地自愈体系</li><li><span class="prefix">结果</span> <ul><li>环境构建成功率绝对提升 <span class="metric">35.2%</span>（均值 <span class="metric">87.8%</span>），构建平均时长降低 <span class="metric">37%</span>；Noah 问题占比下降 <span class="metric">60%</span>（降低到 <span class="metric">2.94%</span>），环境导致的需求 Delay 率下降 <span class="metric">90%</span>（降低到 <span class="metric">0.06%</span>）；</li></ul></li><li class="project-keywords"><span class="prefix">关键词</span><span class="tag-list"><span class="tag">工作流编排调度</span><span class="tag">核心模块重构</span><span class="tag">稳定性提升</span><span class="tag">Java</span><span class="tag">Salt</span><span class="tag">测试环境管理</span></span></li></ul>
+<div class="item-title">测试环境管理平台 Noah V3.0 | 多个模块负责人 | 2021.08~2022.06</div>
+<a class="link-pill" href="代表作/测试环境管理平台.html">项目链接</a>
+<ul><li><span class="prefix">目标</span> 为了提升环境构建稳定性和成功率，重构 Noah 核心编排系统，落地自愈体系</li><li><span class="prefix">结果</span> 环境构建成功率绝对提升 <span class="metric">35.2%</span>（均值 <span class="metric">87.8%</span>），构建平均时长降低 <span class="metric">37%</span>；Noah 问题占比下降 <span class="metric">60%</span>（降低到 <span class="metric">2.94%</span>），环境导致的需求 Delay 率下降 <span class="metric">90%</span>（降低到 <span class="metric">0.06%</span>）；</li><li class="project-keywords"><span class="prefix">关键词</span><span class="tag-list"><span class="tag accent">工作流编排调度</span><span class="tag">核心模块重构</span><span class="tag">稳定性提升</span><span class="tag">Java</span><span class="tag">Salt</span><span class="tag">测试环境管理</span></span></li></ul>
 </div>
       </section>
       <section class="card section span-2">
@@ -646,7 +424,7 @@
 <li><span class="prefix awards-prefix">乐于培养他人</span> 带团队期间，个人晋升成功率 <span class="metric">87.5%</span>，远超平均水平（全司均值 &lt; <span class="metric">50%</span>）</li>
 <li><span class="prefix awards-prefix">有建团队、稳定性提升经验</span> 25 年初组建基础架构 QA 团队，负责基础架构稳定、大客户端框架质量保证与发版。基础架构 BU 全年故障数 <span class="metric">0 个</span>，在全司 <span class="metric">10+</span> 三级 BU 中排名第 1，相比 24 年故障数减少 <span class="metric">9 个</span></li>
 <li><span class="prefix awards-prefix">长期高绩效</span> <span class="metric">3 次</span> A（<span class="metric">Top 10%</span>）、<span class="metric">4 次</span> B（<span class="metric">Top 30%</span>）；最近一次 2025H2 为 A</li>
-<li><span class="prefix awards-prefix">连续晋升</span> 4 年 3 次高职级个人晋升，成功率 <span class="metric">100%</span>（全司均值 &lt; <span class="metric">50%</span>）</li>
+<li><span class="prefix awards-prefix">连续晋升</span> <span class="metric">4 年</span> 3 次高职级个人晋升，成功率 <span class="metric">100%</span>（全司均值 &lt; <span class="metric">50%</span>）</li>
 <li><span class="prefix awards-prefix">多次获奖</span> 23 年带队包揽 CR 大赛冠军和 AI Hackathon 大赛第 <span class="metric">1 名</span>；23 年技术品牌突出贡献奖；4 年公司内训师；飞书效率先锋；公司飞书社群 KOL；大四校一等奖学金；大三校二等奖学金</li>
 </ul>
       </section>
