@@ -241,6 +241,113 @@
       margin-top: clamp(0.52rem, 1.2vw, 0.82rem);
     }
 
+    .hero-profile-sheet {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(0.52rem, 1.2vw, 0.82rem);
+      min-width: 0;
+    }
+
+    .hero-profile-sheet .hero-facts + .hero-facts {
+      margin-top: 0;
+    }
+
+    .hero-facts--profile-meta {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    .hero-facts--profile-meta--4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .hero-facts--profile-intent {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    .hero-facts--profile-intent--4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .hero-facts--profile-intent > .hero-facts-intent-wrap {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: subgrid;
+      grid-template-rows: auto;
+      min-width: 0;
+    }
+
+    .hero-facts--profile-intent .hero-facts-intent-pair {
+      display: contents;
+    }
+
+    .hero-fact--intent-roles {
+      grid-column: span 4;
+      min-width: 0;
+    }
+
+    .hero-fact--intent-city {
+      grid-column: span 1;
+      min-width: 0;
+    }
+
+    .hero-facts--profile-intent--4 .hero-fact--intent-roles {
+      grid-column: span 3;
+    }
+
+    .hero-facts--profile-intent > li.hero-fact.hero-fact-wide {
+      grid-column: 1 / -1;
+    }
+
+    @supports not (grid-template-columns: subgrid) {
+      .hero-facts--profile-intent > .hero-facts-intent-wrap {
+        display: block;
+      }
+
+      .hero-facts--profile-intent .hero-facts-intent-pair {
+        display: grid;
+        grid-template-columns: 4fr 1fr;
+        gap: 0.42rem;
+        align-items: stretch;
+      }
+
+      .hero-facts--profile-intent--4 .hero-facts-intent-pair {
+        grid-template-columns: 3fr 1fr;
+      }
+
+      .hero-fact--intent-roles,
+      .hero-fact--intent-city {
+        grid-column: auto;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero-facts--profile-meta,
+      .hero-facts--profile-meta--4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .hero-facts--profile-intent,
+      .hero-facts--profile-intent--4 {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-facts--profile-intent > .hero-facts-intent-wrap {
+        display: block;
+        grid-column: 1 / -1;
+      }
+
+      .hero-facts--profile-intent .hero-facts-intent-pair {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.42rem;
+      }
+
+      .hero-fact--intent-roles,
+      .hero-fact--intent-city {
+        grid-column: auto;
+      }
+    }
+
     .hero-fact {
       display: flex;
       flex-direction: column;
@@ -290,9 +397,8 @@
       }
     }
 
-    /* 意向岗位左、意向城市右：两张独立卡片同行 */
+    /* 意向岗位 / 意向城市：与首行 5（或 4）列 grid 对齐，见 .hero-facts--profile-intent */
     .hero-facts-intent-wrap {
-      grid-column: 1 / -1;
       padding: 0;
       margin: 0;
       background: transparent;
@@ -303,19 +409,6 @@
     .hero-facts-intent-wrap:hover {
       border-color: transparent;
       background: transparent;
-    }
-
-    .hero-facts-intent-pair {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(9.25rem, 13.5rem);
-      gap: clamp(0.5rem, 1.15vw, 0.72rem);
-      align-items: stretch;
-    }
-
-    @media (max-width: 560px) {
-      .hero-facts-intent-pair {
-        grid-template-columns: 1fr;
-      }
     }
 
     /* 五号 ≈ 10.5pt，标签与正文同档字号 */
@@ -786,7 +879,8 @@
           <div class="hero-intro">
             <h1>马阳阳</h1>
           </div>
-          <ul class="hero-facts" aria-label="联系方式与基本信息">
+          <div class="hero-profile-sheet">
+          <ul class="hero-facts hero-facts--profile-meta hero-facts--profile-meta--5" aria-label="联系方式与基本信息">
             <li class="hero-fact">
               <span class="hero-fact-label">年龄</span>
               <span class="hero-fact-value">29 岁</span>
@@ -808,10 +902,10 @@
               <span class="hero-fact-value"><a href="https://livelyryan.github.io/i/" rel="noopener noreferrer">livelyryan.github.io/i/</a></span>
             </li>
           </ul>
-          <ul class="hero-facts" aria-label="求职意向">
+          <ul class="hero-facts hero-facts--profile-intent" aria-label="求职意向">
             <li class="hero-facts-intent-wrap">
               <div class="hero-facts-intent-pair">
-                <div class="hero-fact">
+                <div class="hero-fact hero-fact--intent-roles">
                   <span class="hero-fact-label">意向岗位</span>
                   <span class="hero-fact-value hero-fact-value--pills">
                     <span class="hero-intent-pills">
@@ -820,7 +914,7 @@
                     </span>
                   </span>
                 </div>
-                <div class="hero-fact">
+                <div class="hero-fact hero-fact--intent-city">
                   <span class="hero-fact-label">意向城市</span>
                   <span class="hero-fact-value hero-fact-value--pills">
                     <span class="hero-intent-pills">
@@ -831,6 +925,7 @@
               </div>
             </li>
           </ul>
+          </div>
         </div>
         <figure class="hero-photo-slot" aria-label="个人照片">
           <img class="hero-photo-img" src="resume-profile.jpg" alt="马阳阳" width="560" height="747" decoding="async" />

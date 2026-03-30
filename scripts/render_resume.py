@@ -166,6 +166,14 @@ def render_profile_hero(p: Profile, photo_rel: str = DEFAULT_PHOTO_RELPATH) -> s
     ]
     roles_pills = "\n                  ".join(pill_lines)
     roles_pills_nested = "\n                      ".join(pill_lines)
+    meta_ul_cls = (
+        "hero-facts hero-facts--profile-meta hero-facts--profile-meta--5"
+        if p.website_url
+        else "hero-facts hero-facts--profile-meta hero-facts--profile-meta--4"
+    )
+    intent_ul_cls = "hero-facts hero-facts--profile-intent"
+    if not p.website_url:
+        intent_ul_cls += " hero-facts--profile-intent--4"
     lines = [
         '    <header class="hero">',
         '      <div class="hero-content">',
@@ -176,7 +184,8 @@ def render_profile_hero(p: Profile, photo_rel: str = DEFAULT_PHOTO_RELPATH) -> s
         '          <div class="hero-intro">',
         f"            <h1>{esc(p.name)}</h1>",
         "          </div>",
-        '          <ul class="hero-facts" aria-label="联系方式与基本信息">',
+        '          <div class="hero-profile-sheet">',
+        f'          <ul class="{meta_ul_cls}" aria-label="联系方式与基本信息">',
         '            <li class="hero-fact">',
         '              <span class="hero-fact-label">年龄</span>',
         f'              <span class="hero-fact-value">{esc(p.age)}</span>',
@@ -205,13 +214,13 @@ def render_profile_hero(p: Profile, photo_rel: str = DEFAULT_PHOTO_RELPATH) -> s
         ]
     lines += [
         "          </ul>",
-        '          <ul class="hero-facts" aria-label="求职意向">',
+        f'          <ul class="{intent_ul_cls}" aria-label="求职意向">',
     ]
     if p.intent_city:
         lines += [
             '            <li class="hero-facts-intent-wrap">',
             '              <div class="hero-facts-intent-pair">',
-            '                <div class="hero-fact">',
+            '                <div class="hero-fact hero-fact--intent-roles">',
             '                  <span class="hero-fact-label">意向岗位</span>',
             '                  <span class="hero-fact-value hero-fact-value--pills">',
             '                    <span class="hero-intent-pills">',
@@ -219,7 +228,7 @@ def render_profile_hero(p: Profile, photo_rel: str = DEFAULT_PHOTO_RELPATH) -> s
             "                    </span>",
             "                  </span>",
             "                </div>",
-            '                <div class="hero-fact">',
+            '                <div class="hero-fact hero-fact--intent-city">',
             '                  <span class="hero-fact-label">意向城市</span>',
             '                  <span class="hero-fact-value hero-fact-value--pills">',
             '                    <span class="hero-intent-pills">',
@@ -244,6 +253,7 @@ def render_profile_hero(p: Profile, photo_rel: str = DEFAULT_PHOTO_RELPATH) -> s
         ]
     lines += [
         "          </ul>",
+        "          </div>",
         "        </div>",
         '        <figure class="hero-photo-slot" aria-label="个人照片">',
         f'          <img class="hero-photo-img" src="{esc(photo_rel)}" alt="{esc(p.name)}" '

@@ -233,6 +233,113 @@
       margin-top: clamp(0.52rem, 1.2vw, 0.82rem);
     }
 
+    .hero-profile-sheet {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(0.52rem, 1.2vw, 0.82rem);
+      min-width: 0;
+    }
+
+    .hero-profile-sheet .hero-facts + .hero-facts {
+      margin-top: 0;
+    }
+
+    .hero-facts--profile-meta {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    .hero-facts--profile-meta--4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .hero-facts--profile-intent {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    .hero-facts--profile-intent--4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .hero-facts--profile-intent > .hero-facts-intent-wrap {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: subgrid;
+      grid-template-rows: auto;
+      min-width: 0;
+    }
+
+    .hero-facts--profile-intent .hero-facts-intent-pair {
+      display: contents;
+    }
+
+    .hero-fact--intent-roles {
+      grid-column: span 4;
+      min-width: 0;
+    }
+
+    .hero-fact--intent-city {
+      grid-column: span 1;
+      min-width: 0;
+    }
+
+    .hero-facts--profile-intent--4 .hero-fact--intent-roles {
+      grid-column: span 3;
+    }
+
+    .hero-facts--profile-intent > li.hero-fact.hero-fact-wide {
+      grid-column: 1 / -1;
+    }
+
+    @supports not (grid-template-columns: subgrid) {
+      .hero-facts--profile-intent > .hero-facts-intent-wrap {
+        display: block;
+      }
+
+      .hero-facts--profile-intent .hero-facts-intent-pair {
+        display: grid;
+        grid-template-columns: 4fr 1fr;
+        gap: 0.42rem;
+        align-items: stretch;
+      }
+
+      .hero-facts--profile-intent--4 .hero-facts-intent-pair {
+        grid-template-columns: 3fr 1fr;
+      }
+
+      .hero-fact--intent-roles,
+      .hero-fact--intent-city {
+        grid-column: auto;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero-facts--profile-meta,
+      .hero-facts--profile-meta--4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .hero-facts--profile-intent,
+      .hero-facts--profile-intent--4 {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-facts--profile-intent > .hero-facts-intent-wrap {
+        display: block;
+        grid-column: 1 / -1;
+      }
+
+      .hero-facts--profile-intent .hero-facts-intent-pair {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.42rem;
+      }
+
+      .hero-fact--intent-roles,
+      .hero-fact--intent-city {
+        grid-column: auto;
+      }
+    }
+
     .hero-fact {
       display: flex;
       flex-direction: column;
@@ -282,9 +389,8 @@
       }
     }
 
-    /* 意向岗位左、意向城市右：两张独立卡片同行 */
+    /* 意向岗位 / 意向城市：与首行 5（或 4）列 grid 对齐 */
     .hero-facts-intent-wrap {
-      grid-column: 1 / -1;
       padding: 0;
       margin: 0;
       background: transparent;
@@ -295,19 +401,6 @@
     .hero-facts-intent-wrap:hover {
       border-color: transparent;
       background: transparent;
-    }
-
-    .hero-facts-intent-pair {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(9.25rem, 13.5rem);
-      gap: clamp(0.5rem, 1.15vw, 0.72rem);
-      align-items: stretch;
-    }
-
-    @media (max-width: 560px) {
-      .hero-facts-intent-pair {
-        grid-template-columns: 1fr;
-      }
     }
 
     /* 五号 ≈ 10.5pt，标签与正文同档字号 */
