@@ -262,25 +262,32 @@
       grid-column: 1 / -1;
     }
 
-    .hero-fact-combo-inner {
+    /* 同一行两个独立卡片：外层占满行，内层双列网格 */
+    .hero-facts-dual-wrap {
+      grid-column: 1 / -1;
+      padding: 0;
+      margin: 0;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+    }
+
+    .hero-facts-dual-wrap:hover {
+      border-color: transparent;
+      background: transparent;
+    }
+
+    .hero-facts-dual {
       display: grid;
-      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
-      gap: 0.65rem 1rem;
-      align-items: start;
-      width: 100%;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.5rem;
+      align-items: stretch;
     }
 
     @media (max-width: 560px) {
-      .hero-fact-combo-inner {
+      .hero-facts-dual {
         grid-template-columns: 1fr;
       }
-    }
-
-    .hero-fact-combo-cell {
-      display: flex;
-      flex-direction: column;
-      gap: 0.35rem;
-      min-width: 0;
     }
 
     /* 五号 ≈ 10.5pt，标签与正文同档字号 */
@@ -742,13 +749,13 @@
               <span class="hero-fact-label">邮箱</span>
               <span class="hero-fact-value"><a href="mailto:1135038815@qq.com">1135038815@qq.com</a></span>
             </li>
-            <li class="hero-fact hero-fact-wide hero-fact-combo">
-              <div class="hero-fact-combo-inner">
-                <div class="hero-fact-combo-cell">
+            <li class="hero-facts-dual-wrap" aria-label="网站与意向城市">
+              <div class="hero-facts-dual">
+                <div class="hero-fact">
                   <span class="hero-fact-label">网站</span>
                   <span class="hero-fact-value"><a href="https://livelyryan.github.io/i/" rel="noopener noreferrer">livelyryan.github.io/i/</a></span>
                 </div>
-                <div class="hero-fact-combo-cell">
+                <div class="hero-fact">
                   <span class="hero-fact-label">意向城市</span>
                   <span class="hero-fact-value hero-fact-value--pills">
                     <span class="hero-intent-pills">
