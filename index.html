@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Resume</title>
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&f[]=jet-brains-mono@400,600&display=swap" />
+  <style>
+    :root {
+      --bg-0: #070911;
+      --bg-1: #0b1020;
+      --glass: rgba(255, 255, 255, 0.06);
+      --glass-2: rgba(255, 255, 255, 0.03);
+      --line: rgba(255, 255, 255, 0.12);
+      --text-0: rgba(255, 255, 255, 0.92);
+      --text-1: rgba(255, 255, 255, 0.70);
+      --accent: #3dffcf;
+      --accent-2: #7c5cff;
+      --accent-3: #ff4fd8;
+
+      --font-body: "Satoshi", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+
+      --page-pad: clamp(0.9rem, 2.4vw, 2.2rem);
+      --card-pad: clamp(0.8rem, 1.9vw, 1.4rem);
+      --gap: clamp(0.7rem, 1.6vw, 1.1rem);
+      --radius: 16px;
+      --page-bg:
+        radial-gradient(1100px 900px at 15% 10%, rgba(124, 92, 255, 0.18), transparent 60%),
+        radial-gradient(900px 700px at 80% 20%, rgba(61, 255, 207, 0.12), transparent 55%),
+        radial-gradient(900px 700px at 65% 88%, rgba(255, 79, 216, 0.10), transparent 55%),
+        linear-gradient(180deg, var(--bg-0), var(--bg-1));
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+      color-scheme: dark;
+      background-color: var(--bg-0);
+      background-image: var(--page-bg);
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+      min-height: 100%;
+      min-height: -webkit-fill-available;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      color: var(--text-0);
+      background: transparent;
+      min-height: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+      min-height: -webkit-fill-available;
+      overflow-x: clip;
+      overscroll-behavior-x: none;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .page {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      min-width: 0;
+      padding-top: max(var(--page-pad), env(safe-area-inset-top, 0px));
+      padding-right: max(var(--page-pad), env(safe-area-inset-right, 0px));
+      padding-bottom: max(1.2rem, env(safe-area-inset-bottom, 0px));
+      padding-left: max(var(--page-pad), env(safe-area-inset-left, 0px));
+      display: grid;
+      gap: calc(var(--gap) * 0.9);
+    }
+
+    .hero {
+      --hero-pad-y: clamp(1.15rem, 2.6vw, 1.75rem);
+      --hero-pad-x: clamp(1rem, 2.2vw, 1.6rem);
+      display: block;
+      background:
+        linear-gradient(135deg, rgba(61, 255, 207, 0.07) 0%, transparent 42%),
+        linear-gradient(180deg, var(--glass), var(--glass-2));
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) + 4px);
+      padding: var(--hero-pad-y) var(--hero-pad-x);
+      box-shadow:
+        0 34px 120px rgba(0, 0, 0, 0.48),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: clamp(1rem, 2.2vw, 1.35rem);
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+
+    @media (min-width: 720px) {
+      .hero-content {
+        grid-template-columns: minmax(0, 1fr) clamp(148px, 24vw, 236px);
+        gap: clamp(1rem, 2.5vw, 1.5rem);
+        align-items: stretch;
+      }
+    }
+
+    .hero-main {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(0.85rem, 1.8vw, 1.05rem);
+    }
+
+    .hero-intro {
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      min-width: 0;
+    }
+
+    .hero-photo-slot {
+      margin: 0;
+      padding: 0;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(0, 0, 0, 0.28);
+      overflow: hidden;
+      position: relative;
+      min-height: clamp(200px, 36vw, 280px);
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
+    }
+
+    @media (min-width: 720px) {
+      .hero-photo-slot {
+        align-self: stretch;
+        min-height: 280px;
+        width: 100%;
+        margin-inline-start: auto;
+        aspect-ratio: 3 / 4;
+        max-height: min(520px, 82vh);
+      }
+    }
+
+    @media (max-width: 719px) {
+      .hero-photo-slot {
+        order: 1;
+        max-width: 260px;
+        margin-inline: auto;
+      }
+      .hero-main {
+        order: 0;
+      }
+    }
+
+    .hero-photo-slot .hero-photo-img {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+
+    .hero-photo-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      font-size: max(10.5pt, 0.88rem);
+      color: rgba(255, 255, 255, 0.38);
+      text-align: center;
+      line-height: 1.5;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .hero-photo-slot:has(.hero-photo-img[src]:not([src=""])) .hero-photo-placeholder {
+      display: none;
+    }
+
+    .hero .block-title {
+      margin-bottom: 0.4rem;
+    }
+
+    .hero .block-title h2 {
+      margin-bottom: 0;
+    }
+
+    .hero h1 {
+      font-size: clamp(1.65rem, 4vw, 2.65rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.12;
+      margin: 0;
+      background: linear-gradient(
+        105deg,
+        rgba(255, 255, 255, 0.98) 0%,
+        rgba(255, 255, 255, 0.88) 45%,
+        rgba(61, 255, 207, 0.95) 100%
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 42px rgba(61, 255, 207, 0.12);
+    }
+
+    .hero-lede {
+      margin: 0;
+      font-size: clamp(0.8rem, 1.2vw, 0.92rem);
+      color: var(--text-1);
+      line-height: 1.5;
+      max-width: 36ch;
+    }
+
+    .hero-facts {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.5rem;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 11.5rem), 1fr));
+    }
+
+    .hero-facts > li::before {
+      display: none;
+      content: none;
+      margin: 0;
+    }
+
+    .hero-facts + .hero-facts {
+      margin-top: 0.35rem;
+    }
+
+    .hero-fact {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      padding: 0.55rem 0.65rem;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.22);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      min-width: 0;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .hero-fact:hover {
+      border-color: rgba(61, 255, 207, 0.22);
+      background: rgba(0, 0, 0, 0.28);
+    }
+
+    .hero-fact-wide {
+      grid-column: 1 / -1;
+    }
+
+    /* 同一行两个独立卡片：外层占满行，内层双列网格 */
+    .hero-facts-dual-wrap {
+      grid-column: 1 / -1;
+      padding: 0;
+      margin: 0;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+    }
+
+    .hero-facts-dual-wrap:hover {
+      border-color: transparent;
+      background: transparent;
+    }
+
+    .hero-facts-dual {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.5rem;
+      align-items: stretch;
+    }
+
+    @media (max-width: 560px) {
+      .hero-facts-dual {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* 五号 ≈ 10.5pt，标签与正文同档字号 */
+    .hero-fact-label,
+    .hero-fact-value {
+      font-size: max(10.5pt, clamp(0.88rem, 1.2vw, 1.02rem));
+      line-height: 1.45;
+    }
+
+    .hero-fact-label {
+      font-family: var(--font-body);
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      color: var(--text-1);
+    }
+
+    .hero-fact-value {
+      color: var(--text-0);
+      word-break: break-word;
+      overflow-wrap: anywhere;
+    }
+
+    .hero-fact-value a {
+      color: var(--accent);
+      text-decoration: none;
+      text-underline-offset: 0.15em;
+    }
+
+    .hero-fact-value a:hover {
+      text-decoration: underline;
+    }
+
+    .hero-fact-value--pills {
+      display: block;
+      min-width: 0;
+    }
+
+    .hero-fact-value--pills .hero-intent-pills {
+      margin-top: 0.1rem;
+    }
+
+    .hero-intent-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      min-width: 0;
+    }
+
+    .intent-pill {
+      display: inline-block;
+      font-size: max(10.5pt, clamp(0.88rem, 1.2vw, 1.02rem));
+      line-height: 1.45;
+      color: var(--text-1);
+      padding: 0.35rem 0.65rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .intent-pill-accent {
+      color: var(--accent);
+      border-color: rgba(61, 255, 207, 0.35);
+      background: rgba(61, 255, 207, 0.08);
+      font-weight: 600;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -100px;
+      top: -100px;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(61, 255, 207, 0.28), transparent 68%);
+      opacity: 0.55;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--gap);
+      align-items: start;
+    }
+
+    /* Summary + Education 同列堆叠，避免与 Skills 等高时在左侧出现大块空白 */
+    .column-stack {
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap);
+      min-width: 0;
+    }
+
+    .card {
+      background: linear-gradient(180deg, var(--glass), var(--glass-2));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: var(--card-pad);
+      box-shadow: 0 28px 100px rgba(0, 0, 0, 0.38);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    h2 {
+      font-size: clamp(1rem, 1.8vw, 1.3rem);
+      margin-bottom: 0.5rem;
+      color: var(--accent);
+      letter-spacing: 0.3px;
+    }
+
+    .block-title {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .section p {
+      color: var(--text-1);
+      font-size: clamp(0.82rem, 1.3vw, 0.96rem);
+      line-height: 1.55;
+    }
+
+    ul {
+      list-style: none;
+      display: grid;
+      gap: 0.35rem;
+      color: var(--text-1);
+      font-size: clamp(0.82rem, 1.3vw, 0.96rem);
+      line-height: 1.55;
+    }
+
+    ul > li::before {
+      content: "•";
+      color: var(--accent-3);
+      margin-right: 0.5rem;
+    }
+
+    ul ul {
+      margin-left: 1.05rem;
+      margin-top: 0.3rem;
+      gap: 0.3rem;
+    }
+
+    ul ul > li::before {
+      content: "◦";
+      color: var(--accent-2);
+    }
+
+    /* Summary：整块字号比全局 section 列表大一号 */
+    .section-summary h2 {
+      font-size: clamp(1.05rem, 1.95vw, 1.4rem);
+    }
+
+    .section-summary ul {
+      font-size: clamp(0.88rem, 1.42vw, 1.02rem);
+    }
+
+    .item-title {
+      color: var(--text-0);
+      font-weight: 600;
+      font-size: clamp(0.9rem, 1.5vw, 1.02rem);
+      margin-bottom: 0.35rem;
+    }
+
+    .project-headline {
+      margin: 0 0 0.4rem 0;
+      line-height: 1.45;
+    }
+
+    .project-headline .item-title {
+      display: inline;
+      margin-bottom: 0;
+      font-size: clamp(0.9rem, 1.5vw, 1.02rem);
+    }
+
+    .project-headline .link-pill {
+      display: inline-flex;
+      align-items: center;
+      vertical-align: middle;
+      margin-left: 0.5rem;
+      margin-top: 0;
+    }
+
+    .skills-groups {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    h3.skill-subtitle {
+      margin: 0 0 0.4rem 0;
+      font-size: clamp(0.82rem, 1.25vw, 0.95rem);
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+      font-family: var(--font-body);
+      line-height: 1.3;
+    }
+
+    .skill-tags {
+      margin-top: 0;
+    }
+
+    .skill-tags .tag {
+      font-size: clamp(0.78rem, 1.2vw, 0.92rem);
+    }
+
+    .metric {
+      color: var(--accent);
+      font-weight: 600;
+      text-shadow: 0 0 18px rgba(61, 255, 207, 0.25);
+    }
+
+    .prefix {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: var(--font-mono);
+      font-size: clamp(0.88rem, 1.38vw, 1.02rem);
+      padding: 0.12rem 0.5rem;
+      border-radius: 999px;
+      background: rgba(124, 92, 255, 0.12);
+      border: 1px solid rgba(124, 92, 255, 0.4);
+      color: var(--accent-2);
+      letter-spacing: 0.25px;
+    }
+
+    .link-pill {
+      font-family: var(--font-mono);
+      font-size: clamp(0.82rem, 1.25vw, 0.95rem);
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid rgba(61, 255, 207, 0.4);
+      color: var(--accent);
+    }
+
+    .project-card + .project-card {
+      margin-top: 0.7rem;
+      padding-top: 0.7rem;
+      border-top: 1px dashed rgba(255, 255, 255, 0.12);
+    }
+
+    .span-2 {
+      grid-column: span 2;
+    }
+
+    .timeline {
+      position: relative;
+      margin-top: 0.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: minmax(5.6rem, 7rem) minmax(0, 1fr);
+      gap: 0.5rem 0.65rem;
+      align-items: start;
+      position: relative;
+    }
+
+    .timeline-date {
+      position: relative;
+      text-align: left;
+      padding-left: 1.05rem;
+      padding-right: 0.25rem;
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--accent);
+      line-height: 1.45;
+      letter-spacing: 0.02em;
+    }
+
+    .timeline-date::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.38rem;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 14px rgba(61, 255, 207, 0.5);
+      z-index: 1;
+    }
+
+    .timeline-date::after {
+      content: "";
+      position: absolute;
+      left: 4px;
+      top: 0.85rem;
+      bottom: -1.05rem;
+      width: 2px;
+      background: linear-gradient(180deg, rgba(61, 255, 207, 0.55), rgba(124, 92, 255, 0.3));
+      border-radius: 999px;
+    }
+
+    .timeline-item:last-child .timeline-date::after {
+      bottom: 0;
+    }
+
+    .timeline-body {
+      min-width: 0;
+      padding-left: 0;
+      margin-left: 0;
+    }
+
+    .exp-first-line {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.35rem 0.75rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .exp-first-line .item-title {
+      margin-bottom: 0;
+    }
+
+    .exp-org {
+      display: inline-flex;
+      align-items: center;
+      flex-wrap: nowrap;
+      white-space: nowrap;
+      gap: 0;
+    }
+
+    .exp-org .exp-sep {
+      opacity: 0.7;
+      padding: 0 0.15rem;
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      align-items: center;
+      color: var(--text-1);
+      font-size: 0.82rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 0.35rem;
+    }
+
+    .tag {
+      font-family: var(--font-mono);
+      font-size: clamp(0.78rem, 1.15vw, 0.92rem);
+      padding: 0.14rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: var(--text-0);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .tag.accent { border-color: rgba(61, 255, 207, 0.45); color: var(--accent); }
+    .tag.purple { border-color: rgba(124, 92, 255, 0.45); color: var(--accent-2); }
+    .tag.pink { border-color: rgba(255, 79, 216, 0.45); color: var(--accent-3); }
+
+    .project-keywords {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.35rem 0.5rem;
+    }
+
+    .project-keywords .tag-list {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin: 0;
+    }
+
+    .awards-prefix {
+      max-width: 100%;
+      white-space: normal;
+      text-align: left;
+      line-height: 1.4;
+      font-size: clamp(0.86rem, 1.32vw, 0.98rem);
+      letter-spacing: 0.15px;
+    }
+
+    @media (max-width: 980px) {
+      .columns { grid-template-columns: 1fr; }
+      .span-2 { grid-column: span 1; }
+      .timeline-item {
+        grid-template-columns: 1fr;
+        gap: 0.45rem;
+      }
+      .timeline-date {
+        text-align: left;
+        padding-right: 0;
+        padding-left: 1.05rem;
+        border-left: none;
+      }
+      .timeline-date::before { left: 0; right: auto; }
+      .timeline-date::after { display: none; }
+    }
+
+    @media (max-width: 480px) {
+      :root {
+        --page-pad: 0.75rem;
+        --card-pad: 0.7rem;
+        --gap: 0.65rem;
+      }
+      .card {
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+      }
+      .intent-pill { line-height: 1.45; }
+      .item-title { font-size: clamp(0.85rem, 3.8vw, 1rem); }
+      .project-headline .link-pill {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.45rem 0.75rem;
+        min-height: 2.75rem;
+        line-height: 1.25;
+      }
+      a { touch-action: manipulation; }
+    }
+
+  </style>
+</head>
+<body>
+  <main class="page">
+
+    <header class="hero">
+      <div class="hero-content">
+        <div class="hero-main">
+          <div class="block-title">
+            <h2>Profile</h2>
+          </div>
+          <div class="hero-intro">
+            <h1>马阳阳</h1>
+          </div>
+          <ul class="hero-facts" aria-label="联系方式与基本信息">
+            <li class="hero-fact">
+              <span class="hero-fact-label">年龄</span>
+              <span class="hero-fact-value">29 岁</span>
+            </li>
+            <li class="hero-fact">
+              <span class="hero-fact-label">现居</span>
+              <span class="hero-fact-value">北京</span>
+            </li>
+            <li class="hero-fact">
+              <span class="hero-fact-label">电话</span>
+              <span class="hero-fact-value"><a href="tel:+8617610245400">176-1024-5400</a></span>
+            </li>
+            <li class="hero-fact">
+              <span class="hero-fact-label">邮箱</span>
+              <span class="hero-fact-value"><a href="mailto:1135038815@qq.com">1135038815@qq.com</a></span>
+            </li>
+            <li class="hero-facts-dual-wrap" aria-label="网站与意向城市">
+              <div class="hero-facts-dual">
+                <div class="hero-fact">
+                  <span class="hero-fact-label">网站</span>
+                  <span class="hero-fact-value"><a href="https://livelyryan.github.io/i/" rel="noopener noreferrer">livelyryan.github.io/i/</a></span>
+                </div>
+                <div class="hero-fact">
+                  <span class="hero-fact-label">意向城市</span>
+                  <span class="hero-fact-value hero-fact-value--pills">
+                    <span class="hero-intent-pills">
+                      <span class="intent-pill intent-pill-accent">上海</span>
+                    </span>
+                  </span>
+
+                </div>
+              </div>
+            </li>
+          </ul>
+          <ul class="hero-facts" aria-label="求职意向">
+            <li class="hero-fact hero-fact-wide">
+              <span class="hero-fact-label">意向岗位</span>
+              <span class="hero-fact-value hero-fact-value--pills">
+                <span class="hero-intent-pills">
+                  <span class="intent-pill intent-pill-accent">高级技术经理/技术负责人（Agent/研发效能方向）</span>
+                  <span class="intent-pill intent-pill-accent">Agent 应用开发工程师</span>
+                </span>
+              </span>
+            </li>
+          </ul>
+        </div>
+        <figure class="hero-photo-slot" aria-label="个人照片">
+          <img class="hero-photo-img" src="resume-profile.jpg" alt="马阳阳" width="560" height="747" decoding="async" />
+          <span class="hero-photo-placeholder" aria-hidden="true">个人照片<br />使用 <code>resume-profile.jpg</code>（与本页同级）</span>
+        </figure>
+      </div>
+    </header>
+    <div class="columns">
+      <div class="column-stack">
+      <section class="card section section-summary">
+        <div class="block-title"><h2>Summary</h2></div>
+<ul>
+<li>8 年研发经验，3 年技术管理经验，负责基础平台研发与公共 QA 团队（10+ 人规模），支撑多条业务线研发</li>
+<li>长期负责公司内部平台建设，在 AI Agent、AI 基建、研发效能、稳定性体系建设方面有丰富落地经验</li>
+<li>带领团队完成多个 0 到 1 平台建设，通过明确平台生态位与产品边界，完成平台在全司规模化落地</li>
+<li>具备体系化管理与战略规划能力，熟练运用 战略地图、OKR、DMAIC 推动组织与技术持续改进</li>
+<li>长期高绩效，连续晋升，多次获得公司级奖项</li>
+</ul>
+      </section>
+      <section class="card section">
+        <div class="block-title"><h2>Education</h2></div>
+        <p>南京晓庄学院，统招本科，软件工程专业，GPA 排名 Top 10</p>
+        <div class="block-title" style="margin-top:0.7rem;">
+          <h2>Certifications</h2>
+        </div>
+<ul>
+<li>CET-4</li>
+<li>OCJP（Oracle Certified Java Programmer）</li>
+</ul>
+      </section>
+      </div>
+      <section class="card section">
+        <div class="block-title"><h2>Skills</h2></div>
+        <div class="skills-groups">
+          <div class="skill-block">
+            <h3 class="skill-subtitle">Languages</h3>
+            <div class="tag-list skill-tags">
+              <span class="tag">Java</span>
+              <span class="tag">Golang</span>
+              <span class="tag">...</span>
+            </div>
+          </div>
+          <div class="skill-block">
+            <h3 class="skill-subtitle">LLM</h3>
+            <div class="tag-list skill-tags">
+              <span class="tag">Agent</span>
+              <span class="tag">Workflow</span>
+              <span class="tag">Prompt</span>
+              <span class="tag">RAG</span>
+              <span class="tag">ReAct</span>
+              <span class="tag">Reflection</span>
+              <span class="tag">Harness Engineering</span>
+              <span class="tag">Dify</span>
+              <span class="tag">LangChain4j</span>
+              <span class="tag">Langfuse</span>
+              <span class="tag">OpenClaw</span>
+              <span class="tag">MCP</span>
+              <span class="tag">Skill</span>
+            </div>
+          </div>
+          <div class="skill-block">
+            <h3 class="skill-subtitle">AI Coding</h3>
+            <div class="tag-list skill-tags">
+              <span class="tag">Claude Code</span>
+              <span class="tag">Codex CLI</span>
+              <span class="tag">Cursor</span>
+            </div>
+          </div>
+          <div class="skill-block">
+            <h3 class="skill-subtitle">Java Frameworks</h3>
+            <div class="tag-list skill-tags">
+              <span class="tag">Spring</span>
+              <span class="tag">Spring Boot</span>
+              <span class="tag">MyBatis</span>
+              <span class="tag">Spring Cloud</span>
+            </div>
+          </div>
+          <div class="skill-block">
+            <h3 class="skill-subtitle">Infrastructure</h3>
+            <div class="tag-list skill-tags">
+              <span class="tag">MySQL</span>
+              <span class="tag">Redis</span>
+              <span class="tag">ZooKeeper</span>
+              <span class="tag">ES</span>
+              <span class="tag">Kafka</span>
+              <span class="tag">K8S</span>
+              <span class="tag">Docker</span>
+            </div>
+          </div>
+          <div class="skill-block">
+            <h3 class="skill-subtitle">Other</h3>
+            <div class="tag-list skill-tags">
+              <span class="tag">分布式理论（CAP/BASE/AKF）</span>
+              <span class="tag">高并发高可用（CDN/LVS/Nginx）</span>
+              <span class="tag">RESTful API</span>
+              <span class="tag">JVM/JMM</span>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="card section span-2">
+        <div class="block-title"><h2>Experience</h2></div>
+<div class="timeline">
+<div class="timeline-item">
+<div class="timeline-date">2024-01 — 至今</div>
+<div class="timeline-body">
+<div class="exp-first-line"><span class="item-title">技术总监 ｜ 基础平台开发、公共 QA 团队负责人</span><span class="exp-org"><span class="prefix">去哪儿旅行</span></span></div>
+<ul>
+<li>战略管理：每半年制定团队战略规划，25 年以稳定性为基础，AI 应用与基建为核心，推动团队与多业务线目标对齐，联合立项并跟进落地</li>
+<li>组织建设：负责基础平台研发与公共 QA 团队建设，主导岗位招聘与人才梯队建设，建立并改进组织协作机制</li>
+<li>技术架构：设计项目流程与技术规范，主导关键技术设计与评审，解决复杂系统演进与跨团队协作中的核心技术问题，沉淀为 skills 方便复用</li>
+<li>保稳定性：持续完善公司稳定性治理体系，制定系统分级、SLO、变更、容量、预案、演练、常态化治理标准，跟踪新增风险并沉淀到标准中，推动多部门落地</li>
+<li>技术布局：跟踪前沿技术发展，推动 AI Agent 与研发效能相关基础设施的前置建设，为业务创新提供技术基础能力，为团队创新提供方向</li>
+<li>公司活动：参与公司级技术活动的评审与落地，包括 CR 大赛、Hackathon、AI 茶话会、AI 大咖说、应届生培训课程及 ITCP 联盟大会等</li>
+</ul>
+</div></div>
+<div class="timeline-item">
+<div class="timeline-date">2021-08 — 2023-12</div>
+<div class="timeline-body">
+<div class="exp-first-line"><span class="item-title">资深研发工程师 ｜ 基础平台团队核心开发</span><span class="exp-org"><span class="prefix">去哪儿旅行</span></span></div>
+<ul>
+<li>战略项目落地：承接部门重点战略，推动跨团队联合立项与资源协调，负责技术调研、架构设计及功能交付，保障战略项目按期落地</li>
+<li>稳定性保障：负责核心平台系统的版本迭代与日常稳定性保障，持续优化监控、告警、预案，定期压测与演练，提升平台可用性</li>
+<li>技术沉淀与对外输出：总结团队技术实践与工程经验，在业界技术大会进行分享，提升公司在基础架构与工程效率领域的技术影响力</li>
+</ul>
+</div></div>
+<div class="timeline-item">
+<div class="timeline-date">2017-12 — 2021-08</div>
+<div class="timeline-body">
+<div class="exp-first-line"><span class="item-title">研发工程师 | 云计算团队核心开发</span><span class="exp-org"><span class="prefix">北京宝兰德软件股份有限公司</span></span></div>
+</div></div>
+</div>
+      </section>
+      <section class="card section span-2">
+        <div class="block-title"><h2>Projects</h2></div>
+<div class="project-card">
+<div class="project-headline"><span class="item-title">企业级智能体平台（QMoss V3.0 + Dify V3.0） | 项目负责人 | 2024.02~2025.11</span> <a class="link-pill" href="代表作/企业级智能体平台.html">项目链接</a></div>
+<ul><li><span class="prefix">目标</span> 搭建智能体平台，形成至少 3 个代表落地场景，年化提效 <span class="metric">1000 PD</span></li><li><span class="prefix">结果</span> <ul><li><span class="prefix">提效</span> 25 年新增流程数 <span class="metric">3500+</span>，提升 AI 应用搭建效率 <span class="metric">6000+</span>PD。以平台作为核心基建，其上搭建了多个高价值项目，总计全年节约 PD 超 <span class="metric">4.4W</span></li><li><span class="prefix">覆盖</span> 平台在公司各个部门大面积落地，包括 <span class="metric">30+</span> 非技术部门，是公司历史上覆盖部门数最多的内部平台</li><li><span class="prefix">稳定性</span> QMoss 全年系统可用性 <span class="metric">100%</span>，0 中断 0 故障；Dify 全年可用性 <span class="metric">99.98%</span></li><li><span class="prefix">创新</span> 自研+开源 双平台协同体系。自研 QMoss 平台聚焦高稳定性，提供与内部系统深度集成场景。Dify 负责提供前沿能力和社区插件生态；</li><li><span class="prefix">先进性</span> 探索并规模化落地了 “智能体平台 + 多维表格” 的新型研发模式，使 AI 应用的搭建和迭代周期，从天降低到分钟级，门槛降低到任何角色均可完成，已成为最佳实践。这套模式的落地广度和深度处于业界领先</li></ul></li><li class="project-keywords"><span class="prefix">关键词</span><span class="tag-list"><span class="tag">金项奖最佳</span><span class="tag">公司级战略项目</span><span class="tag">Dify</span><span class="tag">智能体平台</span><span class="tag">运营提效</span><span class="tag">高可用</span><span class="tag">稳定性</span><span class="tag">Java</span><span class="tag">Python</span><span class="tag">Workflow</span><span class="tag">Agent</span><span class="tag">Prompt</span><span class="tag">知识库</span><span class="tag">MCP 网关</span><span class="tag">Langfuse</span><span class="tag">Code Interpreter</span><span class="tag">版本控制</span><span class="tag">分布式架构</span><span class="tag">企业级能力</span><span class="tag">平台运营</span></span></li></ul>
+</div>
+<div class="project-card">
+<div class="project-headline"><span class="item-title">九章 AI V2.0（自然语言取数） | 项目负责人 | 2025.03~至今</span> <a class="link-pill" href="代表作/SQL-Agent.html">项目链接</a></div>
+<ul><li><span class="prefix">目标</span> 打造自然语言取数 Agent，提升取数效率 <span class="metric">50%</span></li><li><span class="prefix">结果</span> <ul><li><span class="prefix">提效</span> 开发自然语言取数 Agent，取数周期缩短 <span class="metric">98.4%</span>，从平均 <span class="metric">1.9 PD</span> 降低到 <span class="metric">15 min</span>。取数流程由原来的 7 步降低到 1 步</li><li><span class="prefix">吞吐</span> 取数需求交付量增长 <span class="metric">70%</span>，<span class="metric">99.2%</span> 取数类需求由九章承接</li><li><span class="prefix">安全</span> 之前数据的权限控制粒度为人、表，九章 AI 新增了 行、列控制，满足了数据安全诉求</li><li><span class="prefix">效果</span> 取数准确率从 <span class="metric">52%</span> 持续优化，提升到周均稳定 <span class="metric">92%</span>。设计了自学习能力，在无研发介入情况下，会越用越准确</li><li><span class="prefix">创新</span> 公司最早、最深地集成飞书的 AI Agent，整合了 飞书消息卡片、多维表格、菜单、话题、流式消息 等多个能力，使取数工作，从需要登录内网的电脑办公模式，变成手机上随时可取的日常操作。飞书作为入口，成为后续内部 Agent 的标配。26 年现象级产品 OpenClaw 核心能力之一 channel 再次印证了价值</li></ul></li><li class="project-keywords"><span class="prefix">关键词</span><span class="tag-list"><span class="tag">NL2SQL</span><span class="tag">智能问数</span><span class="tag">Data Agent</span><span class="tag">Agent 调优</span><span class="tag">Agent Chain 架构</span><span class="tag">RAG</span><span class="tag">Human-in-the-Loop Learning</span><span class="tag">数据安全</span><span class="tag">飞书机器人</span></span></li></ul>
+</div>
+<div class="project-card">
+<div class="project-headline"><span class="item-title">公司系统瘦身项目 V3.0（ACED） | 技术负责人｜2022.05–2022.12</span> <a class="link-pill" href="代表作/公司系统瘦身项目.html">项目链接</a></div>
+<ul><li><span class="prefix">目标</span> 全司总代码量精简 <span class="metric">50%</span>，项目导致故障数 <span class="metric">1 个</span></li><li><span class="prefix">结果</span> <ul><li><span class="prefix">提效</span> 全司总代码量 -<span class="metric">50.21%</span>（减少 <span class="metric">2500W+</span>），服务数 -<span class="metric">26%</span>，发布效率 +<span class="metric">9.5%</span>，需求平均耗时 -<span class="metric">10.9%</span>，因项目产生故障数 0。</li><li><span class="prefix">创新</span> 业界首创 0 风险、0 性能损耗的函数级代码精简体系，在多个行业大会分享，多家公司参考落地</li></ul></li><li class="project-keywords"><span class="prefix">关键词</span><span class="tag-list"><span class="tag">行业级创新</span><span class="tag">金项奖第一名</span><span class="tag">跨全司技术 BU 项目</span><span class="tag">Java</span><span class="tag">SA</span><span class="tag">IDEA 插件</span><span class="tag">Spoon</span></span></li></ul>
+</div>
+<div class="project-card">
+<div class="project-headline"><span class="item-title">组件市场 | 技术负责人 | 2023.02~2023.12</span></div>
+<ul><li><span class="prefix">目标</span> 打造组件市场，并在至少 3 个业务场景实际落地。成功孵化至少 5 个成熟组件；组件覆盖率，4级团队维度达 <span class="metric">80%</span></li><li><span class="prefix">结果</span> <ul><li>项目期间孵化 7 个成熟的公司级可复用组件，包括 分布式锁、动态可观测线程池、压缩套件、日志管理组件、分布式限流、序列化组件。</li><li>开发的分布式锁组件，将公司各种分布式锁实现完成统一，覆盖 <span class="metric">100%</span> 技术团队、<span class="metric">100+</span> AppCode，至今相关故障 <span class="metric">0 个</span></li><li>开发的压缩套件支撑了酒店业务 Redis 内存治理，数据大小平均减少 <span class="metric">65%</span>；带宽平均下降 <span class="metric">66%</span></li><li>动态可观测线程池组件，具备参数热配、完善的可观测性及配套报警能力，覆盖 <span class="metric">100+</span> AppCode，已成为全司默认使用的线程池</li></ul></li><li class="project-keywords"><span class="prefix">关键词</span><span class="tag-list"><span class="tag">分布式锁</span><span class="tag">可观测线程池</span><span class="tag">压缩</span><span class="tag">Java</span><span class="tag">IDEA 插件</span><span class="tag">组件开发</span></span></li></ul>
+</div>
+<div class="project-card">
+<div class="project-headline"><span class="item-title">测试环境管理平台 Noah V3.0 | 多个模块负责人 | 2021.08~2022.06</span> <a class="link-pill" href="代表作/测试环境管理平台.html">项目链接</a></div>
+<ul><li><span class="prefix">目标</span> 为了提升环境构建稳定性和成功率，重构 Noah 核心编排系统，落地自愈体系</li><li><span class="prefix">结果</span> <ul><li>环境构建成功率绝对提升 <span class="metric">35.2%</span>（均值 <span class="metric">87.8%</span>），构建平均时长降低 <span class="metric">37%</span>；Noah 问题占比下降 <span class="metric">60%</span>（降低到 <span class="metric">2.94%</span>），环境导致的需求 Delay 率下降 <span class="metric">90%</span>（降低到 <span class="metric">0.06%</span>）；</li></ul></li><li class="project-keywords"><span class="prefix">关键词</span><span class="tag-list"><span class="tag">工作流编排调度</span><span class="tag">核心模块重构</span><span class="tag">稳定性提升</span><span class="tag">Java</span><span class="tag">Salt</span><span class="tag">测试环境管理</span></span></li></ul>
+</div>
+      </section>
+      <section class="card section span-2">
+        <div class="block-title"><h2>Awards</h2></div>
+<ul>
+<li><span class="prefix awards-prefix">热爱分享交流，有影响力</span> 作为讲师参加 ArchSubmit、Top100、QECon、SECon、A2M、DBAPlus、ITCP 等行业大会，获得明星讲师称号；组织过多场跨公司闭门交流会</li>
+<li><span class="prefix awards-prefix">具备公司级横向组织、推进能力</span> 26 年担任 AI Coding SIG 秘书长，推动 AI Coding 在全司科学、体系化落地；22、23 年分别担任技术 SIG 秘书长、负责人</li>
+<li><span class="prefix awards-prefix">乐于培养他人</span> 带团队期间，个人晋升成功率 <span class="metric">87.5%</span>，远超平均水平（全司均值 &lt; <span class="metric">50%</span>）</li>
+<li><span class="prefix awards-prefix">有建团队、稳定性提升经验</span> 25 年初组建基础架构 QA 团队，负责基础架构稳定、大客户端框架质量保证与发版。基础架构 BU 全年故障数 <span class="metric">0 个</span>，在全司 <span class="metric">10+</span> 三级 BU 中排名第 1，相比 24 年故障数减少 <span class="metric">9 个</span></li>
+<li><span class="prefix awards-prefix">长期高绩效</span> <span class="metric">3 次</span> A（<span class="metric">Top 10%</span>）、<span class="metric">4 次</span> B（<span class="metric">Top 30%</span>）；最近一次 2025H2 为 A</li>
+<li><span class="prefix awards-prefix">连续晋升</span> 4 年 3 次高职级个人晋升，成功率 <span class="metric">100%</span>（全司均值 &lt; <span class="metric">50%</span>）</li>
+<li><span class="prefix awards-prefix">多次获奖</span> 23 年带队包揽 CR 大赛冠军和 AI Hackathon 大赛第 <span class="metric">1 名</span>；23 年技术品牌突出贡献奖；4 年公司内训师；飞书效率先锋；公司飞书社群 KOL；大四校一等奖学金；大三校二等奖学金</li>
+</ul>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

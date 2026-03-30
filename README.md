@@ -5,29 +5,23 @@ This repo keeps `resume.md` as the single source of truth for the resume.
 ## Source of truth
 
 - `resume.md`: primary resume content
-- `index.html`: **不纳入 Git**。由 `scripts/render_resume.py` 生成；推送 `master` 后由 GitHub Actions 构建并发布（见 `.github/workflows/render-resume-pages.yml`）。
+- `index.html`: 由 `scripts/render_resume.py` 从 `resume.md` **生成**；提交到仓库后，在 Pages 使用 **Deploy from a branch**（`master` / `/ (root)`）时可直接访问。推送 `master` 时 **Actions** 也会构建 `_site` 并尝试通过 **GitHub Actions** 源部署（见 `.github/workflows/render-resume-pages.yml`）。
 - `代表作/`: 项目展示 HTML 与静态资源（仅此一份；发布站点中与首页同级，相对路径 `代表作/...`）
 
 ## 如何更新网站（GitHub Pages）
 
-站点通过 **GitHub Actions** 发布（勿再使用 “Deploy from a branch”）。请在仓库 **Settings → Pages → Build and deployment** 将 **Source** 设为 **GitHub Actions**。若仍指向 `master` 根目录，而在仓库中已删除 `index.html`，首页会 404，直到改为 Actions 并成功跑通工作流。
+打开 **Settings → Pages → Build and deployment**：
 
-1. 编辑 **`resume.md`**（改文案、链接等）。
-2. 若新增或修改 **`代表作/`** 下的页面或图片，直接改根目录 `代表作/` 并随仓库提交。
-3. （可选）本地预览首页，生成到被忽略的 `index.html`：
+- **GitHub Actions**（推荐）：Source 选 **GitHub Actions**，保存后每次推 `master` 会跑「Render Resume Pages」：**build** 上传产物，**deploy** 发布。若长期 404，到 **Actions** 打开最近一次运行，确认 `deploy` 成功且无 Environment 审批阻塞。
+- **Deploy from a branch**（备用）：Source 改为 **Deploy from a branch**，Branch **master**，Folder **`/ (root)`**。仓库根目录必须有已提交的 **`index.html`**（否则 `/i/` 会 404）。
 
-   ```bash
-   python3 scripts/render_resume.py --in resume.md --out index.html
-   ```
+两种源**不要混用**：选 Actions 时以运行产物为准；选 branch 时以仓库里 `index.html` 为准。可选在改完 `resume.md` 后本地执行渲染并一并提交 `index.html`，与线上 branch 源一致：
 
-4. 提交并推送到 **`master`**（无需 `git add index.html`）：
+```bash
+python3 scripts/render_resume.py --in resume.md --out index.html
+git add resume.md index.html 代表作/
+git commit -m "docs: AI update resume and portfolio"
+git push origin master
+```
 
-   ```bash
-   git add resume.md 代表作/
-   git commit -m "docs: AI update resume and portfolio"
-   git push origin master
-   ```
-
-推送后，工作流会渲染简历、复制 `resume-profile.jpg` 与 **`代表作/`** 到发布产物并部署。
-
-`docs/` 仅保留与站点无关的说明文档（例如 `md2html-resume-prompt.md`），不参与 Pages 发布根目录。
+推送后，Actions 工作流会重新渲染并部署（若已启用 Actions 源）。

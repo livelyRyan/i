@@ -1,6 +1,3 @@
-# Generated locally; CI builds into _site and deploys without committing HTML
-index.html
-
 .DS_Store
 __pycache__/
 *.py[cod]
