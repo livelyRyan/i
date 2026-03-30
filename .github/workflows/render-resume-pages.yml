@@ -20,26 +20,21 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Render Resume
+      - name: Render resume HTML
         run: |
-          python3 scripts/render_resume.py --in resume.md --variant all --out /tmp/resume.all.md
           mkdir -p docs
-          {
-            echo "---"
-            echo "title: \"Resume\""
-            echo "---"
-            echo
-            cat /tmp/resume.all.md
-          } > docs/index.md
+          python3 scripts/render_resume.py --in resume.md --variant all --out docs/index.html
+          touch docs/.nojekyll
+          rm -f docs/index.md
 
-      - name: Commit Pages
+      - name: Commit pages
         run: |
-          if git diff --quiet -- docs/index.md docs/_config.yml; then
+          git add -A docs/
+          if git diff --cached --quiet; then
             echo "No changes to commit."
             exit 0
           fi
-          git add docs/index.md docs/_config.yml
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git commit -m "docs: AI update resume pages"
+          git commit -m "docs: AI update resume pages (HTML)"
           git push
