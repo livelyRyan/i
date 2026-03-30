@@ -64,7 +64,7 @@
 
     .page {
       width: 100%;
-      max-width: 1420px;
+      max-width: 1560px;
       margin: 0 auto;
       min-width: 0;
       padding-top: max(var(--page-pad), env(safe-area-inset-top, 0px));
@@ -238,7 +238,7 @@
     }
 
     .hero-facts + .hero-facts {
-      margin-top: 0.35rem;
+      margin-top: clamp(0.72rem, 1.5vw, 1.02rem);
     }
 
     .hero-fact {
@@ -280,7 +280,7 @@
     .hero-facts-dual {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.5rem;
+      gap: clamp(0.58rem, 1.25vw, 0.78rem);
       align-items: stretch;
     }
 
@@ -372,7 +372,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: var(--gap);
-      align-items: start;
+      align-items: stretch;
     }
 
     /* Summary + Education 同列堆叠，避免与 Skills 等高时在左侧出现大块空白 */
@@ -479,6 +479,19 @@
       display: flex;
       flex-direction: column;
       gap: 0.85rem;
+      flex: 1;
+      min-height: 0;
+    }
+
+    /* 与左侧 Summary+Education 同高时拉满卡片，底部与 Education 对齐 */
+    .columns > .card.section:has(.skills-groups) {
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+
+    .columns > .card.section:has(.skills-groups) .block-title {
+      flex-shrink: 0;
     }
 
     h3.skill-subtitle {
@@ -548,8 +561,8 @@
 
     .timeline-item {
       display: grid;
-      grid-template-columns: minmax(5.6rem, 7rem) minmax(0, 1fr);
-      gap: 0.5rem 0.65rem;
+      grid-template-columns: minmax(7.25rem, 10.75rem) minmax(0, 1fr);
+      gap: 0.5rem 0.75rem;
       align-items: start;
       position: relative;
     }
@@ -593,6 +606,12 @@
 
     .timeline-item:last-child .timeline-date::after {
       bottom: 0;
+    }
+
+    @media (min-width: 981px) {
+      .timeline-date {
+        white-space: nowrap;
+      }
     }
 
     .timeline-body {
