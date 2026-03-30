@@ -1,19 +1,34 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Render resume.md into static HTML for GitHub Pages (local path or CI `_site/`)."""
+"""Render resume.md into static HTML for GitHub Pages (local path or CI `_site/`).
+
+本脚本集中承载简历页的结构与展示逻辑，与根目录 index.html 对齐的优化包括：
+
+- **CSS**：内联样式来自同目录 `resume_embedded.css`。若先改 `index.html` 的 `<style>`，
+  运行 ``python scripts/render_resume.py --sync-css-from-index`` 可抽回嵌入文件，避免漂移。
+- **Profile**：`hero-profile-sheet`、首行 5 列等宽、意向岗位/城市 subgrid 对齐、`render_profile_hero`。
+- **Projects**：“结果”子项无紫色小标题前缀（`RESULT_DETAIL_LABELS`）；「目标 / 结果 / 关键动作 / 关键词」
+  与 `PROJECT_SECTION_LABELS`、`render_bullet_tree(under_result=...)`。
+- **Experience / 页面布局**：时间轴列宽、`max-width: 1560px`、Skills 与 Education 底对齐等均在嵌入 CSS 中。
+
+校验：``python scripts/render_resume.py --check``（需已有 `--out` 指向的 index.html）。
+"""
 
 from __future__ import annotations
 
 import argparse
 import html
 import re
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import List, Optional, Tuple
 
 _SCRIPT_DIR = Path(__file__).resolve().parent
+_REPO_ROOT = _SCRIPT_DIR.parent
 
 DEFAULT_PHOTO_RELPATH = "resume-profile.jpg"
+EMBEDDED_CSS_PATH = _SCRIPT_DIR / "resume_embedded.css"
 
 # 「- 结果：」下的子 bullet 原为带 prefix 的小标题；改为整条按正文显示
 RESULT_DETAIL_LABELS = frozenset(
@@ -23,12 +38,23 @@ PROJECT_SECTION_LABELS = frozenset({"目标", "结果", "关键动作"})
 
 
 def _embedded_styles() -> str:
-    p = _SCRIPT_DIR / "resume_embedded.css"
-    if not p.is_file():
+    if not EMBEDDED_CSS_PATH.is_file():
         raise FileNotFoundError(
-            f"Missing {p}; copy CSS from repo-root index.html into this file."
+            f"Missing {EMBEDDED_CSS_PATH}; run: "
+            f"python {_SCRIPT_DIR.name}/render_resume.py --sync-css-from-index"
         )
-    return p.read_text(encoding="utf-8").rstrip() + "\n"
+    return EMBEDDED_CSS_PATH.read_text(encoding="utf-8").rstrip() + "\n"
+
+
+def sync_embedded_css_from_index(index_html: Optional[Path] = None) -> Path:
+    """从仓库根目录 ``index.html`` 的 ``<style>`` 抽取内容写入 ``resume_embedded.css``。"""
+    src = index_html or (_REPO_ROOT / "index.html")
+    html_text = src.read_text(encoding="utf-8")
+    m = re.search(r"<style>\n(.*)\n  </style>", html_text, re.DOTALL)
+    if not m:
+        raise ValueError(f"No matching <style> block in {src}")
+    EMBEDDED_CSS_PATH.write_text(m.group(1).rstrip() + "\n", encoding="utf-8")
+    return EMBEDDED_CSS_PATH
 
 
 def html_head_open() -> str:
@@ -643,12 +669,49 @@ def build_html(md_text: str) -> str:
     return "\n".join(sb)
 
 
+def verify_render_matches(md_text: str, expected_html_path: Path) -> None:
+    """若与已生成的 HTML 不一致则 ``sys.exit(1)``。"""
+    if not expected_html_path.is_file():
+        raise FileNotFoundError(f"--check expects existing file: {expected_html_path}")
+    rendered = build_html(md_text)
+    expected = expected_html_path.read_text(encoding="utf-8")
+    if rendered != expected:
+        sys.stderr.write(
+            f"Mismatch: rendered output != {expected_html_path} "
+            f"({len(rendered)} vs {len(expected)} bytes)\n"
+        )
+        sys.exit(1)
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description="Render resume.md to static index.html")
     ap.add_argument("--in", dest="in_path", default="resume.md", help="Input Markdown path")
     ap.add_argument("--out", dest="out_path", default="index.html", help="Output HTML path")
+    ap.add_argument(
+        "--sync-css-from-index",
+        action="store_true",
+        help="从仓库根 index.html 的 <style> 更新 scripts/resume_embedded.css，然后退出",
+    )
+    ap.add_argument(
+        "--check",
+        action="store_true",
+        help="从 --in 渲染并与已有 --out 逐字节比对；一致则打印 OK 并退出 0",
+    )
     args = ap.parse_args()
-    src = Path(args.in_path).read_text(encoding="utf-8")
+
+    if args.sync_css_from_index:
+        outp = sync_embedded_css_from_index()
+        print(f"Wrote {outp} from {_REPO_ROOT / 'index.html'} <style>")
+        return
+
+    src_path = Path(args.in_path)
+    src = src_path.read_text(encoding="utf-8")
+
+    if args.check:
+        verify_render_matches(src, Path(args.out_path))
+        print(f"OK: render matches {args.out_path}")
+        return
+
     out = build_html(src)
     outp = Path(args.out_path)
     outp.parent.mkdir(parents=True, exist_ok=True)
