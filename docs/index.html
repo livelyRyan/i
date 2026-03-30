@@ -76,46 +76,238 @@
     }
 
     .hero {
-      display: grid;
-      gap: 0.45rem;
-      background: linear-gradient(180deg, var(--glass), var(--glass-2));
+      --hero-pad-y: clamp(1.15rem, 2.6vw, 1.75rem);
+      --hero-pad-x: clamp(1rem, 2.2vw, 1.6rem);
+      display: block;
+      background:
+        linear-gradient(135deg, rgba(61, 255, 207, 0.07) 0%, transparent 42%),
+        linear-gradient(180deg, var(--glass), var(--glass-2));
       border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: var(--card-pad);
-      box-shadow: 0 30px 120px rgba(0, 0, 0, 0.45);
+      border-radius: calc(var(--radius) + 4px);
+      padding: var(--hero-pad-y) var(--hero-pad-x);
+      box-shadow:
+        0 34px 120px rgba(0, 0, 0, 0.48),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
       position: relative;
       overflow: hidden;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: clamp(1rem, 2.2vw, 1.35rem);
+    }
+
+    .hero-top {
+      display: grid;
+      gap: clamp(0.85rem, 2vw, 1.15rem);
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+
+    @media (min-width: 720px) {
+      .hero-top {
+        grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+        gap: clamp(1rem, 2.5vw, 1.75rem);
+        align-items: center;
+      }
+    }
+
+    .hero-intro {
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      min-width: 0;
+    }
+
+    .hero-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0;
+    }
+
+    .hero-eyebrow-title {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-1);
+      letter-spacing: 0.08em;
+    }
+
+    .chip-hero {
+      font-size: 0.62rem;
+      letter-spacing: 1.2px;
+      border-color: rgba(124, 92, 255, 0.55);
+      color: var(--accent-2);
+      background: rgba(124, 92, 255, 0.08);
     }
 
     .hero h1 {
-      font-size: clamp(1.5rem, 3.2vw, 2.4rem);
-      letter-spacing: 0.4px;
+      font-size: clamp(1.65rem, 4vw, 2.65rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.12;
+      margin: 0;
+      background: linear-gradient(
+        105deg,
+        rgba(255, 255, 255, 0.98) 0%,
+        rgba(255, 255, 255, 0.88) 45%,
+        rgba(61, 255, 207, 0.95) 100%
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 42px rgba(61, 255, 207, 0.12);
     }
 
-    .hero .meta {
+    .hero-lede {
+      margin: 0;
+      font-size: clamp(0.8rem, 1.2vw, 0.92rem);
       color: var(--text-1);
-      font-size: clamp(0.8rem, 1.25vw, 0.98rem);
+      line-height: 1.5;
+      max-width: 36ch;
+    }
+
+    .hero-facts {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.5rem;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 11.5rem), 1fr));
+    }
+
+    .hero-facts > li::before {
+      display: none;
+      content: none;
+      margin: 0;
+    }
+
+    .hero-fact {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      padding: 0.55rem 0.65rem;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.22);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      min-width: 0;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .hero-fact:hover {
+      border-color: rgba(61, 255, 207, 0.22);
+      background: rgba(0, 0, 0, 0.28);
+    }
+
+    .hero-fact-wide {
+      grid-column: 1 / -1;
+    }
+
+    .hero-fact-label {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255, 255, 255, 0.42);
+    }
+
+    .hero-fact-value {
+      font-size: clamp(0.82rem, 1.15vw, 0.94rem);
+      color: var(--text-0);
+      line-height: 1.4;
       word-break: break-word;
       overflow-wrap: anywhere;
     }
 
-    .hero .roles {
-      font-size: clamp(0.86rem, 1.4vw, 1.02rem);
-      color: var(--text-0);
-      font-weight: 500;
+    .hero-fact-value a {
+      color: var(--accent);
+      text-decoration: none;
+      text-underline-offset: 0.15em;
+    }
+
+    .hero-fact-value a:hover {
+      text-decoration: underline;
+    }
+
+    .hero-intent {
+      margin: 0;
+      padding-top: clamp(0.85rem, 1.8vw, 1.05rem);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: grid;
+      gap: 0.85rem;
+    }
+
+    .hero-intent-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    @media (min-width: 560px) {
+      .hero-intent-row {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 0.75rem;
+      }
+
+      .hero-intent-label {
+        flex: 0 0 4.5rem;
+        padding-top: 0.28rem;
+      }
+    }
+
+    .hero-intent-label {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent-2);
+      white-space: nowrap;
+    }
+
+    .hero-intent-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      min-width: 0;
+    }
+
+    .intent-pill {
+      display: inline-block;
+      font-size: clamp(0.78rem, 1.15vw, 0.9rem);
+      line-height: 1.45;
+      color: var(--text-1);
+      padding: 0.35rem 0.65rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .intent-pill-accent {
+      color: var(--accent);
+      border-color: rgba(61, 255, 207, 0.35);
+      background: rgba(61, 255, 207, 0.08);
+      font-weight: 600;
     }
 
     .hero::after {
       content: "";
       position: absolute;
-      right: -90px;
-      top: -90px;
-      width: 220px;
-      height: 220px;
+      right: -100px;
+      top: -100px;
+      width: 280px;
+      height: 280px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(61, 255, 207, 0.35), transparent 65%);
-      opacity: 0.5;
+      background: radial-gradient(circle, rgba(61, 255, 207, 0.28), transparent 68%);
+      opacity: 0.55;
       pointer-events: none;
+      z-index: 0;
     }
 
     .columns {
@@ -472,7 +664,7 @@
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(8px);
       }
-      .hero .roles { line-height: 1.45; }
+      .intent-pill { line-height: 1.45; }
       .item-title { font-size: clamp(0.85rem, 3.8vw, 1rem); }
       .project-headline .link-pill {
         display: inline-flex;
@@ -489,9 +681,54 @@
   <main class="page">
 
     <header class="hero">
-      <h1>马阳阳</h1>
-      <div class="meta">29 岁 · 暂居北京 · 176-1024-5400 · 1135038815@qq.com · <a href="https://livelyryan.github.io/i/">https://livelyryan.github.io/i/</a></div>
-      <div class="roles">意向岗位：Agent 应用开发工程师；高级技术经理/技术负责人（Agent/研发效能方向）；意向城市：上海</div>
+      <div class="hero-content">
+        <div class="hero-top">
+          <div class="hero-intro">
+            <p class="hero-eyebrow">
+              <span class="chip chip-hero">profile</span>
+              <span class="hero-eyebrow-title">基础信息</span>
+            </p>
+            <h1>马阳阳</h1>
+          </div>
+          <ul class="hero-facts" aria-label="联系方式与基本信息">
+            <li class="hero-fact">
+              <span class="hero-fact-label">年龄</span>
+              <span class="hero-fact-value">29 岁</span>
+            </li>
+            <li class="hero-fact">
+              <span class="hero-fact-label">现居</span>
+              <span class="hero-fact-value">暂居北京</span>
+            </li>
+            <li class="hero-fact">
+              <span class="hero-fact-label">电话</span>
+              <span class="hero-fact-value"><a href="tel:+8617610245400">176-1024-5400</a></span>
+            </li>
+            <li class="hero-fact">
+              <span class="hero-fact-label">邮箱</span>
+              <span class="hero-fact-value"><a href="mailto:1135038815@qq.com">1135038815@qq.com</a></span>
+            </li>
+            <li class="hero-fact hero-fact-wide">
+              <span class="hero-fact-label">网站</span>
+              <span class="hero-fact-value"><a href="https://livelyryan.github.io/i/" rel="noopener noreferrer">livelyryan.github.io/i/</a></span>
+            </li>
+          </ul>
+        </div>
+        <div class="hero-intent">
+          <div class="hero-intent-row">
+            <span class="hero-intent-label">意向岗位</span>
+            <div class="hero-intent-pills">
+              <span class="intent-pill">Agent 应用开发工程师</span>
+              <span class="intent-pill">高级技术经理/技术负责人（Agent/研发效能方向）</span>
+            </div>
+          </div>
+          <div class="hero-intent-row">
+            <span class="hero-intent-label">意向城市</span>
+            <div class="hero-intent-pills">
+              <span class="intent-pill intent-pill-accent">上海</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </header>
     <div class="columns">
       <div class="column-stack">
