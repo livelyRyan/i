@@ -1,13 +1,13 @@
-# Prompt：将 `resume.md` 同步为 `docs/index.html`
+# Prompt：将 `resume.md` 同步为仓库根目录 `index.html`
 
-把本文件作为 **系统/任务说明** 交给 AI，用于根据最新的 `resume.md` 更新或生成 `docs/index.html`。**`resume.md` 是唯一事实来源**；HTML 仅负责版式与既有样式类名，不得保留源文件中已删除的内容。
+把本文件作为 **系统/任务说明** 交给 AI，用于根据最新的 `resume.md` 更新或生成仓库根目录下的 `index.html`。**`resume.md` 是唯一事实来源**；HTML 仅负责版式与既有样式类名，不得保留源文件中已删除的内容。
 
 ---
 
 ## 1. 角色与目标
 
 - **输入**：仓库根目录下的 `resume.md`。
-- **输出**：`docs/index.html`（在**保留现有 `<head>` 内联样式与整体 DOM 结构**的前提下，替换正文区块中的文案与结构）。
+- **输出**：仓库根目录 `index.html`（在**保留现有 `<head>` 内联样式与整体 DOM 结构**的前提下，替换正文区块中的文案与结构）。
 - **原则**：这是一次 **全量对齐**，不是「在旧 HTML 上追加新段落」。若 `resume.md` 删掉了某段、某词、某列表项，HTML 中对应内容 **必须一并删除**，禁止沿用历史版本残留。
 
 ---
@@ -105,13 +105,13 @@
 - [ ] 任意段落对比 `resume.md`：无多字、无少字、无旧版残留（尤其 Experience 地点、已删项目/奖项）。
 - [ ] Awards 与文中比较符号已转义为 `&lt;`。
 - [ ] 项目链接 `href` 与 MD 相对路径一致。
-- [ ] `span-2`、`.column-stack` 结构未被破坏；样式类名与现有 `docs/index.html` 保持一致。
+- [ ] `span-2`、`.column-stack` 结构未被破坏；样式类名与现有根目录 `index.html` 保持一致。
 
 ---
 
 ## 7. 建议交给 AI 的一句话任务描述
 
-> 请阅读仓库根目录 `resume.md`，按 `docs/md2html-resume-prompt.md` 的规则，将内容 **完整同步** 到 `docs/index.html`：以 MD 为唯一事实来源，删除 HTML 中所有 MD 已不存在的文字与节点；保留现有 CSS 与布局结构。
+> 请阅读仓库根目录 `resume.md`，按 `docs/md2html-resume-prompt.md` 的规则，将内容 **完整同步** 到仓库根目录 `index.html`：以 MD 为唯一事实来源，删除 HTML 中所有 MD 已不存在的文字与节点；保留现有 CSS 与布局结构。
 
 ---
 
@@ -119,4 +119,4 @@
 
 - **`<head>`**：`<meta>`、`<title>`、字体 `<link>`、整段 **内联 `<style>`** 一般保持不变；本次任务只更新 `<body>` 内 `<main class="page">` 下的结构与正文。
 - **不要**根据「常识」补全 `resume.md` 未写的内容（例如擅自加城市、补一条经历或项目）。
-- **结构样板**：具体 DOM 层级、class 命名以当前仓库中的 `docs/index.html` 为参考实现；新章节仍须遵守第 5 节布局约定。
+- **结构样板**：具体 DOM 层级、class 命名以当前仓库根目录 `index.html` 为参考实现；新章节仍须遵守第 5 节布局约定。

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Render resume.md into docs/index.html for GitHub Pages (static HTML)."""
+"""Render resume.md into repo-root index.html for GitHub Pages (static HTML)."""
 
 from __future__ import annotations
 
@@ -20,7 +20,7 @@ def _embedded_styles() -> str:
     p = _SCRIPT_DIR / "resume_embedded.css"
     if not p.is_file():
         raise FileNotFoundError(
-            f"Missing {p}; copy CSS from docs/index.html into this file."
+            f"Missing {p}; copy CSS from repo-root index.html into this file."
         )
     return p.read_text(encoding="utf-8").rstrip() + "\n"
 
@@ -436,6 +436,20 @@ def format_project_line(text: str) -> str:
             '<span class="prefix">关键词</span><span class="tag-list">' + "".join(spans) + "</span>"
         )
     m = re.match(r"^([^：]{1,32})：(.*)$", text)
+    if m and m.group(1) in (
+        "目标",
+        "结果",
+        "提效",
+        "覆盖",
+        "稳定性",
+        "创新",
+        "先进性",
+        "吞吐",
+        "安全",
+        "效果",
+    ):
+        label, body = m.group(1), m.group(2)
+        return f'<span class="prefix">{html.escape(label)}</span> {rich_line(body)}'
     if m:
         label, body = m.group(1), m.group(2)
         return f'<span class="prefix">{html.escape(label)}</span> {rich_line(body)}'
@@ -603,9 +617,9 @@ def build_html(md_text: str) -> str:
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser(description="Render resume.md to static docs/index.html")
+    ap = argparse.ArgumentParser(description="Render resume.md to static index.html")
     ap.add_argument("--in", dest="in_path", default="resume.md", help="Input Markdown path")
-    ap.add_argument("--out", dest="out_path", default="docs/index.html", help="Output HTML path")
+    ap.add_argument("--out", dest="out_path", default="index.html", help="Output HTML path")
     args = ap.parse_args()
     src = Path(args.in_path).read_text(encoding="utf-8")
     out = build_html(src)

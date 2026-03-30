@@ -22,15 +22,13 @@ jobs:
 
       - name: Render resume HTML
         run: |
-          mkdir -p docs
-          python3 scripts/render_resume.py --in resume.md --out docs/index.html
-          touch docs/.nojekyll
+          python3 scripts/render_resume.py --in resume.md --out index.html
+          touch .nojekyll
           rm -f docs/index.md
-          bash scripts/sync_portfolio_to_docs.sh
 
       - name: Commit pages
         run: |
-          git add -A docs/
+          git add index.html .nojekyll resume-profile.jpg
           if git diff --cached --quiet; then
             echo "No changes to commit."
             exit 0
