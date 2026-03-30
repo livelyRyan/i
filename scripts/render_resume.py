@@ -235,29 +235,30 @@ HTML_HEAD = """<!DOCTYPE html>
 
     .timeline-item {
       display: grid;
-      grid-template-columns: minmax(7.5rem, 9.5rem) 1fr;
-      gap: 0.85rem 1.1rem;
+      grid-template-columns: minmax(5.6rem, 7rem) minmax(0, 1fr);
+      gap: 0.5rem 0.65rem;
       align-items: start;
       position: relative;
     }
 
     .timeline-date {
       position: relative;
-      text-align: right;
-      padding-right: 1rem;
+      text-align: left;
+      padding-left: 1.05rem;
+      padding-right: 0.25rem;
       font-family: var(--font-mono);
-      font-size: 0.76rem;
+      font-size: 0.74rem;
       font-weight: 600;
       color: var(--accent);
-      line-height: 1.4;
+      line-height: 1.45;
       letter-spacing: 0.02em;
     }
 
     .timeline-date::before {
       content: "";
       position: absolute;
-      right: -5px;
-      top: 0.4rem;
+      left: 0;
+      top: 0.38rem;
       width: 10px;
       height: 10px;
       border-radius: 50%;
@@ -269,7 +270,7 @@ HTML_HEAD = """<!DOCTYPE html>
     .timeline-date::after {
       content: "";
       position: absolute;
-      right: 0;
+      left: 4px;
       top: 0.85rem;
       bottom: -1.05rem;
       width: 2px;
@@ -283,6 +284,8 @@ HTML_HEAD = """<!DOCTYPE html>
 
     .timeline-body {
       min-width: 0;
+      padding-left: 0;
+      margin-left: 0;
     }
 
     .meta-row {
@@ -349,10 +352,10 @@ HTML_HEAD = """<!DOCTYPE html>
       .timeline-date {
         text-align: left;
         padding-right: 0;
-        padding-left: 1.15rem;
-        border-left: 2px solid rgba(61, 255, 207, 0.35);
+        padding-left: 1.05rem;
+        border-left: none;
       }
-      .timeline-date::before { left: -6px; right: auto; }
+      .timeline-date::before { left: 0; right: auto; }
       .timeline-date::after { display: none; }
     }
   </style>
