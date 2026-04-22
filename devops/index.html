@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>马阳阳 - 研发效能技术专家</title>
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&f[]=jet-brains-mono@400,600&display=swap" />
+  <style>
+    :root {
+      --bg-0: #070911;
+      --bg-1: #0b1020;
+      --glass: rgba(255, 255, 255, 0.06);
+      --glass-2: rgba(255, 255, 255, 0.03);
+      --line: rgba(255, 255, 255, 0.12);
+      --text-0: rgba(255, 255, 255, 0.92);
+      --text-1: rgba(255, 255, 255, 0.70);
+      --accent: #3dffcf;
+      --accent-2: #7c5cff;
+      --accent-3: #ff4fd8;
+
+      --font-body: "Satoshi", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+
+      --page-pad: clamp(0.9rem, 2.4vw, 2.2rem);
+      --card-pad: clamp(0.8rem, 1.9vw, 1.4rem);
+      --gap: clamp(0.7rem, 1.6vw, 1.1rem);
+      --radius: 16px;
+      --page-bg:
+        radial-gradient(1100px 900px at 15% 10%, rgba(124, 92, 255, 0.18), transparent 60%),
+        radial-gradient(900px 700px at 80% 20%, rgba(61, 255, 207, 0.12), transparent 55%),
+        radial-gradient(900px 700px at 65% 88%, rgba(255, 79, 216, 0.10), transparent 55%),
+        linear-gradient(180deg, var(--bg-0), var(--bg-1));
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+      color-scheme: dark;
+      background-color: var(--bg-0);
+      background-image: var(--page-bg);
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+      min-height: 100%;
+      min-height: -webkit-fill-available;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      color: var(--text-0);
+      background: transparent;
+      min-height: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+      min-height: -webkit-fill-available;
+      overflow-x: clip;
+      overscroll-behavior-x: none;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .page {
+      width: 100%;
+      max-width: 1560px;
+      margin: 0 auto;
+      min-width: 0;
+      padding-top: max(var(--page-pad), env(safe-area-inset-top, 0px));
+      padding-right: max(var(--page-pad), env(safe-area-inset-right, 0px));
+      padding-bottom: max(1.2rem, env(safe-area-inset-bottom, 0px));
+      padding-left: max(var(--page-pad), env(safe-area-inset-left, 0px));
+      display: grid;
+      gap: calc(var(--gap) * 0.9);
+    }
+
+    /* ── Hero ── */
+    .hero {
+      --hero-pad-y: clamp(0.82rem, 2vw, 1.32rem);
+      --hero-pad-x: clamp(0.88rem, 2vw, 1.38rem);
+      display: block;
+      background:
+        linear-gradient(135deg, rgba(61, 255, 207, 0.07) 0%, transparent 42%),
+        linear-gradient(180deg, var(--glass), var(--glass-2));
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) + 4px);
+      padding: var(--hero-pad-y) var(--hero-pad-x);
+      box-shadow:
+        0 34px 120px rgba(0, 0, 0, 0.48),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: clamp(0.72rem, 1.85vw, 1.05rem);
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+
+    @media (min-width: 720px) {
+      .hero-content {
+        grid-template-columns: minmax(0, 1fr) clamp(132px, 22vw, 210px);
+        gap: clamp(0.75rem, 2vw, 1.15rem);
+        align-items: stretch;
+      }
+    }
+
+    .hero-main {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(0.55rem, 1.35vw, 0.82rem);
+    }
+
+    .hero-intro {
+      display: flex;
+      flex-direction: column;
+      gap: 0.38rem;
+      min-width: 0;
+    }
+
+    /* ── 照片 ── */
+    .hero-photo-slot {
+      margin: 0;
+      padding: 0;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(0, 0, 0, 0.28);
+      overflow: hidden;
+      position: relative;
+      min-height: clamp(168px, 30vw, 236px);
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
+    }
+
+    @media (min-width: 720px) {
+      .hero-photo-slot {
+        align-self: stretch;
+        min-height: 236px;
+        width: 100%;
+        margin-inline-start: auto;
+        aspect-ratio: 3 / 4;
+        max-height: min(440px, 72vh);
+      }
+    }
+
+    @media (max-width: 719px) {
+      .hero-photo-slot {
+        order: 1;
+        max-width: 260px;
+        margin-inline: auto;
+      }
+      .hero-main { order: 0; }
+    }
+
+    .hero-photo-slot .hero-photo-img {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+
+    .hero-photo-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      font-size: max(10.5pt, 0.88rem);
+      color: rgba(255, 255, 255, 0.38);
+      text-align: center;
+      line-height: 1.5;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .hero-photo-slot:has(.hero-photo-img[src]:not([src=""])) .hero-photo-placeholder {
+      display: none;
+    }
+
+    .hero .block-title { margin-bottom: 0.28rem; }
+    .hero .block-title h2 { margin-bottom: 0; }
+
+    .hero h1 {
+      font-size: clamp(1.48rem, 3.65vw, 2.35rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.12;
+      margin: 0;
+      background: linear-gradient(105deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.88) 45%, rgba(61,255,207,0.95) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 42px rgba(61, 255, 207, 0.12);
+    }
+
+    .hero-profile-sheet {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(0.52rem, 1.2vw, 0.82rem);
+      min-width: 0;
+    }
+
+    .hero-facts {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.42rem;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 11.5rem), 1fr));
+    }
+
+    .hero-facts > li::before { display: none; content: none; margin: 0; }
+    .hero-facts + .hero-facts { margin-top: clamp(0.52rem, 1.2vw, 0.82rem); }
+    .hero-profile-sheet .hero-facts + .hero-facts { margin-top: 0; }
+
+    .hero-facts--profile-meta { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .hero-facts--profile-intent { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+
+    .hero-facts--profile-intent > .hero-facts-intent-wrap {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: subgrid;
+      grid-template-rows: auto;
+      min-width: 0;
+    }
+
+    .hero-facts--profile-intent .hero-facts-intent-pair {
+      display: contents;
+    }
+
+    .hero-fact--intent-roles {
+      grid-column: span 4;
+      min-width: 0;
+    }
+
+    .hero-fact--intent-city {
+      grid-column: span 1;
+      min-width: 0;
+    }
+
+    @supports not (grid-template-columns: subgrid) {
+      .hero-facts--profile-intent > .hero-facts-intent-wrap {
+        display: block;
+      }
+
+      .hero-facts--profile-intent .hero-facts-intent-pair {
+        display: grid;
+        grid-template-columns: 4fr 1fr;
+        gap: 0.42rem;
+        align-items: stretch;
+      }
+
+      .hero-fact--intent-roles,
+      .hero-fact--intent-city {
+        grid-column: auto;
+      }
+    }
+
+    .hero-facts-intent-wrap {
+      padding: 0;
+      margin: 0;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+    }
+
+    .hero-facts-intent-wrap:hover {
+      border-color: transparent;
+      background: transparent;
+    }
+
+    .hero-fact {
+      display: flex;
+      flex-direction: column;
+      gap: 0.28rem;
+      padding: 0.46rem 0.58rem;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.22);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      min-width: 0;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .hero-fact:hover {
+      border-color: rgba(61, 255, 207, 0.22);
+      background: rgba(0, 0, 0, 0.28);
+    }
+
+    .hero-fact-wide { grid-column: 1 / -1; }
+
+    .hero-fact-label, .hero-fact-value {
+      font-size: max(10.5pt, clamp(0.88rem, 1.2vw, 1.02rem));
+      line-height: 1.45;
+    }
+
+    .hero-fact-label {
+      font-family: var(--font-body);
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      color: var(--text-1);
+    }
+
+    .hero-fact-value {
+      color: var(--text-0);
+      word-break: break-word;
+      overflow-wrap: anywhere;
+    }
+
+    .hero-fact-value a { color: var(--accent); text-decoration: none; text-underline-offset: 0.15em; }
+    .hero-fact-value a:hover { text-decoration: underline; }
+
+    .hero-fact-value--pills { display: block; min-width: 0; }
+    .hero-fact-value--pills .hero-intent-pills { margin-top: 0.1rem; }
+
+    .hero-intent-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      min-width: 0;
+    }
+
+    .intent-pill {
+      display: inline-block;
+      font-size: max(10.5pt, clamp(0.88rem, 1.2vw, 1.02rem));
+      line-height: 1.45;
+      color: var(--text-1);
+      padding: 0.35rem 0.65rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .intent-pill-accent {
+      color: var(--accent);
+      border-color: rgba(61, 255, 207, 0.35);
+      background: rgba(61, 255, 207, 0.08);
+      font-weight: 600;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -100px;
+      top: -100px;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(61, 255, 207, 0.28), transparent 68%);
+      opacity: 0.55;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: linear-gradient(180deg, var(--glass), var(--glass-2));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: var(--card-pad);
+      box-shadow: 0 28px 100px rgba(0, 0, 0, 0.38);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    h2 {
+      font-size: clamp(1rem, 1.8vw, 1.3rem);
+      margin-bottom: 0.5rem;
+      color: var(--accent);
+      letter-spacing: 0.3px;
+    }
+
+    .block-title {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .section p {
+      color: var(--text-1);
+      font-size: clamp(0.82rem, 1.3vw, 0.96rem);
+      line-height: 1.55;
+    }
+
+    ul {
+      list-style: none;
+      display: grid;
+      gap: 0.35rem;
+      color: var(--text-1);
+      font-size: clamp(0.82rem, 1.3vw, 0.96rem);
+      line-height: 1.55;
+    }
+
+    ul > li::before {
+      content: "•";
+      color: var(--accent-3);
+      margin-right: 0.5rem;
+    }
+
+    ul ul {
+      margin-left: 1.05rem;
+      margin-top: 0.3rem;
+      gap: 0.3rem;
+    }
+
+    ul ul > li::before {
+      content: "◦";
+      color: var(--accent-2);
+    }
+
+    .section-summary h2 { font-size: clamp(1.05rem, 1.95vw, 1.4rem); }
+    .section-summary ul { font-size: clamp(0.88rem, 1.42vw, 1.02rem); }
+
+    .item-title {
+      color: var(--text-0);
+      font-weight: 600;
+      font-size: clamp(0.9rem, 1.5vw, 1.02rem);
+      margin-bottom: 0.35rem;
+    }
+
+    .project-headline {
+      margin: 0 0 0.4rem 0;
+      line-height: 1.45;
+    }
+
+    .project-headline .item-title {
+      display: inline;
+      margin-bottom: 0;
+      font-size: clamp(0.9rem, 1.5vw, 1.02rem);
+    }
+
+    .metric {
+      color: var(--accent);
+      font-weight: 600;
+      text-shadow: 0 0 18px rgba(61, 255, 207, 0.25);
+    }
+
+    .prefix {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: var(--font-mono);
+      font-size: clamp(0.88rem, 1.38vw, 1.02rem);
+      padding: 0.12rem 0.5rem;
+      border-radius: 999px;
+      background: rgba(124, 92, 255, 0.12);
+      border: 1px solid rgba(124, 92, 255, 0.4);
+      color: var(--accent-2);
+      letter-spacing: 0.25px;
+    }
+
+    /* ── Timeline ── */
+    .timeline {
+      position: relative;
+      margin-top: 0.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: minmax(7.25rem, 10.75rem) minmax(0, 1fr);
+      gap: 0.5rem 0.75rem;
+      align-items: start;
+      position: relative;
+    }
+
+    .timeline-date {
+      position: relative;
+      text-align: left;
+      padding-left: 1.05rem;
+      padding-right: 0.25rem;
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--accent);
+      line-height: 1.45;
+      letter-spacing: 0.02em;
+    }
+
+    .timeline-date::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.38rem;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 14px rgba(61, 255, 207, 0.5);
+      z-index: 1;
+    }
+
+    .timeline-date::after {
+      content: "";
+      position: absolute;
+      left: 4px;
+      top: 0.85rem;
+      bottom: -1.05rem;
+      width: 2px;
+      background: linear-gradient(180deg, rgba(61, 255, 207, 0.55), rgba(124, 92, 255, 0.3));
+      border-radius: 999px;
+    }
+
+    .timeline-item:last-child .timeline-date::after { bottom: 0; }
+
+    @media (min-width: 981px) {
+      .timeline-date { white-space: nowrap; }
+    }
+
+    .timeline-body {
+      min-width: 0;
+      padding-left: 0;
+      margin-left: 0;
+    }
+
+    .exp-first-line {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.35rem 0.75rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .exp-first-line .item-title { margin-bottom: 0; }
+
+    .exp-org {
+      display: inline-flex;
+      align-items: center;
+      flex-wrap: nowrap;
+      white-space: nowrap;
+      gap: 0;
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 0.35rem;
+    }
+
+    .tag {
+      font-family: var(--font-mono);
+      font-size: clamp(0.78rem, 1.15vw, 0.92rem);
+      padding: 0.14rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: var(--text-0);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .tag.accent { border-color: rgba(61, 255, 207, 0.45); color: var(--accent); }
+    .tag.purple { border-color: rgba(124, 92, 255, 0.45); color: var(--accent-2); }
+    .tag.pink { border-color: rgba(255, 79, 216, 0.45); color: var(--accent-3); }
+
+    .awards-prefix {
+      max-width: 100%;
+      white-space: normal;
+      text-align: left;
+      line-height: 1.4;
+      font-size: clamp(0.86rem, 1.32vw, 0.98rem);
+      letter-spacing: 0.15px;
+    }
+
+    /* ── 双列布局 ── */
+    .columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--gap);
+      align-items: start;
+    }
+
+    /* ── 板块卡片间距 ── */
+    .domain-card + .domain-card {
+      margin-top: 0.7rem;
+      padding-top: 0.7rem;
+      border-top: 1px dashed rgba(255, 255, 255, 0.12);
+    }
+
+    /* ── 内联图片 ── */
+    .domain-image {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: 0.6rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    /* ── 版块子标题 ── */
+    .domain-subsection {
+      margin-top: 0.6rem;
+    }
+
+    .domain-subsection-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: var(--font-mono);
+      font-size: clamp(0.82rem, 1.25vw, 0.95rem);
+      padding: 0.12rem 0.5rem;
+      border-radius: 999px;
+      background: rgba(61, 255, 207, 0.08);
+      border: 1px solid rgba(61, 255, 207, 0.35);
+      color: var(--accent);
+      letter-spacing: 0.25px;
+      margin-bottom: 0.4rem;
+    }
+
+    .domain-subsection-title.result {
+      background: rgba(255, 79, 216, 0.08);
+      border-color: rgba(255, 79, 216, 0.35);
+      color: var(--accent-3);
+    }
+
+    .domain-subsection-title.goal {
+      background: rgba(124, 92, 255, 0.08);
+      border-color: rgba(124, 92, 255, 0.35);
+      color: var(--accent-2);
+    }
+
+    /* ── 目标区域 ── */
+    .goal-block {
+      background: rgba(124, 92, 255, 0.04);
+      border: 1px solid rgba(124, 92, 255, 0.15);
+      border-radius: 12px;
+      padding: 0.6rem 0.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* ── 响应式 ── */
+    @media (max-width: 980px) {
+      .columns { grid-template-columns: 1fr; }
+      .timeline-item {
+        grid-template-columns: 1fr;
+        gap: 0.45rem;
+      }
+      .timeline-date {
+        text-align: left;
+        padding-right: 0;
+        padding-left: 1.05rem;
+        border-left: none;
+      }
+      .timeline-date::before { left: 0; right: auto; }
+      .timeline-date::after { display: none; }
+    }
+
+    @media (max-width: 640px) {
+      .hero-facts--profile-meta {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .hero-facts--profile-intent {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-facts--profile-intent > .hero-facts-intent-wrap {
+        display: block;
+        grid-column: 1 / -1;
+      }
+
+      .hero-facts--profile-intent .hero-facts-intent-pair {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.42rem;
+      }
+
+      .hero-fact--intent-roles,
+      .hero-fact--intent-city {
+        grid-column: auto;
+      }
+    }
+
+    @media (max-width: 480px) {
+      :root {
+        --page-pad: 0.75rem;
+        --card-pad: 0.7rem;
+        --gap: 0.65rem;
+      }
+      .card {
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+      }
+      .intent-pill { line-height: 1.45; }
+      .item-title { font-size: clamp(0.85rem, 3.8vw, 1rem); }
+      a { touch-action: manipulation; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+
+    <!-- Hero: 个人信息 + 照片 -->
+    <header class="hero">
+      <div class="hero-content">
+        <div class="hero-main">
+          <div class="block-title"><h2>Profile</h2></div>
+          <div class="hero-intro"><h1>马阳阳</h1></div>
+          <div class="hero-profile-sheet">
+            <ul class="hero-facts hero-facts--profile-meta" aria-label="联系方式与基本信息">
+              <li class="hero-fact">
+                <span class="hero-fact-label">年龄</span>
+                <span class="hero-fact-value">29 岁</span>
+              </li>
+              <li class="hero-fact">
+                <span class="hero-fact-label">现居</span>
+                <span class="hero-fact-value">暂居北京</span>
+              </li>
+              <li class="hero-fact">
+                <span class="hero-fact-label">电话</span>
+                <span class="hero-fact-value"><a href="tel:+8617610245400">176-1024-5400</a></span>
+              </li>
+              <li class="hero-fact">
+                <span class="hero-fact-label">邮箱</span>
+                <span class="hero-fact-value"><a href="mailto:1135038815@qq.com">1135038815@qq.com</a></span>
+              </li>
+            </ul>
+            <ul class="hero-facts hero-facts--profile-intent" aria-label="求职意向">
+              <li class="hero-facts-intent-wrap">
+                <div class="hero-facts-intent-pair">
+                  <div class="hero-fact hero-fact--intent-roles">
+                    <span class="hero-fact-label">意向岗位</span>
+                    <span class="hero-fact-value hero-fact-value--pills">
+                      <span class="hero-intent-pills">
+                        <span class="intent-pill intent-pill-accent">研发效能/Agent开发 技术专家/架构师/技术总监</span>
+                      </span>
+                    </span>
+                  </div>
+                  <div class="hero-fact hero-fact--intent-city">
+                    <span class="hero-fact-label">意向城市</span>
+                    <span class="hero-fact-value hero-fact-value--pills">
+                      <span class="hero-intent-pills">
+                        <span class="intent-pill intent-pill-accent">上海</span>
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <figure class="hero-photo-slot" aria-label="个人照片">
+          <img class="hero-photo-img" src="../resume-profile.jpg" alt="马阳阳" width="560" height="747" decoding="async" />
+          <span class="hero-photo-placeholder" aria-hidden="true">个人照片</span>
+        </figure>
+      </div>
+    </header>
+
+    <!-- 第二排: Summary + 工作经历 并排 -->
+    <div class="columns">
+    <section class="card section section-summary">
+      <div class="block-title"><h2>Summary</h2></div>
+      <ul>
+        <li>去哪儿旅行技术总监，负责 AI 研发体系与企业级稳定性架构建设</li>
+        <li><span class="metric">8 年</span>研发效能经验，近 <span class="metric">3 年</span>技术管理经验，负责基础平台研发与公共 QA 团队（<span class="metric">10+</span> 人规模）</li>
+        <li>带领团队完成多个 0 到 100 的平台建设，通过明确平台生态位与产品边界，完成平台在全司规模化落地</li>
+        <li>具备体系化管理与战略规划能力，熟练运用 战略地图、OKR、DMAIC 推动组织与技术演进</li>
+        <li>长期高绩效，连续晋升，个人和团队多次获得公司级奖项</li>
+      </ul>
+    </section>
+
+    <!-- 工作经历 -->
+    <section class="card section">
+      <div class="block-title"><h2>工作经历</h2></div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-date">2024-01 — 至今</div>
+          <div class="timeline-body">
+            <div class="exp-first-line"><span class="item-title">技术总监 · 基础平台开发、公共 QA 团队负责人</span><span class="exp-org"><span class="prefix">去哪儿旅行</span></span></div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">2021-08 — 2023-12</div>
+          <div class="timeline-body">
+            <div class="exp-first-line"><span class="item-title">资深研发工程师 · 基础平台团队核心开发</span><span class="exp-org"><span class="prefix">去哪儿旅行</span></span></div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">2017-12 — 2021-08</div>
+          <div class="timeline-body">
+            <div class="exp-first-line"><span class="item-title">高级研发工程师</span><span class="exp-org"><span class="prefix">北京宝兰德软件股份有限公司</span></span></div>
+            <p style="color: var(--text-1); font-size: clamp(0.82rem, 1.3vw, 0.96rem); line-height: 1.55;">私有云 PaaS 平台核心开发，基于 Kubernetes，负责 CI/CD 流水线、灰度发布、镜像库、弹性伸缩等模块</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    </div>
+
+    <!-- 负责板块: 全宽 -->
+    <section class="card section">
+      <div class="block-title"><h2>负责板块</h2></div>
+
+      <!-- 1. AI 驱动质效升级 -->
+      <div class="domain-card">
+        <div class="project-headline"><span class="item-title">1. AI 驱动质效升级</span></div>
+
+        <div class="domain-subsection">
+          <div class="domain-subsection-title">关键动作</div>
+          <ul>
+            <li><strong>AI 基建：</strong>构建 企业级智能体平台（覆盖无代码开发）、LangChain4j-Qunar（覆盖代码开发）、Agent 可观测性，降低 AI 应用开发门槛</li>
+            <li><strong>场景落地：</strong>建设 AI Code Review、AI 数据分析、AI 项目助手 3 大场景，覆盖 <span class="metric">100%</span> BU</li>
+            <li><strong>AI Coding 体系：</strong>
+              <ul>
+                <li>组织：组建 AI 研发 SIG，双周运营与 SOP 沉淀，推动全司协同落地</li>
+                <li>工具：搭建自动开发平台（覆盖 <span class="metric">0.5 PD</span> 小需求）、CodeWiki（覆盖历史工程）、Skill hub、数据采集工具，提升研发自动化能力</li>
+                <li>数据：制定 L1-L5 标准，建设跨 CLI 的会话采集、洞察能力，沉淀研发行为数据资产，构建 AI 出码率、需求覆盖率等指标体系与全司看板</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        <div class="domain-subsection">
+          <div class="domain-subsection-title result">结果</div>
+          <ul>
+            <li>AI Code Review 全司落地，评审效率提升 <span class="metric">56.34%</span>，千行代码优化数 <span class="metric">1.3 个</span></li>
+            <li>Data Agent(QNova) 覆盖 <span class="metric">20+</span> 业务场景，业务指标分析效率从"天级"降低到"分钟级"，成为管理者日常使用工具</li>
+            <li>自研智能体平台 QMoss 全年稳定性 <span class="metric">100%</span>，实现 Dify 企业级本地化改造并落地定期升级机制</li>
+            <li>平台覆盖 <span class="metric">60+</span> 三级 BU，落地 <span class="metric">3500+</span> 流程。AI 应用构建周期从"天级"缩短至"分钟级"，年度累计提效超 <span class="metric">4.4 万 PD</span>，具备行业级领先</li>
+            <li>AI Coding 出码率达 <span class="metric">70%</span>（阶段性成果），初步构建了 "数据驱动 → 能力沉淀 → 平台化落地 → 组织推广 → 数据反馈" 的 AI 研发闭环</li>
+          </ul>
+          <img class="domain-image" src="AI基建体系.png" alt="AI基建体系" loading="lazy" />
+        </div>
+      </div>
+
+      <!-- 2. SRE 体系 -->
+      <div class="domain-card">
+        <div class="project-headline"><span class="item-title">2. SRE 体系</span></div>
+
+        <div class="goal-block">
+          <div class="domain-subsection-title goal">目标</div>
+          <ul>
+            <li>公司：全司故障率 &lt;= <span class="metric">0.2%</span>，P1/P2 故障 1-5-10 达标率 <span class="metric">50%</span></li>
+            <li>BU：基础架构 BU 故障率 &lt;= <span class="metric">0.1%</span>，25 全年故障 &lt;= <span class="metric">6 个</span></li>
+          </ul>
+        </div>
+
+        <div class="domain-subsection">
+          <div class="domain-subsection-title">关键动作</div>
+          <ul>
+            <li><strong>指标驱动：</strong>升级质量度量体系，涵盖 1-5-10 指标，建立全司通晒与月度运营机制，驱动 BU 持续优化</li>
+            <li><strong>故障治理：</strong>横向介入全 BU 故障复盘，分析 <span class="metric">5 年</span>故障根因并平台化治理，沉淀跨 BU 风险复用机制</li>
+            <li><strong>依赖治理：</strong>建设公司级依赖分级与治理体系（数据沉淀 / 演练平台 / 发布门禁），消除非对等强依赖风险</li>
+            <li><strong>基建加固：</strong>增设基础架构 SRE 负责人，覆盖容灾、容量、变更、演练、预案、运营六大方向，建立 SLO 机制并实现基建 <span class="metric">100%</span> 覆盖</li>
+            <li><strong>压测升级：</strong>升级压测平台（脉冲压测 <span class="metric">0.3s</span> 峰值 <span class="metric">10W QPS</span>），覆盖 <span class="metric">100%</span> 流量场景</li>
+          </ul>
+        </div>
+
+        <div class="domain-subsection">
+          <div class="domain-subsection-title result">成果</div>
+          <ul>
+            <li>25 年，全司故障率降至 <span class="metric">0.08%</span>；基础架构 BU 故障数 YoY 从 <span class="metric">9</span> 降到 <span class="metric">0</span>（Top 1 BU）</li>
+            <li>建立常态化 "检测-演练-治理-运营" 依赖闭环，强弱依赖导致的 P1/P2 故障降为 <span class="metric">0</span>，累计规避线上问题 <span class="metric">548 个</span></li>
+            <li>补全启动时依赖、累计容量、主机一致性检查、证书更新等多个细分风险治理，全司落地</li>
+          </ul>
+          <img class="domain-image" src="SRE体系.png" alt="SRE体系" loading="lazy" />
+        </div>
+      </div>
+
+      <!-- 3. 研发效能体系版本演进 -->
+      <div class="domain-card">
+        <div class="project-headline"><span class="item-title">3. 研发效能体系版本演进</span></div>
+
+        <div class="goal-block">
+          <div class="domain-subsection-title goal">目标</div>
+          <p style="color: var(--text-1); font-size: clamp(0.82rem, 1.3vw, 0.96rem);">建立并完善开发域、测试域平台能力</p>
+        </div>
+
+        <div class="domain-subsection">
+          <div class="domain-subsection-title">关键动作</div>
+          <ul>
+            <li>清理技术债，全司总代码量精简 <span class="metric">50%</span>，项目导致故障数 &lt;= <span class="metric">1</span></li>
+            <li>打造组件市场V1.0，形成至少 <span class="metric">5 个</span>代表组件，提供复用性，覆盖 <span class="metric">100+</span> AppCode</li>
+            <li>测试环境平台（Noah）V3.0 升级，通过建立软路由、环境保障，重构编排系统，提升环境效率、降低机器成本</li>
+          </ul>
+        </div>
+
+        <div class="domain-subsection">
+          <div class="domain-subsection-title result">结果</div>
+          <ul>
+            <li>搭建瘦身平台 ACED，利用 JDK 底层技术，实现 <span class="metric">0 性能损耗</span>、<span class="metric">0 风险</span>探测函数是否有流量。对比常见的代码覆盖率、Java 探针方案，具备明显稳定性优势</li>
+            <li>全司代码量减少 <span class="metric">50.21%</span>（<span class="metric">2500W+</span> 行），服务数 -<span class="metric">26%</span>。发布效率提升 <span class="metric">9.5%</span>，需求交付时长降低 <span class="metric">10.9%</span>，项目故障数 <span class="metric">0</span></li>
+            <li>孵化 <span class="metric">7 个</span>公司级核心组件（分布式锁、可观测线程池、压缩组件等），覆盖 <span class="metric">300+</span> AppCode，组件 BUG 导致的故障 <span class="metric">0</span></li>
+            <li>Noah 机器资源成本减少 <span class="metric">360 万</span>，环境构建成功率绝对提升 <span class="metric">35.2%</span>，年化节约人力成本 <span class="metric">1200+ PD</span>，环境导致需求 Delay 率减少 <span class="metric">90%</span></li>
+          </ul>
+          <img class="domain-image" src="研发效能体系.jpg" alt="研发效能体系" loading="lazy" />
+        </div>
+      </div>
+    </section>
+
+    <!-- 教育背景 -->
+    <section class="card section">
+      <div class="block-title"><h2>教育背景</h2></div>
+      <p style="color: var(--text-1); font-size: clamp(0.82rem, 1.3vw, 0.96rem); line-height: 1.55;">
+        <strong style="color: var(--text-0);">南京晓庄学院</strong> · 2014~2018 · 统招本科 · 软件工程 · GPA 排名 <span class="metric">Top 10</span>
+      </p>
+    </section>
+
+    <!-- 荣誉 -->
+    <section class="card section">
+      <div class="block-title"><h2>荣誉</h2></div>
+      <ul>
+        <li><span class="prefix awards-prefix">热爱分享交流，有影响力</span> 作为讲师参加 ArchSubmit、Top100、QECon、SECon、A2M、DBAPlus、ITCP 等行业大会，获得明星讲师称号；组织过多场跨公司闭门交流会</li>
+        <li><span class="prefix awards-prefix">具备公司级横向组织、推进能力</span> 26 年担任 AI Coding SIG 秘书长，推动 AI Coding 在全司体系化、规模化落地；22、23 年分别担任技术 SIG 秘书长、负责人</li>
+        <li><span class="prefix awards-prefix">乐于培养他人</span> 带团队期间，个人晋升成功率 <span class="metric">87.5%</span>，远超平均水平（全司均值 &lt; <span class="metric">50%</span>）</li>
+        <li><span class="prefix awards-prefix">有建团队、稳定性提升经验</span> 25 年初组建基础架构 QA 团队，负责基础架构稳定、大客户端框架质量保证与发版。基础架构 BU 全年故障数 <span class="metric">0 个</span>，在全司 <span class="metric">10+</span> 三级 BU 中排名第 1，相比 24 年故障数减少 <span class="metric">9 个</span></li>
+        <li><span class="prefix awards-prefix">长期高绩效</span> <span class="metric">3 次</span> A（<span class="metric">Top 10%</span>）、<span class="metric">4 次</span> B（<span class="metric">Top 30%</span>）；最近一次 2025H2 为 A</li>
+        <li><span class="prefix awards-prefix">连续晋升</span> 4 年 3 次高职级个人晋升，成功率 <span class="metric">100%</span>（全司均值 &lt; <span class="metric">50%</span>）</li>
+        <li><span class="prefix awards-prefix">多次获奖</span> 23 年带队包揽 CR 大赛冠军和 AI Hackathon 大赛第 <span class="metric">1 名</span>；23 年技术品牌突出贡献奖；4 年公司内训师；飞书效率先锋；公司飞书社群 KOL；大四校一等奖学金；大三校二等奖学金</li>
+      </ul>
+    </section>
+
+  </main>
+</body>
+</html>

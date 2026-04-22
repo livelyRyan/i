@@ -31,6 +31,10 @@ jobs:
           touch _site/.nojekyll
           cp resume-profile.jpg _site/
           cp -r 代表作 _site/
+          # DJI 研发效能简历
+          mkdir -p _site/devops
+          cp devops/index.html _site/devops/
+          cp AI基建体系.png SRE体系.png 研发效能体系.jpg 质量度量.png _site/devops/
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
